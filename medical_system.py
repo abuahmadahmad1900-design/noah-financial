@@ -265,6 +265,10 @@ MED_PAGE = '''
 </html>
 '''
 
+@app.route('/')
+def medical_home():
+    return redirect('/medical_login')
+
 @app.route('/medical_login', methods=['GET','POST'])
 def medical_login():
     if request.method == 'POST':

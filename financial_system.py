@@ -386,6 +386,9 @@ def index():
                 <a href="/budgets">📋 الميزانيات</a>
                 <a href="/assets">🏢 الأصول</a>
                 <a href="/currencies">💱 العملات</a>
+                <a href="/ai_center">🧠 25 عقل ذكي</a>
+                <a href="/all_systems">📊 50 نظام</a>
+                <a href="/self_dev">🧬 تطوير ذاتي</a>
                 <a href="/all_systems">📊 كل الأنظمة</a>
                 <a href="/logout">🚪 خروج</a>
             </div>

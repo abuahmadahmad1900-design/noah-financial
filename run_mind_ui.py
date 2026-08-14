@@ -126,7 +126,7 @@ PAGE = '''
         {% if result %}
         <div class="result">{{ result }}</div>
         {% endif %}
-        <a href="https://noah-financial-1.onrender.com">💼 النظام المالي</a> | <a href="https://noah-financial.onrender.com/login">💼 النظام المالي</a> | <a href="/">🏠 الرئيسية</a> |
+        <a href="https://noah-financial-1.onrender.com">💼 النظام المالي</a> | <a href="/">🏠 الرئيسية</a> |
         <a href="/minds">🧠 كل العقول</a>
     </div>
 </body>

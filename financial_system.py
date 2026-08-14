@@ -2108,5 +2108,69 @@ def self_dev():
     content += '</div><a href="/magic">🏠 العودة</a></div></body></html>'
     return content
 
+
+# ========== دوال إضافية للمسارات الناقصة ==========
+@app.route('/ai/financial_analyst')
+def ai_financial_analyst():
+    if 'user' not in session: return redirect('/login')
+    return redirect('/ai_center')
+
+@app.route('/ai/forecaster')
+def ai_forecaster():
+    if 'user' not in session: return redirect('/login')
+    return redirect('/ai_center')
+
+@app.route('/ai/risk_manager')
+def ai_risk_manager():
+    if 'user' not in session: return redirect('/login')
+    return redirect('/ai_center')
+
+@app.route('/ai/zakat_calculator')
+def ai_zakat_calculator():
+    if 'user' not in session: return redirect('/login')
+    return redirect('/ai_center')
+
+@app.route('/ai/strategist')
+def ai_strategist():
+    if 'user' not in session: return redirect('/login')
+    return redirect('/ai_center')
+
+@app.route('/reports')
+def reports():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices")
+    revenue = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM purchase_orders")
+    expenses = c.fetchone()[0]
+    conn.close()
+    net = revenue - expenses
+    content = f'<h2>📊 التقارير المالية</h2><table><tr><th>الإيرادات</th><td>{revenue}</td></tr><tr><th>المصاريف</th><td>{expenses}</td></tr><tr><th>صافي الربح</th><td>{net}</td></tr></table><a href="/magic">🏠 العودة</a>'
+    return PAGE_STYLE + content
+
+@app.route('/projects')
+def projects():
+    if 'user' not in session: return redirect('/login')
+    content = '<h2>📁 المشاريع</h2><p>لا توجد مشاريع بعد</p><a href="/magic">🏠 العودة</a>'
+    return PAGE_STYLE + content
+
+@app.route('/contracts')
+def contracts():
+    if 'user' not in session: return redirect('/login')
+    content = '<h2>📜 العقود</h2><p>لا توجد عقود بعد</p><a href="/magic">🏠 العودة</a>'
+    return PAGE_STYLE + content
+
+@app.route('/messages')
+def messages():
+    if 'user' not in session: return redirect('/login')
+    content = '<h2>✉️ الرسائل</h2><p>لا توجد رسائل</p><a href="/magic">🏠 العودة</a>'
+    return PAGE_STYLE + content
+
+@app.route('/settings')
+def settings():
+    if 'user' not in session: return redirect('/login')
+    content = '<h2>⚙️ الإعدادات</h2><p>إعدادات النظام</p><a href="/magic">🏠 العودة</a>'
+    return PAGE_STYLE + content
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)

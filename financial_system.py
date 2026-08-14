@@ -33,7 +33,89 @@ init_db()
 
 PAGE_STYLE = '''
 <style>
-    body { font-family:Tahoma; background:#0a0a1a; color:#eee; padding:20px; direction:rtl; }
+    body { 
+    font-family:Tahoma; 
+    background: linear-gradient(180deg, #0a0a2e, #1a0a3e, #0a0a2e);
+    color:#eee; 
+    padding:20px; 
+    direction:rtl; 
+    min-height:100vh;
+    animation: bg-shift 10s ease infinite;
+}
+@keyframes bg-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+a { 
+    color:#4af; 
+    text-decoration:none; 
+    margin:5px;
+    transition: all 0.3s;
+}
+a:hover {
+    color:#FFD700;
+    text-shadow: 0 0 10px rgba(255,215,0,0.8);
+}
+input, select, button { 
+    padding:8px; 
+    margin:5px; 
+    background:#222; 
+    color:#eee; 
+    border:1px solid #555; 
+    border-radius:5px;
+    transition: all 0.3s;
+}
+input:focus, select:focus {
+    border-color: #FFD700;
+    box-shadow: 0 0 15px rgba(255,215,0,0.3);
+}
+button { 
+    background: linear-gradient(45deg, #FFD700, #FF8C00);
+    color:#000; 
+    cursor:pointer;
+    font-weight: bold;
+    border: none;
+}
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255,215,0,0.4);
+}
+table { 
+    width:100%; 
+    border-collapse:collapse; 
+    margin-top:15px;
+}
+th, td { 
+    border:1px solid #444; 
+    padding:8px; 
+    text-align:center;
+    transition: all 0.3s;
+}
+tr:hover td {
+    background: rgba(255,215,0,0.05);
+}
+th { 
+    background: linear-gradient(145deg, #1a1a4e, #0d0d2e); 
+    color:#FFD700;
+    text-shadow: 0 0 5px rgba(255,215,0,0.5);
+}
+.container { 
+    background: rgba(20,20,50,0.8);
+    padding:20px; 
+    border-radius:20px;
+    border: 1px solid rgba(255,215,0,0.3);
+    box-shadow: 0 0 30px rgba(255,215,0,0.1);
+    backdrop-filter: blur(10px);
+}
+.nav { 
+    background: linear-gradient(145deg, #1a1a4e, #0d0d2e);
+    padding:15px; 
+    border-radius:15px; 
+    margin-bottom:15px;
+    border: 1px solid rgba(0,200,255,0.3);
+    box-shadow: 0 0 20px rgba(0,200,255,0.1);
+}
     a { color:#4af; text-decoration:none; margin:5px; }
     input, select, button { padding:8px; margin:5px; background:#222; color:#eee; border:1px solid #555; border-radius:5px; }
     button { background:#4af; color:#000; cursor:pointer; }

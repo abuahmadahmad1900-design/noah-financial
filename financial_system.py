@@ -390,7 +390,7 @@ def index():
                 <a href="/all_systems">📊 50 نظام</a>
                 <a href="/self_dev">🧬 تطوير ذاتي</a>
                 <a href="/all_systems">📊 كل الأنظمة</a>
-                <a href="/logout">🚪 خروج</a>
+                <a href="https://noah-financial.onrender.com">🧠 عقول نوح</a> | <a href="/logout">🚪 خروج</a>
             </div>
         </div>
     </body>

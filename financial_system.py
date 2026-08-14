@@ -173,30 +173,226 @@ def index():
     c.execute("SELECT COUNT(*) FROM invoices"); invoices = c.fetchone()[0]
     c.execute("SELECT COUNT(*) FROM products"); products = c.fetchone()[0]
     c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM bank_moves"); bank_moves = c.fetchone()[0]
     conn.close()
-    content = f'''
-    <h1 style="text-align:center;color:#FFD700;">🦅 نوح - لوحة التحكم</h1>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;">
-        <div style="background:#1a1a3e;padding:25px;border-radius:15px;text-align:center;"><div style="font-size:2rem;">📚</div><div style="font-size:2rem;">{accounts}</div>الحسابات</div>
-        <div style="background:#1a1a3e;padding:25px;border-radius:15px;text-align:center;"><div style="font-size:2rem;">👥</div><div style="font-size:2rem;">{customers}</div>العملاء</div>
-        <div style="background:#1a1a3e;padding:25px;border-radius:15px;text-align:center;"><div style="font-size:2rem;">📦</div><div style="font-size:2rem;">{suppliers}</div>الموردون</div>
-        <div style="background:#1a1a3e;padding:25px;border-radius:15px;text-align:center;"><div style="font-size:2rem;">🧾</div><div style="font-size:2rem;">{invoices}</div>الفواتير</div>
-        <div style="background:#1a1a3e;padding:25px;border-radius:15px;text-align:center;"><div style="font-size:2rem;">📦</div><div style="font-size:2rem;">{products}</div>المنتجات</div>
-    </div>
-    <div style="background:#1a1a3e;padding:25px;border-radius:15px;text-align:center;margin-top:20px;"><h2 style="color:#FFD700;">💰 الإيرادات</h2><div style="font-size:2.5rem;">{revenue}</div></div>
-    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:20px;">
-        <a href="/accounts">📚 الحسابات</a>
-        <a href="/customers">👥 العملاء</a>
-        <a href="/suppliers">📦 الموردون</a>
-        <a href="/invoices">🧾 الفواتير</a>
-        <a href="/products">📦 المنتجات</a>
-        <a href="/bank">🏦 البنك</a>
-        <a href="/zakat">🕌 الزكاة</a>
-        <a href="/debts">💳 الديون</a>
-        <a href="/all_systems">📊 كل الأنظمة</a>
-        <a href="/logout">🚪 خروج</a>
-    </div>'''
-    return PAGE_STYLE + content
+
+    return f"""
+    <!DOCTYPE html>
+    <html lang="ar" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>🦅 نوح - السحر المالي</title>
+        <style>
+            * {{ margin:0; padding:0; box-sizing:border-box; }}
+            body {{
+                font-family: Tahoma, sans-serif;
+                background: linear-gradient(135deg, #0a0a2e, #1a0a3e, #0a1a2e, #0a0a2e);
+                background-size: 400% 400%;
+                animation: bg-shift 10s ease infinite;
+                color: #fff;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }}
+            @keyframes bg-shift {{
+                0% {{ background-position: 0% 50%; }}
+                50% {{ background-position: 100% 50%; }}
+                100% {{ background-position: 0% 50%; }}
+            }}
+            .container {{
+                width: 100%;
+                max-width: 1100px;
+                background: rgba(20,20,50,0.85);
+                backdrop-filter: blur(15px);
+                border-radius: 30px;
+                padding: 40px;
+                border: 2px solid rgba(255,215,0,0.5);
+                box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 40px rgba(255,215,0,0.3), 0 0 80px rgba(0,200,255,0.2);
+                animation: glow 3s ease-in-out infinite alternate;
+            }}
+            @keyframes glow {{
+                from {{ box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 20px rgba(255,215,0,0.2); }}
+                to {{ box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 50px rgba(255,215,0,0.6), 0 0 100px rgba(0,200,255,0.3); }}
+            }}
+            h1 {{
+                text-align: center;
+                font-size: 3rem;
+                background: linear-gradient(45deg, #FFD700, #FF8C00, #FFD700);
+                background-size: 300% 300%;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: gradient-shift 3s ease infinite;
+                margin-bottom: 10px;
+            }}
+            @keyframes gradient-shift {{
+                0% {{ background-position: 0% 50%; }}
+                50% {{ background-position: 100% 50%; }}
+                100% {{ background-position: 0% 50%; }}
+            }}
+            .subtitle {{
+                text-align: center;
+                color: #ccc;
+                margin-bottom: 40px;
+                font-size: 1.1rem;
+                letter-spacing: 1px;
+            }}
+            .stats-grid {{
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                gap: 20px;
+                margin-bottom: 40px;
+            }}
+            .stat-card {{
+                background: linear-gradient(145deg, #1a1a4e, #0d0d2e);
+                border-radius: 20px;
+                padding: 30px 20px;
+                text-align: center;
+                border: 1px solid rgba(255,255,255,0.15);
+                transition: all 0.3s;
+                cursor: pointer;
+                animation: float-card 3s ease-in-out infinite;
+            }}
+            .stat-card:nth-child(2) {{ animation-delay: 0.3s; }}
+            .stat-card:nth-child(3) {{ animation-delay: 0.6s; }}
+            .stat-card:nth-child(4) {{ animation-delay: 0.9s; }}
+            .stat-card:nth-child(5) {{ animation-delay: 1.2s; }}
+            .stat-card:nth-child(6) {{ animation-delay: 1.5s; }}
+            @keyframes float-card {{
+                0%, 100% {{ transform: translateY(0); }}
+                50% {{ transform: translateY(-8px); }}
+            }}
+            .stat-card:hover {{
+                transform: translateY(-12px) rotate(2deg) scale(1.05);
+                border-color: #00c8ff;
+                box-shadow: 0 15px 40px rgba(0,200,255,0.5);
+            }}
+            .stat-card .icon {{
+                font-size: 3rem;
+                margin-bottom: 15px;
+                animation: bounce 2s ease-in-out infinite;
+            }}
+            @keyframes bounce {{
+                0%, 100% {{ transform: translateY(0); }}
+                50% {{ transform: translateY(-10px); }}
+            }}
+            .stat-card .value {{
+                font-size: 2.5rem;
+                font-weight: 900;
+                text-shadow: 0 0 20px rgba(0,200,255,0.8), 0 0 40px rgba(255,215,0,0.4);
+            }}
+            .stat-card .label {{
+                color: #ccc;
+                font-size: 0.9rem;
+                margin-top: 8px;
+            }}
+            .highlight {{
+                background: linear-gradient(145deg, #2a2a5e, #1a1a3e);
+                border-radius: 25px;
+                padding: 40px;
+                text-align: center;
+                margin-bottom: 30px;
+                border: 2px solid rgba(255,215,0,0.5);
+                position: relative;
+                overflow: hidden;
+            }}
+            .highlight::before {{
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(255,215,0,0.1), transparent 70%);
+                animation: pulse-bg 3s ease-in-out infinite;
+            }}
+            @keyframes pulse-bg {{
+                0%, 100% {{ transform: scale(1); opacity: 0.5; }}
+                50% {{ transform: scale(1.3); opacity: 1; }}
+            }}
+            .highlight h2 {{
+                color: #FFD700;
+                margin-bottom: 15px;
+                position: relative;
+                z-index: 1;
+            }}
+            .highlight .amount {{
+                font-size: 3.5rem;
+                font-weight: 900;
+                background: linear-gradient(45deg, #FFD700, #FF8C00, #FFD700);
+                background-size: 200% 200%;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: gradient-shift 2s ease infinite;
+                position: relative;
+                z-index: 1;
+            }}
+            .nav-links {{
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                justify-content: center;
+            }}
+            .nav-links a {{
+                background: linear-gradient(145deg, #222255, #111133);
+                color: #fff;
+                padding: 14px 25px;
+                border-radius: 30px;
+                text-decoration: none;
+                font-size: 0.9rem;
+                border: 1px solid rgba(255,255,255,0.2);
+                transition: all 0.3s;
+                position: relative;
+                overflow: hidden;
+            }}
+            .nav-links a:hover {{
+                background: #00c8ff;
+                color: #000;
+                transform: scale(1.1);
+                box-shadow: 0 0 30px rgba(0,200,255,0.6);
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🦅 نوح - السحر المالي</h1>
+            <p class="subtitle">النظام المالي الأسطوري</p>
+
+            <div class="stats-grid">
+                <div class="stat-card"><div class="icon">📚</div><div class="value">{accounts}</div><div class="label">الحسابات</div></div>
+                <div class="stat-card"><div class="icon">👥</div><div class="value">{customers}</div><div class="label">العملاء</div></div>
+                <div class="stat-card"><div class="icon">📦</div><div class="value">{suppliers}</div><div class="label">الموردون</div></div>
+                <div class="stat-card"><div class="icon">🧾</div><div class="value">{invoices}</div><div class="label">الفواتير</div></div>
+                <div class="stat-card"><div class="icon">📦</div><div class="value">{products}</div><div class="label">المنتجات</div></div>
+                <div class="stat-card"><div class="icon">🏦</div><div class="value">{bank_moves}</div><div class="label">حركات بنكية</div></div>
+            </div>
+
+            <div class="highlight">
+                <h2>💰 إجمالي الإيرادات</h2>
+                <div class="amount">{revenue}</div>
+            </div>
+
+            <div class="nav-links">
+                <a href="/accounts">📚 الحسابات</a>
+                <a href="/customers">👥 العملاء</a>
+                <a href="/suppliers">📦 الموردون</a>
+                <a href="/invoices">🧾 الفواتير</a>
+                <a href="/products">📦 المنتجات</a>
+                <a href="/bank">🏦 البنك</a>
+                <a href="/zakat">🕌 الزكاة</a>
+                <a href="/debts">💳 الديون</a>
+                <a href="/budgets">📋 الميزانيات</a>
+                <a href="/assets">🏢 الأصول</a>
+                <a href="/currencies">💱 العملات</a>
+                <a href="/all_systems">📊 كل الأنظمة</a>
+                <a href="/logout">🚪 خروج</a>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
 
 @app.route('/all_systems')
 def all_systems():

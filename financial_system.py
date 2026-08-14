@@ -1906,5 +1906,207 @@ def auto_backup():
 backup_thread = threading.Thread(target=auto_backup, daemon=True)
 backup_thread.start()
 
+
+# ========== 25 عقل ذكاء اصطناعي ==========
+AI_SYSTEMS = [
+    ("ai_analyst", "🧠", "المحلل المالي الشامل", "تحليل شامل للبيانات المالية"),
+    ("ai_forecaster", "🔮", "المتنبئ المستقبلي", "توقع الإيرادات والمصاريف"),
+    ("ai_risk", "🛡️", "حارس المخاطر", "كشف المخاطر المالية"),
+    ("ai_zakat", "🕌", "حاسب الزكاة", "حساب الزكاة تلقائياً"),
+    ("ai_strategist", "👑", "المخطط الاستراتيجي", "خطط استراتيجية ذكية"),
+    ("ai_cashflow", "💵", "مراقب التدفق النقدي", "مراقبة التدفقات"),
+    ("ai_profit", "📈", "محلل الربحية", "تحليل الربحية"),
+    ("ai_debt", "💳", "مدير الديون", "إدارة الديون"),
+    ("ai_tax", "💰", "مستشار الضرائب", "نصائح ضريبية"),
+    ("ai_investment", "📊", "خبير الاستثمار", "توصيات استثمارية"),
+    ("ai_budget", "📋", "مخطط الميزانيات", "تخطيط الميزانيات"),
+    ("ai_customer", "👥", "محلل العملاء", "تحليل سلوك العملاء"),
+    ("ai_supplier", "📦", "محلل الموردين", "تحليل الموردين"),
+    ("ai_inventory", "🏭", "مدير المخزون", "إدارة المخزون"),
+    ("ai_pricing", "💲", "خبير التسعير", "تسعير المنتجات"),
+    ("ai_market", "🌍", "محلل الأسواق", "تحليل الأسواق"),
+    ("ai_currency", "💱", "مراقب العملات", "مراقبة أسعار العملات"),
+    ("ai_growth", "🚀", "مخطط النمو", "خطط النمو"),
+    ("ai_efficiency", "⚡", "محسن الكفاءة", "تحسين الكفاءة"),
+    ("ai_compliance", "📜", "مراقب الامتثال", "الامتثال القانوني"),
+    ("ai_audit", "🔍", "المدقق الذكي", "تدقيق تلقائي"),
+    ("ai_report", "📄", "مولد التقارير", "توليد تقارير"),
+    ("ai_alert", "🔔", "منبه المخاطر", "تنبيهات فورية"),
+    ("ai_savings", "💰", "مستشار الادخار", "نصائح ادخار"),
+    ("ai_super", "🦅", "العقل الفائق", "ذكاء شامل"),
+]
+
+@app.route('/ai_center')
+def ai_center():
+    if 'user' not in session:
+        return redirect('/login')
+    content = '''
+    <!DOCTYPE html>
+    <html lang="ar" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <title>🧠 مركز الذكاء الاصطناعي</title>
+        <style>
+            body { font-family:Tahoma; background:#0a0a1a; color:#fff; padding:20px; }
+            .container { max-width:1200px; margin:0 auto; }
+            h1 { text-align:center; color:#00c8ff; margin-bottom:30px; }
+            .ai-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:15px; }
+            .ai-card { background:linear-gradient(145deg,#1a1a4e,#0d0d2e); border-radius:15px; padding:25px; text-align:center; border:1px solid rgba(0,200,255,0.3); transition:all 0.3s; }
+            .ai-card:hover { transform:translateY(-5px); border-color:#00c8ff; box-shadow:0 10px 25px rgba(0,200,255,0.3); }
+            .ai-card .icon { font-size:3rem; margin-bottom:10px; }
+            .ai-card h3 { color:#00c8ff; margin-bottom:5px; }
+            .ai-card p { color:#aaa; font-size:0.85rem; }
+            a { color:#00c8ff; text-decoration:none; display:inline-block; margin-top:20px; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🧠 مركز الذكاء الاصطناعي - 25 عقل</h1>
+            <div class="ai-grid">'''
+    
+    for ai_id, icon, name, desc in AI_SYSTEMS:
+        content += f'<div class="ai-card"><div class="icon">{icon}</div><h3>{name}</h3><p>{desc}</p></div>'
+    
+    content += '</div><a href="/magic">🏠 العودة</a></div></body></html>'
+    return content
+
+# ========== 50 نظام مالي ومحاسبي ==========
+@app.route('/all_systems')
+def all_systems():
+    if 'user' not in session:
+        return redirect('/login')
+    
+    systems = [
+        ("📚", "الحسابات", "إدارة الحسابات العامة"),
+        ("👥", "العملاء", "إدارة العملاء"),
+        ("📦", "الموردون", "إدارة الموردين"),
+        ("🧾", "الفواتير", "إدارة الفواتير"),
+        ("📋", "أوامر الشراء", "إدارة أوامر الشراء"),
+        ("📦", "المنتجات", "إدارة المنتجات"),
+        ("🏭", "المستودعات", "إدارة المستودعات"),
+        ("🔄", "حركات المخزون", "تتبع حركات المخزون"),
+        ("👷", "الموظفون", "إدارة الموظفين"),
+        ("💼", "الرواتب", "إدارة الرواتب"),
+        ("💰", "الضرائب", "إدارة الضرائب"),
+        ("🏦", "البنك", "الحركات البنكية"),
+        ("🕌", "الزكاة", "حساب الزكاة"),
+        ("📈", "الاستثمارات", "إدارة الاستثمارات"),
+        ("⚖️", "ميزان المراجعة", "ميزان المراجعة"),
+        ("📒", "دفتر الأستاذ", "دفتر الأستاذ"),
+        ("📈", "قائمة الدخل", "قائمة الدخل"),
+        ("📊", "الميزانية", "الميزانية العمومية"),
+        ("💵", "التدفقات", "التدفقات النقدية"),
+        ("🎯", "مؤشرات الأداء", "مؤشرات الأداء"),
+        ("📊", "التحليلات", "التحليلات المالية"),
+        ("💱", "العملات", "إدارة العملات"),
+        ("📋", "الميزانيات", "إدارة الميزانيات"),
+        ("💳", "الديون", "إدارة الديون"),
+        ("🏢", "الأصول", "إدارة الأصول"),
+        ("🔍", "التدقيق", "سجل التدقيق"),
+        ("📥", "التصدير", "تصدير البيانات"),
+        ("💾", "النسخ", "النسخ الاحتياطي"),
+        ("📁", "المشاريع", "إدارة المشاريع"),
+        ("📜", "العقود", "إدارة العقود"),
+        ("✉️", "الرسائل", "الرسائل الداخلية"),
+        ("⚙️", "الإعدادات", "إعدادات النظام"),
+        ("🔔", "التنبيهات", "التنبيهات الذكية"),
+        ("👤", "المستخدمون", "إدارة المستخدمين"),
+        ("🔮", "عراف نوح", "التنبؤات الذكية"),
+        ("🌍", "المؤشرات", "المؤشرات العالمية"),
+        ("📊", "الرسوم", "الرسوم البيانية"),
+        ("🧠", "الذكاء", "مركز الذكاء"),
+        ("💱", "محول العملات", "تحويل العملات"),
+        ("📊", "الإحصائيات", "الإحصائيات الشاملة"),
+        ("🔍", "البحث", "البحث المتقدم"),
+        ("📊", "تقارير متقدمة", "تقارير مالية متقدمة"),
+        ("💰", "المدفوعات", "إدارة المدفوعات"),
+        ("📥", "المقبوضات", "إدارة المقبوضات"),
+        ("📤", "المصروفات", "إدارة المصروفات"),
+        ("📋", "القيود", "قيود اليومية"),
+        ("📊", "الموازنات", "الموازنات التقديرية"),
+        ("🎯", "الأهداف", "الأهداف المالية"),
+        ("📈", "النمو", "متابعة النمو"),
+        ("🔐", "الأمان", "إدارة الأمان"),
+    ]
+    
+    content = '''
+    <!DOCTYPE html>
+    <html lang="ar" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <title>📊 جميع الأنظمة</title>
+        <style>
+            body { font-family:Tahoma; background:#0a0a1a; color:#fff; padding:20px; }
+            .container { max-width:1200px; margin:0 auto; }
+            h1 { text-align:center; color:#FFD700; margin-bottom:30px; }
+            .systems-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+            .system-card { background:#1a1a3e; border-radius:12px; padding:20px; text-align:center; border:1px solid rgba(255,215,0,0.2); transition:all 0.3s; }
+            .system-card:hover { transform:translateY(-3px); border-color:#FFD700; }
+            .system-card .icon { font-size:2rem; }
+            .system-card h3 { color:#FFD700; font-size:0.95rem; margin:10px 0 5px; }
+            .system-card p { color:#888; font-size:0.75rem; }
+            a { color:#FFD700; text-decoration:none; display:inline-block; margin-top:20px; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>📊 جميع الأنظمة المالية - 50 نظام</h1>
+            <div class="systems-grid">'''
+    
+    for icon, name, desc in systems:
+        content += f'<div class="system-card"><div class="icon">{icon}</div><h3>{name}</h3><p>{desc}</p></div>'
+    
+    content += '</div><a href="/magic">🏠 العودة</a></div></body></html>'
+    return content
+
+# ========== 10 أنظمة تطوير ذاتي ==========
+@app.route('/self_dev')
+def self_dev():
+    if 'user' not in session:
+        return redirect('/login')
+    
+    dev_systems = [
+        ("🧬", "التعلم الذاتي", "يتعلم من البيانات تلقائياً"),
+        ("🔧", "الإصلاح الذاتي", "يكتشف الأخطاء ويصلحها"),
+        ("📈", "التحسين الذاتي", "يحسن أداءه باستمرار"),
+        ("🔄", "التكيف الذاتي", "يتكيف مع المتغيرات"),
+        ("🧠", "التفكير الذاتي", "يحلل قراراته"),
+        ("💾", "الحفظ الذاتي", "يحفظ البيانات تلقائياً"),
+        ("🔐", "الحماية الذاتية", "يحمي نفسه من الهجمات"),
+        ("📊", "التقييم الذاتي", "يقيم أداءه"),
+        ("🚀", "التطوير الذاتي", "يضيف ميزات جديدة"),
+        ("🌟", "التطور الذاتي", "يتطور باستمرار"),
+    ]
+    
+    content = '''
+    <!DOCTYPE html>
+    <html lang="ar" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <title>🧬 أنظمة التطوير الذاتي</title>
+        <style>
+            body { font-family:Tahoma; background:#0a0a1a; color:#fff; padding:20px; }
+            .container { max-width:900px; margin:0 auto; }
+            h1 { text-align:center; color:#4aff4a; margin-bottom:30px; }
+            .dev-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:15px; }
+            .dev-card { background:linear-gradient(145deg,#1a3e1a,#0d2e0d); border-radius:15px; padding:25px; text-align:center; border:1px solid rgba(74,255,74,0.3); transition:all 0.3s; }
+            .dev-card:hover { transform:translateY(-5px); border-color:#4aff4a; box-shadow:0 10px 25px rgba(74,255,74,0.3); }
+            .dev-card .icon { font-size:2.5rem; }
+            .dev-card h3 { color:#4aff4a; margin:10px 0 5px; }
+            .dev-card p { color:#aaa; font-size:0.85rem; }
+            a { color:#4aff4a; text-decoration:none; display:inline-block; margin-top:20px; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🧬 أنظمة التطوير الذاتي - 10 أنظمة</h1>
+            <div class="dev-grid">'''
+    
+    for icon, name, desc in dev_systems:
+        content += f'<div class="dev-card"><div class="icon">{icon}</div><h3>{name}</h3><p>{desc}</p></div>'
+    
+    content += '</div><a href="/magic">🏠 العودة</a></div></body></html>'
+    return content
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)

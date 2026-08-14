@@ -2110,31 +2110,6 @@ def self_dev():
 
 
 # ========== دوال إضافية للمسارات الناقصة ==========
-@app.route('/ai/financial_analyst')
-def ai_financial_analyst():
-    if 'user' not in session: return redirect('/login')
-    return redirect('/ai_center')
-
-@app.route('/ai/forecaster')
-def ai_forecaster():
-    if 'user' not in session: return redirect('/login')
-    return redirect('/ai_center')
-
-@app.route('/ai/risk_manager')
-def ai_risk_manager():
-    if 'user' not in session: return redirect('/login')
-    return redirect('/ai_center')
-
-@app.route('/ai/zakat_calculator')
-def ai_zakat_calculator():
-    if 'user' not in session: return redirect('/login')
-    return redirect('/ai_center')
-
-@app.route('/ai/strategist')
-def ai_strategist():
-    if 'user' not in session: return redirect('/login')
-    return redirect('/ai_center')
-
 @app.route('/reports')
 def reports():
     if 'user' not in session: return redirect('/login')

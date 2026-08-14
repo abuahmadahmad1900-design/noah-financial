@@ -25,22 +25,97 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        hashed = hashlib.sha256(password.encode()).hexdigest()
         conn = sqlite3.connect(DB)
         c = conn.cursor()
-        hashed = hashlib.sha256(password.encode()).hexdigest()
         c.execute("SELECT * FROM users WHERE username=? AND password=?", (username, hashed))
         user = c.fetchone()
         conn.close()
         if user:
             session['user'] = username
             return redirect('/')
-        return 'خطأ في الدخول'
-    return '''
-    <form method="POST">
-        <input type="text" name="username" placeholder="المستخدم" required>
-        <input type="password" name="password" placeholder="كلمة المرور" required>
-        <button>دخول</button>
-    </form>'''
+        return redirect('/login?error=1')
+    
+    error_msg = ''
+    if request.args.get('error'):
+        error_msg = '<div style="color:#ff4a4a;text-align:center;margin-bottom:20px;">❌ اسم المستخدم أو كلمة المرور غير صحيحة</div>'
+    
+    return f'''
+    <!DOCTYPE html>
+    <html lang="ar" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>🦅 نوح - بوابة الدخول</title>
+        <style>
+            * {{ margin:0; padding:0; box-sizing:border-box; }}
+            body {{
+                font-family: Tahoma, sans-serif;
+                background: linear-gradient(135deg, #0a0a2e, #1a0a3e, #0a1a2e);
+                background-size: 400% 400%;
+                animation: bg-shift 10s ease infinite;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }}
+            .login-container {{
+                width: 100%;
+                max-width: 450px;
+                background: rgba(20,20,50,0.9);
+                border-radius: 30px;
+                padding: 50px 40px;
+                border: 2px solid rgba(255,215,0,0.4);
+                box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 50px rgba(255,215,0,0.2);
+            }}
+            h1 {{
+                text-align: center;
+                font-size: 2.5rem;
+                background: linear-gradient(45deg, #FFD700, #FF8C00);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                margin-bottom: 10px;
+            }}
+            .subtitle {{ text-align: center; color: #ccc; margin-bottom: 40px; }}
+            input {{
+                width: 100%;
+                padding: 15px;
+                background: rgba(255,255,255,0.05);
+                border: 1px solid rgba(255,255,255,0.15);
+                border-radius: 15px;
+                color: #fff;
+                font-size: 1rem;
+                margin-bottom: 20px;
+                outline: none;
+            }}
+            button {{
+                width: 100%;
+                padding: 15px;
+                background: linear-gradient(45deg, #FFD700, #FF8C00);
+                border: none;
+                border-radius: 15px;
+                color: #000;
+                font-size: 1.1rem;
+                font-weight: bold;
+                cursor: pointer;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="login-container">
+            <h1>🦅 نوح</h1>
+            <p class="subtitle">بوابة الدخول إلى النظام المالي الأسطوري</p>
+            {error_msg}
+            <form method="POST">
+                <input type="text" name="username" placeholder="👤 اسم المستخدم" required>
+                <input type="password" name="password" placeholder="🔒 كلمة المرور" required>
+                <button type="submit">دخول</button>
+            </form>
+        </div>
+    </body>
+    </html>
+    '''
 
 @app.route('/logout')
 def logout():

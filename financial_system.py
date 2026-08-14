@@ -2172,5 +2172,66 @@ def settings():
     content = '<h2>⚙️ الإعدادات</h2><p>إعدادات النظام</p><a href="/magic">🏠 العودة</a>'
     return PAGE_STYLE + content
 
+
+# ========== صفحة كل الأنظمة العاملة ==========
+@app.route('/working_systems')
+def working_systems():
+    if 'user' not in session:
+        return redirect('/login')
+    
+    working = [
+        ("/magic", "🦅", "اللوحة الرئيسية"),
+        ("/accounts", "📚", "الحسابات"),
+        ("/customers", "👥", "العملاء"),
+        ("/suppliers", "📦", "الموردون"),
+        ("/invoices", "🧾", "الفواتير"),
+        ("/products", "📦", "المنتجات"),
+        ("/bank", "🏦", "البنك"),
+        ("/zakat", "🕌", "الزكاة"),
+        ("/debts", "💳", "الديون"),
+        ("/budgets", "📋", "الميزانيات"),
+        ("/assets", "🏢", "الأصول"),
+        ("/currencies", "💱", "العملات"),
+        ("/ai_center", "🧠", "مركز الذكاء"),
+        ("/all_systems", "📊", "كل الأنظمة"),
+        ("/self_dev", "🧬", "التطوير الذاتي"),
+        ("/oracle", "🔮", "عراف نوح"),
+        ("/global_markets", "🌍", "المؤشرات"),
+        ("/charts", "📊", "الرسوم"),
+        ("/currency_converter", "💱", "محول العملات"),
+        ("/search", "🔍", "البحث"),
+        ("/statistics", "📊", "الإحصائيات"),
+        ("/advanced_reports", "📊", "تقارير متقدمة"),
+        ("/logout", "🚪", "خروج"),
+    ]
+    
+    content = '''
+    <!DOCTYPE html>
+    <html lang="ar" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <title>✅ الأنظمة العاملة</title>
+        <style>
+            body { font-family:Tahoma; background:#0a0a1a; color:#fff; padding:20px; }
+            .container { max-width:900px; margin:0 auto; }
+            h1 { text-align:center; color:#4aff4a; margin-bottom:30px; }
+            .systems-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; }
+            .system-link { background:#1a1a3e; border-radius:12px; padding:15px; text-align:center; border:1px solid rgba(74,255,74,0.3); transition:all 0.3s; text-decoration:none; color:#fff; }
+            .system-link:hover { transform:translateY(-3px); border-color:#4aff4a; background:#1a3e1a; }
+            .system-link .icon { font-size:2rem; }
+            .system-link .name { display:block; margin-top:8px; font-weight:bold; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>✅ الأنظمة العاملة في نوح</h1>
+            <div class="systems-list">'''
+    
+    for path, icon, name in working:
+        content += f'<a class="system-link" href="{path}"><span class="icon">{icon}</span><span class="name">{name}</span></a>'
+    
+    content += '</div></div></body></html>'
+    return content
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)

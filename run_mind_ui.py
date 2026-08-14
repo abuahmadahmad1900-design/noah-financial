@@ -126,7 +126,7 @@ PAGE = '''
         {% if result %}
         <div class="result">{{ result }}</div>
         {% endif %}
-        <a href="https://noah-financial-1.onrender.com">💼 النظام المالي</a> | <a href="/">🏠 الرئيسية</a> |
+        <a href="https://noah-financial-1.onrender.com">💼 النظام المالي</a> | <a href="/financial">💼 النظام المالي</a> | <a href="/">🏠 الرئيسية</a> |
         <a href="/minds">🧠 كل العقول</a>
     </div>
 </body>
@@ -170,6 +170,10 @@ def minds():
         content += f'<div class="mind">{m["id"]}. {m["name"]}<br><small style="color:#aaa;">{m["emperor"]}</small></div>'
     content += '</div><br><a href="/">🏠 العودة</a></body></html>'
     return content
+
+@app.route('/financial')
+def financial():
+    return redirect('https://noah-financial.onrender.com/login')
 
 if __name__ == '__main__':
     print("🦅 واجهة تشغيل العقول تعمل")

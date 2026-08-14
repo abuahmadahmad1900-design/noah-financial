@@ -113,6 +113,9 @@ PAGE = '''
 <body>
     <div class="container">
         <h1>🦅 تشغيل عقول نوح</h1>
+        <div style="text-align:center;margin-bottom:20px;">
+            <a href="https://noah-financial-1.onrender.com/login" style="background:linear-gradient(45deg,#FFD700,#FF8C00);color:#000;padding:15px 30px;border-radius:30px;text-decoration:none;font-weight:bold;display:inline-block;">💼 الدخول إلى النظام المالي</a>
+        </div>
         <form method="POST">
             <label>اسم العقل أو رقمه:</label>
             <input name="mind_id" placeholder="مثال: 26 أو حاسب الزكاة" required>

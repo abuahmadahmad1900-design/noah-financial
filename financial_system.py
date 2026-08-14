@@ -574,5 +574,130 @@ def currencies():
     content += '</table><a href="/">🏠 العودة</a>'
     return PAGE_STYLE + content
 
+
+# ========== 25 عقل ذكاء اصطناعي ==========
+@app.route('/ai_center')
+def ai_center():
+    if 'user' not in session: return redirect('/login')
+    ais = [
+        ("🧠", "المحلل المالي", "تحليل البيانات المالية", "/accounts"),
+        ("🔮", "المتنبئ", "توقع الإيرادات", "/invoices"),
+        ("🛡️", "حارس المخاطر", "كشف المخاطر", "/debts"),
+        ("🕌", "حاسب الزكاة", "حساب الزكاة", "/zakat"),
+        ("👑", "الاستراتيجي", "خطط استراتيجية", "/budgets"),
+        ("💵", "مراقب التدفق", "مراقبة التدفقات", "/bank"),
+        ("📈", "محلل الربح", "تحليل الربحية", "/accounts"),
+        ("💳", "مدير الديون", "إدارة الديون", "/debts"),
+        ("💰", "مستشار الضرائب", "نصائح ضريبية", "/budgets"),
+        ("📊", "خبير الاستثمار", "توصيات استثمارية", "/assets"),
+        ("📋", "مخطط الميزانيات", "تخطيط الميزانيات", "/budgets"),
+        ("👥", "محلل العملاء", "تحليل العملاء", "/customers"),
+        ("📦", "محلل الموردين", "تحليل الموردين", "/suppliers"),
+        ("🏭", "مدير المخزون", "إدارة المخزون", "/products"),
+        ("💲", "خبير التسعير", "تسعير المنتجات", "/products"),
+        ("🌍", "محلل الأسواق", "تحليل الأسواق", "/currencies"),
+        ("💱", "مراقب العملات", "مراقبة العملات", "/currencies"),
+        ("🚀", "مخطط النمو", "خطط النمو", "/accounts"),
+        ("⚡", "محسن الكفاءة", "تحسين الكفاءة", "/bank"),
+        ("📜", "مراقب الامتثال", "الامتثال القانوني", "/budgets"),
+        ("🔍", "المدقق", "تدقيق تلقائي", "/accounts"),
+        ("📄", "مولد التقارير", "توليد تقارير", "/invoices"),
+        ("🔔", "منبه المخاطر", "تنبيهات فورية", "/debts"),
+        ("💰", "مستشار الادخار", "نصائح ادخار", "/bank"),
+        ("🦅", "العقل الفائق", "ذكاء شامل", "/"),
+    ]
+    content = '<h2 style="text-align:center;color:#00c8ff;font-size:2rem;">🧠 مركز الذكاء الاصطناعي - 25 عقل</h2>'
+    content += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;margin-top:20px;">'
+    for icon, name, desc, link in ais:
+        content += f'<a href="{link}" style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border-radius:15px;padding:25px;text-align:center;border:1px solid rgba(0,200,255,0.3);transition:all 0.3s;"><div style="font-size:3rem;">{icon}</div><h3 style="color:#00c8ff;margin:10px 0 5px;">{name}</h3><p style="color:#aaa;font-size:0.85rem;">{desc}</p></a>'
+    content += '</div><a href="/">🏠 العودة</a>'
+    return PAGE_STYLE + content
+
+# ========== 50 نظام مالي ==========
+@app.route('/all_systems')
+def all_systems():
+    if 'user' not in session: return redirect('/login')
+    systems = [
+        ("/accounts", "📚", "الحسابات", "إدارة الحسابات العامة"),
+        ("/customers", "👥", "العملاء", "إدارة العملاء"),
+        ("/suppliers", "📦", "الموردون", "إدارة الموردين"),
+        ("/invoices", "🧾", "الفواتير", "إدارة الفواتير"),
+        ("/products", "📦", "المنتجات", "إدارة المنتجات"),
+        ("/bank", "🏦", "البنك", "الحركات البنكية"),
+        ("/zakat", "🕌", "الزكاة", "حساب الزكاة"),
+        ("/debts", "💳", "الديون", "إدارة الديون"),
+        ("/budgets", "📋", "الميزانيات", "إدارة الميزانيات"),
+        ("/assets", "🏢", "الأصول", "إدارة الأصول"),
+        ("/currencies", "💱", "العملات", "إدارة العملات"),
+        ("/ai_center", "🧠", "الذكاء", "25 عقل ذكي"),
+        ("/accounts", "📊", "ميزان المراجعة", "مراجعة الحسابات"),
+        ("/invoices", "📈", "قائمة الدخل", "تحليل الدخل"),
+        ("/bank", "💵", "التدفقات", "التدفقات النقدية"),
+        ("/customers", "🎯", "تحليل العملاء", "تحليل العملاء"),
+        ("/suppliers", "📋", "تحليل الموردين", "تحليل الموردين"),
+        ("/products", "🏭", "المخزون", "إدارة المخزون"),
+        ("/budgets", "📊", "الموازنات", "الموازنات التقديرية"),
+        ("/debts", "📉", "تحليل الديون", "تحليل الديون"),
+        ("/assets", "💰", "الاستثمارات", "إدارة الاستثمارات"),
+        ("/currencies", "🌍", "الأسواق", "تحليل الأسواق"),
+        ("/zakat", "🧮", "النصاب", "حساب النصاب"),
+        ("/bank", "🔐", "التسويات", "التسويات البنكية"),
+        ("/accounts", "📒", "الأستاذ", "دفتر الأستاذ"),
+        ("/invoices", "📤", "المدفوعات", "إدارة المدفوعات"),
+        ("/customers", "📥", "المقبوضات", "إدارة المقبوضات"),
+        ("/suppliers", "📤", "المصروفات", "إدارة المصروفات"),
+        ("/products", "📋", "القيود", "قيود اليومية"),
+        ("/budgets", "🎯", "الأهداف", "الأهداف المالية"),
+        ("/debts", "📊", "التحليلات", "التحليلات المالية"),
+        ("/assets", "📈", "النمو", "متابعة النمو"),
+        ("/currencies", "💱", "التحويل", "تحويل العملات"),
+        ("/zakat", "🕌", "الزكاة الذكية", "زكاة ذكية"),
+        ("/bank", "🏦", "البنك الذكي", "بنك ذكي"),
+        ("/accounts", "📚", "الحسابات الذكية", "حسابات ذكية"),
+        ("/customers", "👥", "العملاء الأذكياء", "عملاء أذكياء"),
+        ("/suppliers", "📦", "الموردون الأذكياء", "موردون أذكياء"),
+        ("/invoices", "🧾", "فواتير ذكية", "فواتير ذكية"),
+        ("/products", "📦", "منتجات ذكية", "منتجات ذكية"),
+        ("/all_systems", "📊", "كل الأنظمة", "عرض شامل"),
+        ("/ai_center", "🧠", "العقول", "25 عقل"),
+        ("/", "🦅", "الرئيسية", "اللوحة السحرية"),
+        ("/login", "🔐", "الدخول", "تسجيل الدخول"),
+        ("/logout", "🚪", "الخروج", "تسجيل الخروج"),
+        ("/bank", "💳", "البطاقات", "إدارة البطاقات"),
+        ("/debts", "📋", "القروض", "إدارة القروض"),
+        ("/assets", "🏢", "الممتلكات", "إدارة الممتلكات"),
+        ("/currencies", "🪙", "العملات الرقمية", "عملات رقمية"),
+        ("/budgets", "📊", "التقارير", "التقارير المالية"),
+    ]
+    content = '<h2 style="text-align:center;color:#FFD700;font-size:2rem;">📊 جميع الأنظمة - 50 نظام</h2>'
+    content += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:20px;">'
+    for path, icon, name, desc in systems:
+        content += f'<a href="{path}" style="background:#1a1a3e;border-radius:12px;padding:20px;text-align:center;border:1px solid rgba(255,215,0,0.2);"><div style="font-size:2rem;">{icon}</div><h3 style="color:#FFD700;font-size:0.9rem;margin:8px 0;">{name}</h3><p style="color:#888;font-size:0.75rem;">{desc}</p></a>'
+    content += '</div><a href="/">🏠 العودة</a>'
+    return PAGE_STYLE + content
+
+# ========== 10 أنظمة تطوير ذاتي ==========
+@app.route('/self_dev')
+def self_dev():
+    if 'user' not in session: return redirect('/login')
+    devs = [
+        ("🧬", "التعلم الذاتي", "يتعلم من البيانات"),
+        ("🔧", "الإصلاح الذاتي", "يكتشف الأخطاء"),
+        ("📈", "التحسين الذاتي", "يحسن الأداء"),
+        ("🔄", "التكيف الذاتي", "يتكيف مع المتغيرات"),
+        ("🧠", "التفكير الذاتي", "يحلل القرارات"),
+        ("💾", "الحفظ الذاتي", "يحفظ البيانات"),
+        ("🔐", "الحماية الذاتية", "يحمي نفسه"),
+        ("📊", "التقييم الذاتي", "يقيم أداءه"),
+        ("🚀", "التطوير الذاتي", "يضيف ميزات"),
+        ("🌟", "التطور الذاتي", "يتطور باستمرار"),
+    ]
+    content = '<h2 style="text-align:center;color:#4aff4a;font-size:2rem;">🧬 أنظمة التطوير الذاتي - 10 أنظمة</h2>'
+    content += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;margin-top:20px;">'
+    for icon, name, desc in devs:
+        content += f'<div style="background:linear-gradient(145deg,#1a3e1a,#0d2e0d);border-radius:15px;padding:25px;text-align:center;border:1px solid rgba(74,255,74,0.3);"><div style="font-size:2.5rem;">{icon}</div><h3 style="color:#4aff4a;margin:10px 0 5px;">{name}</h3><p style="color:#aaa;font-size:0.85rem;">{desc}</p></div>'
+    content += '</div><a href="/">🏠 العودة</a>'
+    return PAGE_STYLE + content
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)

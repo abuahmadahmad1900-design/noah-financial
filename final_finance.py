@@ -518,3 +518,58 @@ def kpis():
         <div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #FFD700;"><h3>النقد</h3><p style="font-size:2rem;color:#FFD700;">{cash}</p></div>
     </div>'''
     return render_template_string(PAGE, content=content)
+
+@app.route('/ledger')
+def ledger():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT * FROM accounts")
+    rows = c.fetchall(); conn.close()
+    content = "<h2>📒 دفتر الأستاذ</h2><table><tr><th>ID</th><th>الحساب</th><th>النوع</th><th>الرصيد</th></tr>"
+    for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td></tr>"
+    content += "</table>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/trial_balance')
+def trial_balance():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT type, SUM(balance) FROM accounts GROUP BY type")
+    rows = c.fetchall(); conn.close()
+    content = "<h2>⚖️ ميزان المراجعة</h2><table><tr><th>النوع</th><th>الرصيد</th></tr>"
+    for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td></tr>"
+    content += "</table>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/income_statement')
+def income_statement():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount < 0"); expenses = abs(c.fetchone()[0])
+    conn.close()
+    profit = revenue - expenses
+    content = f"<h2>📈 قائمة الدخل</h2><p>الإيرادات: {revenue}</p><p>المصاريف: {expenses}</p><p style='color:#FFD700;font-size:1.5rem;'>صافي الربح: {profit}</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/balance_sheet')
+def balance_sheet():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(balance),0) FROM accounts WHERE type='أصول'"); assets = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(balance),0) FROM accounts WHERE type='خصوم'"); liabilities = c.fetchone()[0]
+    conn.close()
+    equity = assets - liabilities
+    content = f"<h2>📊 الميزانية العمومية</h2><p>الأصول: {assets}</p><p>الخصوم: {liabilities}</p><p>حقوق الملكية: {equity}</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/cashflow')
+def cashflow():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount > 0"); inflow = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount < 0"); outflow = c.fetchone()[0]
+    conn.close()
+    net = inflow + outflow
+    content = f"<h2>💵 التدفقات النقدية</h2><p>داخل: {inflow}</p><p>خارج: {outflow}</p><p style='color:#FFD700;'>صافي: {net}</p>"
+    return render_template_string(PAGE, content=content)

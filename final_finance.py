@@ -649,3 +649,33 @@ def inflation():
     if 'user' not in session: return redirect('/login')
     content = "<h2>📊 التضخم والفائدة</h2><p>التضخم: 2.5%</p><p>الفائدة: 5%</p>"
     return render_template_string(PAGE, content=content)
+
+@app.route('/blockchain')
+def blockchain():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>🔗 بلوكتشين</h2><p>شبكة آمنة ومشفرة</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/machine_learning')
+def machine_learning():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>🤖 تعلم آلي</h2><p>نماذج ذكية تتعلم</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/mobile_app')
+def mobile_app():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>📱 تطبيقات موبايل</h2><p>iOS + Android</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/encryption')
+def encryption():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>🔐 تشفير متقدم</h2><p>AES-256</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/cloud')
+def cloud():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>☁️ حوسبة سحابية</h2><p>متاحة 24/7</p>"
+    return render_template_string(PAGE, content=content)

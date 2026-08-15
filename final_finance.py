@@ -99,6 +99,7 @@ def dashboard():
         @keyframes spin-icon {{ 0%,100% {{ transform:rotate(0deg); }} 50% {{ transform:rotate(12deg); }} }}
         @keyframes gradient-shift {{ 0% {{ background-position:0% 50%; }} 50% {{ background-position:100% 50%; }} 100% {{ background-position:0% 50%; }} }}
         h1 {{
+            text-shadow: 0 0 30px rgba(255,215,0,0.6), 0 0 60px rgba(255,140,0,0.4);
             text-align:center; font-size:2.5rem;
             background:linear-gradient(45deg,#FFD700,#FF8C00,#FFD700);
             background-size:300% 300%;
@@ -127,7 +128,42 @@ def dashboard():
         .nav a:hover {{ transform:scale(1.1); }}
         .nav a span {{ display:inline-block; animation:spin-icon 4s linear infinite; }}
     </style>
+    <div class="magic-particles"></div>
+    <div class="stars"></div>
     <h1>🦅 لوحة نوح المالية</h1>
+    <p style="text-align:center;color:#aaa;">النظام المالي الأسطوري المتكامل</p>
+    <style>
+        .magic-particles, .stars {{ position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }}
+        .particle {{ position:absolute; border-radius:50%; animation:float-particle linear infinite; }}
+        .star {{ position:absolute; border-radius:50%; background:#fff; animation:twinkle ease-in-out infinite; }}
+        @keyframes float-particle {{ 0% {{ transform:translateY(100vh) scale(0); opacity:0; }} 10% {{ opacity:1; }} 90% {{ opacity:1; }} 100% {{ transform:translateY(-10vh) scale(1); opacity:0; }} }}
+        @keyframes twinkle {{ 0%,100% {{ opacity:0.3; }} 50% {{ opacity:1; transform:scale(1.5); }} }}
+        .stats, .nav {{ position:relative; z-index:1; }}
+    </style>
+    <script>
+        for (let i = 0; i < 30; i++) {{
+            const p = document.createElement('div');
+            p.classList.add('particle');
+            p.style.left = Math.random() * 100 + '%';
+            p.style.width = Math.random() * 6 + 3 + 'px';
+            p.style.height = p.style.width;
+            p.style.background = ['#FFD700','#00c8ff','#4affb0','#ff4a4a'][Math.floor(Math.random()*4)];
+            p.style.animationDuration = Math.random() * 8 + 4 + 's';
+            p.style.animationDelay = Math.random() * 8 + 's';
+            document.querySelector('.magic-particles').appendChild(p);
+        }}
+        for (let i = 0; i < 50; i++) {{
+            const s = document.createElement('div');
+            s.classList.add('star');
+            s.style.left = Math.random() * 100 + '%';
+            s.style.top = Math.random() * 100 + '%';
+            s.style.width = Math.random() * 3 + 1 + 'px';
+            s.style.height = s.style.width;
+            s.style.animationDuration = Math.random() * 3 + 1 + 's';
+            s.style.animationDelay = Math.random() * 5 + 's';
+            document.querySelector('.stars').appendChild(s);
+        }}
+    </script>
     <p style="text-align:center;color:#aaa;">النظام المالي الأسطوري المتكامل</p>
     <div class="stats">
         <div class="stat"><h2 style="color:#FFD700;">{accounts}</h2>حسابات</div>

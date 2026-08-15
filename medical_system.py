@@ -1040,6 +1040,7 @@ def vital_systems2():
         <a href="/neonatal" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #FFD700;"><h3>👶 حديثي الولادة</h3><p style="color:#aaa;">11 نظام</p></a>
         <a href="/air_ambulance" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #00c8ff;"><h3>🚑 إسعاف جوي</h3><p style="color:#aaa;">11 نظام</p></a>
         <a href="/remote_monitor" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #4affb0;"><h3>📡 مراقبة عن بعد</h3><p style="color:#aaa;">11 نظام</p></a>
+        <a href="/vital_systems" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #FFD700;"><h3>🏥 الأنظمة السابقة</h3><p style="color:#aaa;">55 نظام</p></a>
     </div>'''
     return render_template_string(MED_PAGE, content=content)
 
@@ -1143,6 +1144,7 @@ def remote_monitor():
         html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #4affb0;display:block;text-decoration:none;margin:5px;"><strong style="color:#4affb0;">📡 {s}</strong></a>'
     content = f'<h2>📡 المراقبة عن بعد</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
     return render_template_string(MED_PAGE, content=content)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5007, debug=False)

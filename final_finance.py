@@ -133,7 +133,7 @@ def dashboard():
         .stats, .nav-grid { position:relative; z-index:1; }
     </style>
     <script>
-        for (let i = 0; i < 40; i++) {
+        for (let i = 0; i < 40; i++) {{
             const p = document.createElement('div');
             p.classList.add('particle');
             p.style.left = Math.random() * 100 + '%';
@@ -142,7 +142,7 @@ def dashboard():
             p.style.animationDuration = Math.random() * 8 + 4 + 's';
             p.style.animationDelay = Math.random() * 8 + 's';
             document.querySelector('.particles').appendChild(p);
-        }
+        }}
     </script>
     <div class="stats">
         <div class="stat" style="animation-delay:0s;"><h2>{accounts}</h2>حسابات</div>

@@ -257,6 +257,7 @@ MED_PAGE = '''
             <a href="/departments">🏢 الأقسام</a>
             <a href="/medical_records">📄 السجلات</a>
             <a href="/medical_alerts">🔔 التنبيهات</a>
+            <a href="/medical_ai">🧠 الذكاء الطبي</a>
             <a href="/logout_medical">🚪 خروج</a>
         </div>
         {{ content | safe }}

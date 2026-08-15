@@ -1022,5 +1022,6 @@ def system_details(system_name):
     </div>'''
     return render_template_string(MED_PAGE, content=content)
 
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5007, debug=False)

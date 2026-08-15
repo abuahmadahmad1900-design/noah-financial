@@ -96,6 +96,7 @@ def dashboard():
         @keyframes glow-gold {{ 0%,100% {{ box-shadow:0 0 15px rgba(255,215,0,0.4); }} 50% {{ box-shadow:0 0 35px rgba(255,215,0,0.9); }} }}
         @keyframes glow-blue {{ 0%,100% {{ box-shadow:0 0 15px rgba(0,200,255,0.4); }} 50% {{ box-shadow:0 0 35px rgba(0,200,255,0.9); }} }}
         @keyframes glow-green {{ 0%,100% {{ box-shadow:0 0 15px rgba(74,255,176,0.4); }} 50% {{ box-shadow:0 0 35px rgba(74,255,176,0.9); }} }}
+        @keyframes pulse-bar {{ 0%,100% {{ filter:brightness(1); }} 50% {{ filter:brightness(1.5); }} }}
         @keyframes spin-icon {{ 0%,100% {{ transform:rotate(0deg); }} 50% {{ transform:rotate(12deg); }} }}
         @keyframes gradient-shift {{ 0% {{ background-position:0% 50%; }} 50% {{ background-position:100% 50%; }} 100% {{ background-position:0% 50%; }} }}
         h1 {{
@@ -165,6 +166,15 @@ def dashboard():
         }}
     </script>
     <p style="text-align:center;color:#aaa;">النظام المالي الأسطوري المتكامل</p>
+    <div style="text-align:center;margin:20px 0;color:#FFD700;font-size:1.2rem;" id="clock"></div>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleDateString('ar') + ' - ' + now.toLocaleTimeString('ar');
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
     <div class="stats">
         <div class="stat"><h2 style="color:#FFD700;">{accounts}</h2>حسابات</div>
         <div class="stat"><h2 style="color:#00c8ff;">{customers}</h2>عملاء</div>
@@ -172,6 +182,13 @@ def dashboard():
         <div class="stat"><h2 style="color:#FFD700;">{products}</h2>منتجات</div>
         <div class="stat"><h2 style="color:#00c8ff;">{bank}</h2>بنك</div>
         <div class="stat"><h2 style="color:#4affb0;">{revenue}</h2>إيرادات</div>
+    </div>
+    <div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border-radius:20px;padding:25px;margin:20px 0;text-align:center;border:2px solid #FFD700;position:relative;z-index:1;">
+        <h3 style="color:#FFD700;">📊 أداء الإيرادات</h3>
+        <div style="background:#222;border-radius:15px;height:25px;margin-top:15px;overflow:hidden;">
+            <div style="background:linear-gradient(90deg,#FFD700,#FF8C00);height:100%;width:80%;border-radius:15px;animation:pulse-bar 2s ease-in-out infinite;"></div>
+        </div>
+        <p style="color:#aaa;margin-top:10px;">80% من الهدف</p>
     </div>
     <div class="nav">
         <a href="/accounts" style="border:2px solid #FFD700;color:#FFD700;"><span>📚</span> الحسابات</a>

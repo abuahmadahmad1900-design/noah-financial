@@ -231,6 +231,14 @@ MED_PAGE = '''
             -webkit-text-fill-color:transparent;
             animation:gradient-shift 3s ease infinite;
         }
+        @keyframes float-circle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes spin-icon {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(10deg); }
+        }
         @keyframes gradient-shift {
             0% { background-position:0% 50%; }
             50% { background-position:100% 50%; }
@@ -242,7 +250,7 @@ MED_PAGE = '''
     <div class="container">
         <h1>🏥 نوح - النظام الطبي الأسطوري</h1>
         <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:25px;padding:20px;background:linear-gradient(145deg,rgba(26,26,62,0.95),rgba(13,13,32,0.95));border-radius:25px;border:2px solid rgba(74,255,176,0.3);box-shadow:0 10px 30px rgba(0,0,0,0.5),inset 0 0 20px rgba(74,255,176,0.05);">
-            <a href="/medical_dashboard" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #FFD700;box-shadow:0 0 15px rgba(255,215,0,0.3);text-decoration:none;color:#FFD700;font-size:0.75rem;transition:all 0.3s;"><span style="font-size:1.5rem;">🏠</span>الرئيسية</a>
+            <a href="/medical_dashboard" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #FFD700;box-shadow:0 0 15px rgba(255,215,0,0.3);text-decoration:none;color:#FFD700;font-size:0.75rem;transition:all 0.3s;animation:float-circle 3s ease-in-out infinite;animation-delay:0s;"><span style="font-size:1.5rem;animation:spin-icon 4s linear infinite;">🏠</span>الرئيسية</a>
             <a href="/specialties" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #4affb0;box-shadow:0 0 15px rgba(74,255,176,0.3);text-decoration:none;color:#4affb0;font-size:0.75rem;transition:all 0.3s;"><span style="font-size:1.5rem;">📋</span>التخصصات</a>
             <a href="/doctors" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #00c8ff;box-shadow:0 0 15px rgba(0,200,255,0.3);text-decoration:none;color:#00c8ff;font-size:0.75rem;transition:all 0.3s;"><span style="font-size:1.5rem;">🩺</span>الأطباء</a>
             <a href="/patients" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #4affb0;box-shadow:0 0 15px rgba(74,255,176,0.3);text-decoration:none;color:#4affb0;font-size:0.75rem;transition:all 0.3s;"><span style="font-size:1.5rem;">👥</span>المرضى</a>

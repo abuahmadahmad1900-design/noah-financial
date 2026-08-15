@@ -320,10 +320,13 @@ def medical_login():
     <style>
         body { font-family:Tahoma; background:linear-gradient(135deg,#0a2e2e,#0e1a2e); color:#fff; display:flex; justify-content:center; align-items:center; height:100vh; }
         .login-box { background:rgba(10,20,30,0.9); padding:40px; border-radius:25px; border:2px solid #4affb0; text-align:center; }
-        input { display:block; width:100%; padding:12px; margin:10px 0; background:#1a1a3e; border:1px solid #4affb0; color:#fff; border-radius:10px; }
+        input { display:block; width:100%; padding:15px; margin:15px 0; background:rgba(255,255,255,0.05); border:2px solid #4affb0; color:#fff; border-radius:15px; font-size:1rem; transition:all 0.3s; outline:none; }
+        input:focus { border-color:#FFD700; box-shadow:0 0 20px rgba(255,215,0,0.3); }
         button { width:100%; padding:12px; background:linear-gradient(45deg,#4affb0,#00c8ff); border:none; border-radius:10px; font-weight:bold; cursor:pointer; }
     </style></head><body>
-    <div class="login-box"><h2>🦅 دخول نوح الطبي</h2>''' + ("<p style='color:#ff4a4a;'>بيانات خاطئة</p>" if error else "") + '''
+    <div class="login-box" style="background:linear-gradient(145deg,rgba(26,26,62,0.95),rgba(13,13,32,0.95));padding:50px;border-radius:30px;border:2px solid #4affb0;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,0.8),0 0 50px rgba(74,255,176,0.3);animation:glow-login 3s ease-in-out infinite alternate;">
+        <h2 style="font-size:2rem;background:linear-gradient(45deg,#4affb0,#00c8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:20px;">🦅 دخول نوح الطبي</h2>
+        <p style="color:#aaa;margin-bottom:30px;">النظام الطبي الأسطوري المتكامل</p>''' + ("<p style='color:#ff4a4a;'>بيانات خاطئة</p>" if error else "") + '''
     <form method="POST">
         <input type="text" name="username" placeholder="المستخدم" required>
         <input type="password" name="password" placeholder="كلمة المرور" required>
@@ -353,9 +356,9 @@ def medical_dashboard():
     <div style="background:linear-gradient(145deg,rgba(26,26,62,0.9),rgba(13,13,32,0.9));border-radius:25px;padding:30px;margin-bottom:30px;border:2px solid rgba(74,255,176,0.4);box-shadow:0 15px 40px rgba(0,0,0,0.5),0 0 40px rgba(74,255,176,0.2),inset 0 0 30px rgba(74,255,176,0.05);text-align:center;animation:glow-border 3s ease-in-out infinite alternate;">
         <h3 style="color:#FFD700;margin-bottom:20px;font-size:1.3rem;text-shadow:0 0 15px rgba(255,215,0,0.5);">⚡ الأنظمة المتقدمة</h3>
         <div style="display:flex;flex-wrap:wrap;gap:15px;justify-content:center;">
-            <a href="/vital_systems" style="background:linear-gradient(45deg,#FFD700,#FF8C00);color:#000;padding:15px 30px;border-radius:25px;text-decoration:none;font-weight:bold;box-shadow:0 0 25px rgba(255,215,0,0.4);transition:all 0.3s;animation:pulse-gold 2s infinite;">🏥 الأنظمة الحيوية</a>
-            <a href="/vital_systems2" style="background:linear-gradient(45deg,#4affb0,#00c8ff);color:#000;padding:15px 30px;border-radius:25px;text-decoration:none;font-weight:bold;box-shadow:0 0 25px rgba(74,255,176,0.4);transition:all 0.3s;animation:pulse-green 2s infinite;">🚀 الأنظمة المتقدمة</a>
-            <a href="/medical_ai" style="background:linear-gradient(45deg,#00c8ff,#4affb0);color:#000;padding:15px 30px;border-radius:25px;text-decoration:none;font-weight:bold;box-shadow:0 0 25px rgba(0,200,255,0.4);transition:all 0.3s;animation:pulse-blue 2s infinite;">🧠 الذكاء الطبي</a>
+            <a href="/vital_systems" style="background:linear-gradient(45deg,#ff4a4a,#ff8c00);color:#fff;padding:15px 30px;border-radius:25px;text-decoration:none;font-weight:bold;box-shadow:0 0 25px rgba(255,74,74,0.6);transition:all 0.3s;animation:pulse-red 2s infinite;">🏥 الأنظمة الحيوية</a>
+            <a href="/vital_systems2" style="background:linear-gradient(45deg,#8b5cf6,#ec4899);color:#fff;padding:15px 30px;border-radius:25px;text-decoration:none;font-weight:bold;box-shadow:0 0 25px rgba(139,92,246,0.6);transition:all 0.3s;animation:pulse-purple 2s infinite;">🚀 الأنظمة المتقدمة</a>
+            <a href="/medical_ai" style="background:linear-gradient(45deg,#f59e0b,#ef4444);color:#fff;padding:15px 30px;border-radius:25px;text-decoration:none;font-weight:bold;box-shadow:0 0 25px rgba(245,158,11,0.6);transition:all 0.3s;animation:pulse-orange 2s infinite;">🧠 الذكاء الطبي</a>
         </div>
     </div>
     <div class="stats-grid">

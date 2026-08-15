@@ -127,10 +127,10 @@ def dashboard():
     <h1>🦅 لوحة نوح المالية</h1>
     <p style="text-align:center;color:#aaa;margin-top:10px;">النظام المالي الأسطوري المتكامل</p>
     <style>
-        .particles { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
-        .particle { position:absolute; border-radius:50%; background:rgba(255,215,0,0.6); animation:float-particle linear infinite; }
+        .particles {{ position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+        .particle {{ position:absolute; border-radius:50%; background:rgba(255,215,0,0.6); animation:float-particle linear infinite; }
         @keyframes float-particle {{ 0% {{ transform:translateY(100vh) scale(0); opacity:0; }} 10% {{ opacity:1; }} 90% {{ opacity:1; }} 100% {{ transform:translateY(-10vh) scale(1); opacity:0; }} }}
-        .stats, .nav-grid { position:relative; z-index:1; }
+        .stats, .nav-grid {{ position:relative; z-index:1; }
     </style>
     <script>
         for (let i = 0; i < 40; i++) {{
@@ -434,3 +434,6 @@ def balance_sheet():
     equity = assets - liabilities
     content = f"<h2 style='text-align:center;color:#FFD700;'>📊 الميزانية العمومية</h2><table><tr><th>الأصول</th><th>الخصوم</th><th>حقوق الملكية</th></tr><tr><td>{assets}</td><td>{liabilities}</td><td>{equity}</td></tr></table>"
     return render_template_string(PAGE, content=content)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=False)

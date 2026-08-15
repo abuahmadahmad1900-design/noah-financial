@@ -113,3 +113,59 @@ def dashboard():
         <div style="background:#1a1a3e;padding:30px;border-radius:20px;border:2px solid #FFD700;text-align:center;"><h2 style="font-size:2.5rem;color:#FFD700;">{revenue}</h2>إيرادات</div>
     </div>'''
     return render_template_string(PAGE, content=content)
+
+@app.route('/accounts', methods=['GET','POST'])
+def accounts():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    if request.method == 'POST':
+        c.execute("INSERT INTO accounts (name, type) VALUES (?,?)", (request.form['name'], request.form['type']))
+        conn.commit()
+    c.execute("SELECT * FROM accounts")
+    rows = c.fetchall(); conn.close()
+    content = "<h2>📚 الحسابات</h2><form method='POST'><input name='name' placeholder='اسم الحساب' required><select name='type'><option>أصول</option><option>خصوم</option><option>إيرادات</option><option>مصاريف</option></select><button>إضافة</button></form><table><tr><th>ID</th><th>الاسم</th><th>النوع</th></tr>"
+    for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>"
+    content += "</table>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/customers', methods=['GET','POST'])
+def customers():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    if request.method == 'POST':
+        c.execute("INSERT INTO customers (name, phone) VALUES (?,?)", (request.form['name'], request.form.get('phone','')))
+        conn.commit()
+    c.execute("SELECT * FROM customers")
+    rows = c.fetchall(); conn.close()
+    content = "<h2>👥 العملاء</h2><form method='POST'><input name='name' placeholder='اسم العميل' required><input name='phone' placeholder='الهاتف'><button>إضافة</button></form><table><tr><th>ID</th><th>الاسم</th><th>الهاتف</th></tr>"
+    for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>"
+    content += "</table>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/suppliers', methods=['GET','POST'])
+def suppliers():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    if request.method == 'POST':
+        c.execute("INSERT INTO suppliers (name, phone) VALUES (?,?)", (request.form['name'], request.form.get('phone','')))
+        conn.commit()
+    c.execute("SELECT * FROM suppliers")
+    rows = c.fetchall(); conn.close()
+    content = "<h2>📦 الموردون</h2><form method='POST'><input name='name' placeholder='اسم المورد' required><input name='phone' placeholder='الهاتف'><button>إضافة</button></form><table><tr><th>ID</th><th>الاسم</th><th>الهاتف</th></tr>"
+    for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>"
+    content += "</table>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/invoices', methods=['GET','POST'])
+def invoices():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    if request.method == 'POST':
+        c.execute("INSERT INTO invoices (customer_id, amount, date) VALUES (?,?,?)", (request.form['customer_id'], request.form['amount'], request.form['date']))
+        conn.commit()
+    c.execute("SELECT * FROM invoices")
+    rows = c.fetchall(); conn.close()
+    content = "<h2>🧾 الفواتير</h2><form method='POST'><input name='customer_id' placeholder='رقم العميل' required><input name='amount' placeholder='المبلغ' required><input name='date' type='date' required><button>إصدار</button></form><table><tr><th>ID</th><th>العميل</th><th>المبلغ</th><th>التاريخ</th></tr>"
+    for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td></tr>"
+    content += "</table>"
+    return render_template_string(PAGE, content=content)

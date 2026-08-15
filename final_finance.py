@@ -278,3 +278,61 @@ def currencies():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)
+
+@app.route('/advanced_reports')
+def advanced_reports():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount > 0"); inflow = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount < 0"); outflow = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(balance),0) FROM accounts WHERE type='أصول'"); assets = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(balance),0) FROM accounts WHERE type='خصوم'"); liabilities = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM debts WHERE type='علينا'"); our_debts = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM debts WHERE type='لنا'"); their_debts = c.fetchone()[0]
+    conn.close()
+    net_cash = inflow + outflow
+    equity = assets - liabilities
+    content = f'''
+    <h2 style="text-align:center;color:#FFD700;">📊 التقارير المتقدمة</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;margin-top:20px;">
+        <div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:25px;border-radius:15px;text-align:center;border:2px solid #FFD700;"><h3>💰 الإيرادات</h3><p style="font-size:2rem;color:#FFD700;">{revenue}</p></div>
+        <div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:25px;border-radius:15px;text-align:center;border:2px solid #00c8ff;"><h3>💵 صافي التدفق</h3><p style="font-size:2rem;color:#00c8ff;">{net_cash}</p></div>
+        <div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:25px;border-radius:15px;text-align:center;border:2px solid #4affb0;"><h3>🏢 الأصول</h3><p style="font-size:2rem;color:#4affb0;">{assets}</p></div>
+        <div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:25px;border-radius:15px;text-align:center;border:2px solid #ff4a4a;"><h3>📉 الخصوم</h3><p style="font-size:2rem;color:#ff4a4a;">{liabilities}</p></div>
+        <div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:25px;border-radius:15px;text-align:center;border:2px solid #FFD700;"><h3>📊 حقوق الملكية</h3><p style="font-size:2rem;color:#FFD700;">{equity}</p></div>
+        <div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:25px;border-radius:15px;text-align:center;border:2px solid #00c8ff;"><h3>💳 ديون علينا</h3><p style="font-size:2rem;color:#00c8ff;">{our_debts}</p></div>
+        <div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:25px;border-radius:15px;text-align:center;border:2px solid #4affb0;"><h3>💳 ديون لنا</h3><p style="font-size:2rem;color:#4affb0;">{their_debts}</p></div>
+    </div>'''
+    return render_template_string(PAGE, content=content)
+
+@app.route('/smart_analysis')
+def smart_analysis():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount < 0"); expenses = abs(c.fetchone()[0])
+    c.execute("SELECT COUNT(*) FROM customers"); customers = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM products"); products = c.fetchone()[0]
+    conn.close()
+    profit = revenue - expenses
+    margin = (profit / revenue * 100) if revenue > 0 else 0
+    insights = []
+    if margin > 30: insights.append("✅ ربحية ممتازة!")
+    elif margin > 10: insights.append("📊 ربحية جيدة، يمكن تحسينها")
+    else: insights.append("⚠️ ربحية منخفضة")
+    if customers >= 5: insights.append("👥 قاعدة عملاء قوية")
+    else: insights.append("📈 تحتاج المزيد من العملاء")
+    if products >= 5: insights.append("📦 تنوع منتجات جيد")
+    else: insights.append("📦 أضف منتجات جديدة")
+    content = f'''
+    <h2 style="text-align:center;color:#00c8ff;">🧠 التحليل الذكي</h2>
+    <div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:30px;border-radius:20px;margin-top:20px;text-align:center;border:2px solid #00c8ff;">
+        <h3 style="color:#00c8ff;">هامش الربح</h3>
+        <p style="font-size:3rem;color:#FFD700;">{margin:.1f}%</p>
+    </div>
+    <div style="margin-top:20px;">'''
+    for i in insights:
+        content += f'<div style="background:#1a1a4e;padding:15px;border-radius:10px;margin:10px 0;border-right:4px solid #FFD700;">{i}</div>'
+    content += "</div>"
+    return render_template_string(PAGE, content=content)

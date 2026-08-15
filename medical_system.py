@@ -1017,13 +1017,14 @@ def system_details(system_name):
     icon, desc, features = SYSTEM_DETAILS.get(system_name, ("📄", "نظام طبي", []))
     features_html = "".join([f'<li style="color:#ccc;text-align:right;padding:5px;">✅ {f}</li>' for f in features])
     content = f'''
-    <h2>{icon} {system_name}</h2>
-    <div style="background:#1a1a4e;padding:30px;border-radius:15px;border:1px solid #4affb0;text-align:center;">
-        <h3 style="color:#4affb0;">✅ النظام مفعل</h3>
-        <p style="color:#ccc;margin:15px 0;">{desc}</p>
-        <h3 style="color:#FFD700;margin:20px 0 10px;">المميزات:</h3>
-        <ul style="list-style:none;padding:0;">{features_html}</ul>
-        <a href="/vital_systems" style="color:#00c8ff;">🏠 العودة</a>
+    <h2 style="text-align:center;font-size:2.5rem;background:linear-gradient(45deg,#4affb0,#00c8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">{icon} {system_name}</h2>
+    <div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:40px;border-radius:25px;border:2px solid #4affb0;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.6),0 0 30px rgba(74,255,176,0.3);animation:glow-green 2s infinite;">
+        <div style="font-size:4rem;margin-bottom:20px;">{icon}</div>
+        <h3 style="color:#4affb0;font-size:1.5rem;">✅ النظام مفعل</h3>
+        <p style="color:#ccc;margin:20px 0;font-size:1.1rem;">{desc}</p>
+        <h3 style="color:#FFD700;margin:25px 0 15px;font-size:1.3rem;">⚡ المميزات الخارقة:</h3>
+        <ul style="list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;">{features_html}</ul>
+        <a href="/vital_systems" style="display:inline-block;margin-top:25px;padding:12px 30px;background:linear-gradient(45deg,#4affb0,#00c8ff);color:#000;border-radius:25px;text-decoration:none;font-weight:bold;">🏠 العودة</a>
     </div>'''
     return render_template_string(MED_PAGE, content=content)
 

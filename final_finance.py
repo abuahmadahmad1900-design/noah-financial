@@ -123,7 +123,27 @@ def dashboard():
         .btn-blue {{ border:2px solid #00c8ff; color:#00c8ff; animation:glow-blue 2s infinite; }}
         .btn-green {{ border:2px solid #4affb0; color:#4affb0; box-shadow:0 0 25px rgba(74,255,176,0.4); }}
     </style>
+    <div class="particles"></div>
     <h1>🦅 لوحة نوح المالية</h1>
+    <p style="text-align:center;color:#aaa;margin-top:10px;">النظام المالي الأسطوري المتكامل</p>
+    <style>
+        .particles { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+        .particle { position:absolute; border-radius:50%; background:rgba(255,215,0,0.6); animation:float-particle linear infinite; }
+        @keyframes float-particle { 0% { transform:translateY(100vh) scale(0); opacity:0; } 10% { opacity:1; } 90% { opacity:1; } 100% { transform:translateY(-10vh) scale(1); opacity:0; } }
+        .stats, .nav-grid { position:relative; z-index:1; }
+    </style>
+    <script>
+        for (let i = 0; i < 40; i++) {
+            const p = document.createElement('div');
+            p.classList.add('particle');
+            p.style.left = Math.random() * 100 + '%';
+            p.style.width = Math.random() * 5 + 2 + 'px';
+            p.style.height = p.style.width;
+            p.style.animationDuration = Math.random() * 8 + 4 + 's';
+            p.style.animationDelay = Math.random() * 8 + 's';
+            document.querySelector('.particles').appendChild(p);
+        }
+    </script>
     <div class="stats">
         <div class="stat" style="animation-delay:0s;"><h2>{accounts}</h2>حسابات</div>
         <div class="stat" style="animation-delay:0.2s;"><h2>{customers}</h2>عملاء</div>
@@ -376,4 +396,38 @@ def reports():
     <tr><td>🏢 الأصول</td><td>{assets}</td></tr>
     <tr><td>💳 ديون علينا</td><td>{our_debts}</td></tr>
     <tr><td>💳 ديون لنا</td><td>{their_debts}</td></tr></table>"""
+    return render_template_string(PAGE, content=content)
+
+@app.route('/cashflow')
+def cashflow():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount > 0"); inflow = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount < 0"); outflow = c.fetchone()[0]
+    conn.close()
+    net = inflow + outflow
+    content = f"<h2 style='text-align:center;color:#00c8ff;'>💵 التدفقات النقدية</h2><table><tr><th>داخل</th><th>خارج</th><th>صافي</th></tr><tr><td>{inflow}</td><td>{outflow}</td><td>{net}</td></tr></table>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/profit_analysis')
+def profit_analysis():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount < 0"); expenses = abs(c.fetchone()[0])
+    conn.close()
+    profit = revenue - expenses
+    margin = (profit / revenue * 100) if revenue > 0 else 0
+    content = f"<h2 style='text-align:center;color:#4affb0;'>📈 تحليل الربحية</h2><p>الإيرادات: {revenue}</p><p>المصاريف: {expenses}</p><p style='font-size:1.5rem;color:#4affb0;'>الربح: {profit} ({margin:.1f}%)</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/balance_sheet')
+def balance_sheet():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(balance),0) FROM accounts WHERE type='أصول'"); assets = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(balance),0) FROM accounts WHERE type='خصوم'"); liabilities = c.fetchone()[0]
+    conn.close()
+    equity = assets - liabilities
+    content = f"<h2 style='text-align:center;color:#FFD700;'>📊 الميزانية العمومية</h2><table><tr><th>الأصول</th><th>الخصوم</th><th>حقوق الملكية</th></tr><tr><td>{assets}</td><td>{liabilities}</td><td>{equity}</td></tr></table>"
     return render_template_string(PAGE, content=content)

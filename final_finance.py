@@ -89,38 +89,72 @@ def dashboard():
     c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
     c.execute("SELECT COUNT(*) FROM bank_moves"); bank = c.fetchone()[0]
     conn.close()
-    content = f'''
-    <h1 style="text-align:center;color:#FFD700;font-size:2.5rem;">🦅 لوحة نوح المالية</h1>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin:30px 0;">
-        <div style="background:#1a1a3e;padding:25px;border-radius:20px;border:2px solid #FFD700;text-align:center;"><h2 style="font-size:2rem;color:#FFD700;">{accounts}</h2>حسابات</div>
-        <div style="background:#1a1a3e;padding:25px;border-radius:20px;border:2px solid #00c8ff;text-align:center;"><h2 style="font-size:2rem;color:#00c8ff;">{customers}</h2>عملاء</div>
-        <div style="background:#1a1a3e;padding:25px;border-radius:20px;border:2px solid #4affb0;text-align:center;"><h2 style="font-size:2rem;color:#4affb0;">{invoices}</h2>فواتير</div>
-        <div style="background:#1a1a3e;padding:25px;border-radius:20px;border:2px solid #FFD700;text-align:center;"><h2 style="font-size:2rem;color:#FFD700;">{products}</h2>منتجات</div>
-        <div style="background:#1a1a3e;padding:25px;border-radius:20px;border:2px solid #00c8ff;text-align:center;"><h2 style="font-size:2rem;color:#00c8ff;">{bank}</h2>بنك</div>
-        <div style="background:#1a1a3e;padding:25px;border-radius:20px;border:2px solid #4affb0;text-align:center;"><h2 style="font-size:2rem;color:#4affb0;">{revenue}</h2>إيرادات</div>
+    content = f"""
+    <style>
+        @keyframes bg-shift {{ 0% {{ background-position:0% 50%; }} 50% {{ background-position:100% 50%; }} 100% {{ background-position:0% 50%; }} }}
+        @keyframes float-card {{ 0%,100% {{ transform:translateY(0); }} 50% {{ transform:translateY(-10px); }} }}
+        @keyframes glow-gold {{ 0%,100% {{ box-shadow:0 0 15px rgba(255,215,0,0.4); }} 50% {{ box-shadow:0 0 35px rgba(255,215,0,0.9); }} }}
+        @keyframes glow-blue {{ 0%,100% {{ box-shadow:0 0 15px rgba(0,200,255,0.4); }} 50% {{ box-shadow:0 0 35px rgba(0,200,255,0.9); }} }}
+        @keyframes glow-green {{ 0%,100% {{ box-shadow:0 0 15px rgba(74,255,176,0.4); }} 50% {{ box-shadow:0 0 35px rgba(74,255,176,0.9); }} }}
+        @keyframes spin-icon {{ 0%,100% {{ transform:rotate(0deg); }} 50% {{ transform:rotate(12deg); }} }}
+        @keyframes gradient-shift {{ 0% {{ background-position:0% 50%; }} 50% {{ background-position:100% 50%; }} 100% {{ background-position:0% 50%; }} }}
+        h1 {{
+            text-align:center; font-size:2.5rem;
+            background:linear-gradient(45deg,#FFD700,#FF8C00,#FFD700);
+            background-size:300% 300%;
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+            animation:gradient-shift 3s ease infinite;
+        }}
+        .stats {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:15px; margin:30px 0; }}
+        .stat {{
+            background:linear-gradient(145deg,#1a1a4e,#0d0d2e); border-radius:20px;
+            padding:25px; text-align:center; border:2px solid #FFD700;
+            animation:float-card 3s ease-in-out infinite;
+        }}
+        .stat:nth-child(1) {{ animation-delay:0s; border-color:#FFD700; animation:glow-gold 2s infinite, float-card 3s ease-in-out infinite; }}
+        .stat:nth-child(2) {{ animation-delay:0.2s; border-color:#00c8ff; animation:glow-blue 2s infinite, float-card 3s ease-in-out infinite; }}
+        .stat:nth-child(3) {{ animation-delay:0.4s; border-color:#4affb0; animation:glow-green 2s infinite, float-card 3s ease-in-out infinite; }}
+        .stat:nth-child(4) {{ animation-delay:0.6s; border-color:#FFD700; animation:glow-gold 2s infinite, float-card 3s ease-in-out infinite; }}
+        .stat:nth-child(5) {{ animation-delay:0.8s; border-color:#00c8ff; animation:glow-blue 2s infinite, float-card 3s ease-in-out infinite; }}
+        .stat:nth-child(6) {{ animation-delay:1s; border-color:#4affb0; animation:glow-green 2s infinite, float-card 3s ease-in-out infinite; }}
+        .stat h2 {{ font-size:2rem; }}
+        .nav {{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:30px; }}
+        .nav a {{
+            background:linear-gradient(145deg,#1a1a4e,#0d0d2e); padding:15px 25px;
+            border-radius:25px; text-decoration:none; font-weight:bold;
+            transition:all 0.3s;
+        }}
+        .nav a:hover {{ transform:scale(1.1); }}
+        .nav a span {{ display:inline-block; animation:spin-icon 4s linear infinite; }}
+    </style>
+    <h1>🦅 لوحة نوح المالية</h1>
+    <p style="text-align:center;color:#aaa;">النظام المالي الأسطوري المتكامل</p>
+    <div class="stats">
+        <div class="stat"><h2 style="color:#FFD700;">{accounts}</h2>حسابات</div>
+        <div class="stat"><h2 style="color:#00c8ff;">{customers}</h2>عملاء</div>
+        <div class="stat"><h2 style="color:#4affb0;">{invoices}</h2>فواتير</div>
+        <div class="stat"><h2 style="color:#FFD700;">{products}</h2>منتجات</div>
+        <div class="stat"><h2 style="color:#00c8ff;">{bank}</h2>بنك</div>
+        <div class="stat"><h2 style="color:#4affb0;">{revenue}</h2>إيرادات</div>
     </div>
-    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;">
-        <a href="/accounts" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #FFD700;">📚 الحسابات</a>
-        <a href="/customers" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #00c8ff;">👥 العملاء</a>
-        <a href="/suppliers" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #4affb0;">📦 الموردون</a>
-        <a href="/invoices" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #FFD700;">🧾 الفواتير</a>
-        <a href="/products" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #00c8ff;">📦 المنتجات</a>
-        <a href="/bank" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #4affb0;">🏦 البنك</a>
-        <a href="/zakat" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #FFD700;">🕌 الزكاة</a>
-        <a href="/debts" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #00c8ff;">💳 الديون</a>
-        <a href="/budgets" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #4affb0;">📋 الميزانيات</a>
-        <a href="/assets" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #FFD700;">🏢 الأصول</a>
-        <a href="/currencies" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #00c8ff;">💱 العملات</a>
-        <a href="/advanced_reports" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #FFD700;">📊 تقارير</a>
-        <a href="/smart_analysis" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #00c8ff;">🧠 تحليل</a>
-        <a href="/currency_converter" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #4affb0;">💱 محول</a>
-        <a href="/kpis" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #FFD700;">🎯 مؤشرات</a>
-        <a href="/advanced_reports" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #FFD700;">📊 تقارير</a>
-        <a href="/smart_analysis" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #00c8ff;">🧠 تحليل</a>
-        <a href="/currency_converter" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #4affb0;">💱 محول</a>
-        <a href="/kpis" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #FFD700;">🎯 مؤشرات</a>
-        <a href="/logout" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #ff4a4a;">🚪 خروج</a>
-    </div>'''
+    <div class="nav">
+        <a href="/accounts" style="border:2px solid #FFD700;color:#FFD700;"><span>📚</span> الحسابات</a>
+        <a href="/customers" style="border:2px solid #00c8ff;color:#00c8ff;"><span>👥</span> العملاء</a>
+        <a href="/suppliers" style="border:2px solid #4affb0;color:#4affb0;"><span>📦</span> الموردون</a>
+        <a href="/invoices" style="border:2px solid #FFD700;color:#FFD700;"><span>🧾</span> الفواتير</a>
+        <a href="/products" style="border:2px solid #00c8ff;color:#00c8ff;"><span>📦</span> المنتجات</a>
+        <a href="/bank" style="border:2px solid #4affb0;color:#4affb0;"><span>🏦</span> البنك</a>
+        <a href="/zakat" style="border:2px solid #FFD700;color:#FFD700;"><span>🕌</span> الزكاة</a>
+        <a href="/debts" style="border:2px solid #00c8ff;color:#00c8ff;"><span>💳</span> الديون</a>
+        <a href="/budgets" style="border:2px solid #4affb0;color:#4affb0;"><span>📋</span> الميزانيات</a>
+        <a href="/assets" style="border:2px solid #FFD700;color:#FFD700;"><span>🏢</span> الأصول</a>
+        <a href="/currencies" style="border:2px solid #00c8ff;color:#00c8ff;"><span>💱</span> العملات</a>
+        <a href="/advanced_reports" style="border:2px solid #4affb0;color:#4affb0;"><span>📊</span> تقارير</a>
+        <a href="/smart_analysis" style="border:2px solid #FFD700;color:#FFD700;"><span>🧠</span> تحليل</a>
+        <a href="/currency_converter" style="border:2px solid #00c8ff;color:#00c8ff;"><span>💱</span> محول</a>
+        <a href="/kpis" style="border:2px solid #4affb0;color:#4affb0;"><span>🎯</span> مؤشرات</a>
+        <a href="/logout" style="border:2px solid #ff4a4a;color:#ff4a4a;"><span>🚪</span> خروج</a>
+    </div>"""
     return render_template_string(PAGE, content=content)
 
 @app.route('/accounts', methods=['GET','POST'])

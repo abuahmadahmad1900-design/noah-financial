@@ -1133,8 +1133,6 @@ def remote_monitor():
     return render_template_string(MED_PAGE, content=content)
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5007, debug=False)
 
 @app.route('/vital_systems2')
 def vital_systems2():
@@ -1152,12 +1150,57 @@ def vital_systems2():
         <a href="/neonatal" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #FFD700;"><h3>👶 حديثي الولادة</h3><p style="color:#aaa;">11 نظام</p></a>
         <a href="/air_ambulance" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #00c8ff;"><h3>🚑 إسعاف جوي</h3><p style="color:#aaa;">11 نظام</p></a>
         <a href="/remote_monitor" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #4affb0;"><h3>📡 مراقبة عن بعد</h3><p style="color:#aaa;">11 نظام</p></a>
-        <a href="/drug_interactions" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #4affb0;"><h3>💊 تفاعلات الأدوية</h3><p style="color:#aaa;">11 نظام</p></a>
-        <a href="/medical_history" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #00c8ff;"><h3>📋 التاريخ المرضي</h3><p style="color:#aaa;">11 نظام</p></a>
-        <a href="/emergency_alerts" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #ff4a4a;"><h3>🚨 تنبيهات الطوارئ</h3><p style="color:#aaa;">11 نظام</p></a>
-        <a href="/surgical_consent" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #FFD700;"><h3>📜 موافقات العمليات</h3><p style="color:#aaa;">11 نظام</p></a>
-        <a href="/data_privacy" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #4affb0;"><h3>🔐 خصوصية البيانات</h3><p style="color:#aaa;">11 نظام</p></a>
     </div>'''
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/drug_interactions')
+def drug_interactions():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["فحص التعارض الدوائي","قاعدة بيانات الأدوية","تنبيهات الجرعات","تفاعلات الأعشاب","تفاعلات الحساسية","فحص الأدوية للحوامل","فحص أدوية الأطفال","تفاعلات الأغذية","تنبيهات الفشل الكلوي","تنبيهات الفشل الكبدي"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #4affb0;display:block;text-decoration:none;margin:5px;"><strong style="color:#4affb0;">💊 {s}</strong></a>'
+    content = f'<h2>💊 تفاعلات الأدوية</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/medical_history')
+def medical_history():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["سجل الأمراض السابقة","سجل العمليات","سجل الحساسية","سجل الأدوية الحالية","التاريخ العائلي","سجل التطعيمات","سجل الحمل","سجل الحوادث","سجل الدخول للمستشفى","ملف المريض الكامل"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #00c8ff;display:block;text-decoration:none;margin:5px;"><strong style="color:#00c8ff;">📋 {s}</strong></a>'
+    content = f'<h2>📋 التاريخ المرضي</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/emergency_alerts')
+def emergency_alerts():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["تنبيه فوري للأطباء","تنبيه غرفة الطوارئ","تنبيه العناية المركزة","تنبيه الصيدلية","تنبيه المختبر","تنبيه الأشعة","تنبيه الإدارة","تنبيه الأمن","تنبيه الإسعاف","تنبيه العائلة"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #ff4a4a;display:block;text-decoration:none;margin:5px;"><strong style="color:#ff4a4a;">🚨 {s}</strong></a>'
+    content = f'<h2>🚨 تنبيهات الطوارئ</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/surgical_consent')
+def surgical_consent():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["موافقة العملية","موافقة التخدير","موافقة نقل الدم","موافقة العلاج الكيماوي","موافقة الإشعاع","موافقة التجارب","موافقة الأطفال","موافقة الطوارئ","موافقة التبرع","موافقة الخروج"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #FFD700;display:block;text-decoration:none;margin:5px;"><strong style="color:#FFD700;">📜 {s}</strong></a>'
+    content = f'<h2>📜 موافقات العمليات</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/data_privacy')
+def data_privacy():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["تشفير السجلات","صلاحيات الوصول","سجل الدخول","نسخ احتياطي مشفر","إخفاء الهوية","قفل الملفات","تدقيق الخصوصية","حماية كلمة المرور","مصادقة ثنائية","تسجيل الخروج التلقائي"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #4affb0;display:block;text-decoration:none;margin:5px;"><strong style="color:#4affb0;">🔐 {s}</strong></a>'
+    content = f'<h2>🔐 خصوصية البيانات</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
     return render_template_string(MED_PAGE, content=content)
 
 if __name__ == '__main__':

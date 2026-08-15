@@ -140,3 +140,27 @@ def bank():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
+@app.route('/zakat')
+def zakat():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount > 0")
+    total = c.fetchone()[0]
+    conn.close()
+    nisab = 85 * 60
+    due = total * 0.025 if total >= nisab else 0
+    content = f"<h2>🕌 الزكاة</h2><p>النقود: {total}</p><p>النصاب: {nisab}</p><p style='color:#FFD700;font-size:1.5rem;'>المستحقة: {due:.2f}</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/debts')
+def debts():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>💳 الديون</h2><p>لا توجد ديون مسجلة</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/budgets')
+def budgets():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>📋 الميزانيات</h2><p>لا توجد ميزانيات</p>"
+    return render_template_string(PAGE, content=content)

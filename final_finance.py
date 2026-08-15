@@ -84,6 +84,14 @@ def dashboard():
         <a href="/invoices" style="color:#FFD700;">🧾 الفواتير</a> |
         <a href="/products" style="color:#FFD700;">📦 المنتجات</a> |
         <a href="/bank" style="color:#FFD700;">🏦 البنك</a> |
+        <a href="/zakat" style="color:#FFD700;">🕌 الزكاة</a> |
+        <a href="/debts" style="color:#FFD700;">💳 الديون</a> |
+        <a href="/budgets" style="color:#FFD700;">📋 الميزانيات</a> |
+        <a href="/assets" style="color:#FFD700;">🏢 الأصول</a> |
+        <a href="/currencies" style="color:#FFD700;">💱 العملات</a> |
+        <a href="/ledger" style="color:#FFD700;">📒 الأستاذ</a> |
+        <a href="/cashflow" style="color:#FFD700;">💵 التدفقات</a> |
+        <a href="/ai_forecast" style="color:#FFD700;">🧠 تنبؤ</a> |
         <a href="/logout" style="color:#ff4a4a;">🚪 خروج</a>
     </div>'''
     return render_template_string(PAGE, content=content)

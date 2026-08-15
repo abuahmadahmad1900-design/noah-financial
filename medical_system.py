@@ -296,6 +296,10 @@ MED_PAGE = '''
         <a href="/medical_search" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #00c8ff;box-shadow:0 0 15px rgba(0,200,255,0.3);text-decoration:none;color:#00c8ff;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">🔍</span>البحث</a>
         <a href="/medical_notifications" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #FFD700;box-shadow:0 0 15px rgba(255,215,0,0.3);text-decoration:none;color:#FFD700;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">🔔</span>إشعارات</a>
         <a href="/medical_payments" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #4affb0;box-shadow:0 0 15px rgba(74,255,176,0.3);text-decoration:none;color:#4affb0;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">💳</span>الدفع</a>
+        <a href="/medical_reports" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #4affb0;box-shadow:0 0 15px rgba(74,255,176,0.3);text-decoration:none;color:#4affb0;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">📊</span>التقارير</a>
+        <a href="/medical_search" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #00c8ff;box-shadow:0 0 15px rgba(0,200,255,0.3);text-decoration:none;color:#00c8ff;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">🔍</span>البحث</a>
+        <a href="/medical_notifications" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #FFD700;box-shadow:0 0 15px rgba(255,215,0,0.3);text-decoration:none;color:#FFD700;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">🔔</span>إشعارات</a>
+        <a href="/medical_payments" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #4affb0;box-shadow:0 0 15px rgba(74,255,176,0.3);text-decoration:none;color:#4affb0;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">💳</span>الدفع</a>
         <a href="/logout_medical" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #ff4a4a;box-shadow:0 0 15px rgba(255,74,74,0.3);text-decoration:none;color:#ff4a4a;font-size:0.75rem;transition:all 0.3s;animation:float-circle 3s ease-in-out infinite;animation-delay:3.2s;"><span style="font-size:1.5rem;animation:spin-icon 4s linear infinite;">🚪</span>خروج</a>
         </div>
         {{ content | safe }}
@@ -1591,3 +1595,65 @@ def medical_payments():
 
 
 # ========== نظام الدفع الإلكتروني المتكامل ==========
+
+@app.route('/medical_reports')
+def medical_reports():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    conn = sqlite3.connect(DB_MED); c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM patients"); patients = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM doctors"); doctors = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM appointments"); appts = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM prescriptions"); presc = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM medical_invoices"); total_rev = c.fetchone()[0]
+    conn.close()
+    content = '<h2>📊 التقارير</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;">'
+    content += f'<div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;"><h3 style="color:#4affb0;">{patients}</h3>مرضى</div>'
+    content += f'<div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;"><h3 style="color:#4affb0;">{doctors}</h3>أطباء</div>'
+    content += f'<div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;"><h3 style="color:#4affb0;">{appts}</h3>مواعيد</div>'
+    content += f'<div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;"><h3 style="color:#4affb0;">{presc}</h3>وصفات</div>'
+    content += f'<div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;"><h3 style="color:#FFD700;">{total_rev}</h3>إيرادات</div>'
+    content += '</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/medical_search')
+def medical_search():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    query = request.args.get('q', '')
+    results = []
+    if query:
+        conn = sqlite3.connect(DB_MED); c = conn.cursor()
+        c.execute("SELECT 'مريض', name FROM patients WHERE name LIKE ?", (f'%{query}%',))
+        results.extend(c.fetchall())
+        c.execute("SELECT 'طبيب', name FROM doctors WHERE name LIKE ?", (f'%{query}%',))
+        results.extend(c.fetchall())
+        c.execute("SELECT 'تخصص', name FROM specialties WHERE name LIKE ?", (f'%{query}%',))
+        results.extend(c.fetchall())
+        c.execute("SELECT 'دواء', medicine_name FROM pharmacy WHERE medicine_name LIKE ?", (f'%{query}%',))
+        results.extend(c.fetchall())
+        conn.close()
+    content = f'<h2>🔍 البحث</h2><form method="GET"><input name="q" placeholder="ابحث..." value="{query}"><button>بحث</button></form><table><tr><th>النوع</th><th>الاسم</th></tr>'
+    for r in results:
+        content += f'<tr><td>{r[0]}</td><td>{r[1]}</td></tr>'
+    content += '</table>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/medical_notifications')
+def medical_notifications():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    notifications = ["📅 تذكير بموعد المريض غداً","💊 تنبيه: دواء قارب على الانتهاء","🔬 نتيجة فحص جاهزة","🏥 غرفة 101 أصبحت متاحة"]
+    html = "".join([f'<div style="background:#1a1a4e;padding:15px;border-radius:10px;margin:5px;border:1px solid #4affb0;">🔔 {n}</div>' for n in notifications])
+    content = f'<h2>🔔 الإشعارات</h2>{html}'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/medical_payments')
+def medical_payments():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    content = '<h2>💳 الدفع الإلكتروني</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;">'
+    content += '<div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:25px;border-radius:15px;text-align:center;border:1px solid #4affb0;"><h3 style="color:#4affb0;">💳 البطاقات</h3><p style="color:#aaa;">Visa / Mastercard / Mada</p></div>'
+    content += '<div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:25px;border-radius:15px;text-align:center;border:1px solid #00c8ff;"><h3 style="color:#00c8ff;">📱 المحافظ</h3><p style="color:#aaa;">Apple Pay / STC Pay</p></div>'
+    content += '<div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:25px;border-radius:15px;text-align:center;border:1px solid #FFD700;"><h3 style="color:#FFD700;">🏦 التحويل</h3><p style="color:#aaa;">تحويل بنكي</p></div>'
+    content += '</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5007, debug=False)

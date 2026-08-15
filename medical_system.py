@@ -1645,15 +1645,5 @@ def medical_notifications():
     content = f'<h2>🔔 الإشعارات</h2>{html}'
     return render_template_string(MED_PAGE, content=content)
 
-@app.route('/medical_payments')
-def medical_payments():
-    if 'medical_user' not in session: return redirect('/medical_login')
-    content = '<h2>💳 الدفع الإلكتروني</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;">'
-    content += '<div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:25px;border-radius:15px;text-align:center;border:1px solid #4affb0;"><h3 style="color:#4affb0;">💳 البطاقات</h3><p style="color:#aaa;">Visa / Mastercard / Mada</p></div>'
-    content += '<div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:25px;border-radius:15px;text-align:center;border:1px solid #00c8ff;"><h3 style="color:#00c8ff;">📱 المحافظ</h3><p style="color:#aaa;">Apple Pay / STC Pay</p></div>'
-    content += '<div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:25px;border-radius:15px;text-align:center;border:1px solid #FFD700;"><h3 style="color:#FFD700;">🏦 التحويل</h3><p style="color:#aaa;">تحويل بنكي</p></div>'
-    content += '</div>'
-    return render_template_string(MED_PAGE, content=content)
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5007, debug=False)

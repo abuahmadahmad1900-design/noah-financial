@@ -80,3 +80,37 @@ def accounts():
     rows = c.fetchall()
     conn.close()
     return f"<h2>📚 الحسابات</h2><table border='1'><tr><th>ID</th><th>الاسم</th><th>النوع</th></tr>" + "".join(f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>" for r in rows) + "</table>"
+
+@app.route('/dashboard')
+def dashboard():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM accounts")
+    accounts = c.fetchone()[0]
+    conn.close()
+    return f"""
+    <!DOCTYPE html>
+    <html lang="ar" dir="rtl">
+    <head><meta charset="UTF-8"><title>🦅 نوح المالي</title>
+    <style>
+        body {{ font-family:Tahoma; background:linear-gradient(135deg,#0a0a2e,#1a0a3e); color:#fff; padding:30px; }}
+        h1 {{ text-align:center; color:#FFD700; font-size:2.5rem; }}
+        .stats {{ display:flex; gap:20px; justify-content:center; margin:40px 0; }}
+        .card {{ background:#1a1a3e; padding:30px; border-radius:20px; border:2px solid #FFD700; text-align:center; }}
+        .card h2 {{ font-size:2.5rem; color:#FFD700; }}
+        .nav {{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }}
+        .nav a {{ background:#1a1a3e; color:#fff; padding:15px 25px; border-radius:25px; text-decoration:none; border:1px solid #FFD700; }}
+        .nav a:hover {{ background:#FFD700; color:#000; }}
+    </style></head>
+    <body>
+        <h1>🦅 لوحة نوح المالية</h1>
+        <div class="stats">
+            <div class="card"><h2>{accounts}</h2>حسابات</div>
+        </div>
+        <div class="nav">
+            <a href="/accounts">📚 الحسابات</a>
+            <a href="/logout">🚪 خروج</a>
+        </div>
+    </body></html>
+    """

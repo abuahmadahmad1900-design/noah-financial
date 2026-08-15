@@ -102,16 +102,50 @@ def dashboard():
     c.execute("SELECT COUNT(*) FROM invoices"); invoices = c.fetchone()[0]
     c.execute("SELECT COUNT(*) FROM products"); products = c.fetchone()[0]
     c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM bank_moves"); bank = c.fetchone()[0]
     conn.close()
-    content = f'''
-    <h1 style="text-align:center;color:#FFD700;font-size:2.5rem;">🦅 لوحة نوح المالية</h1>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin:30px 0;">
-        <div style="background:#1a1a3e;padding:30px;border-radius:20px;border:2px solid #FFD700;text-align:center;"><h2 style="font-size:2.5rem;color:#FFD700;">{accounts}</h2>حسابات</div>
-        <div style="background:#1a1a3e;padding:30px;border-radius:20px;border:2px solid #FFD700;text-align:center;"><h2 style="font-size:2.5rem;color:#FFD700;">{customers}</h2>عملاء</div>
-        <div style="background:#1a1a3e;padding:30px;border-radius:20px;border:2px solid #FFD700;text-align:center;"><h2 style="font-size:2.5rem;color:#FFD700;">{invoices}</h2>فواتير</div>
-        <div style="background:#1a1a3e;padding:30px;border-radius:20px;border:2px solid #FFD700;text-align:center;"><h2 style="font-size:2.5rem;color:#FFD700;">{products}</h2>منتجات</div>
-        <div style="background:#1a1a3e;padding:30px;border-radius:20px;border:2px solid #FFD700;text-align:center;"><h2 style="font-size:2.5rem;color:#FFD700;">{revenue}</h2>إيرادات</div>
-    </div>'''
+    content = f"""
+    <style>
+        @keyframes float-btn {{ 0%,100% {{ transform: translateY(0); }} 50% {{ transform: translateY(-8px); }} }}
+        @keyframes glow-gold {{ 0%,100% {{ box-shadow: 0 0 15px rgba(255,215,0,0.4); }} 50% {{ box-shadow: 0 0 35px rgba(255,215,0,0.8); }} }}
+        @keyframes glow-blue {{ 0%,100% {{ box-shadow: 0 0 15px rgba(0,200,255,0.4); }} 50% {{ box-shadow: 0 0 35px rgba(0,200,255,0.8); }} }}
+        @keyframes spin-icon {{ 0%,100% {{ transform: rotate(0deg); }} 50% {{ transform: rotate(10deg); }} }}
+        h1 {{ text-align:center; font-size:2.5rem; background:linear-gradient(45deg,#FFD700,#FF8C00,#FFD700); -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:gradient-shift 3s ease infinite; }}
+        @keyframes gradient-shift {{ 0% {{ background-position:0% 50%; }} 50% {{ background-position:100% 50%; }} 100% {{ background-position:0% 50%; }} }}
+        .stats {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:15px; margin:30px 0; }}
+        .stat {{ background:linear-gradient(145deg,#1a1a4e,#0d0d2e); border-radius:20px; padding:25px; text-align:center; border:2px solid #FFD700; animation:float-btn 3s ease-in-out infinite; }}
+        .stat h2 {{ font-size:2rem; color:#FFD700; }}
+        .nav-grid {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px; margin-top:30px; }}
+        .nav-btn {{ display:flex; flex-direction:column; align-items:center; gap:8px; padding:20px; border-radius:50%; width:100px; height:100px; justify-content:center; background:linear-gradient(145deg,#1a1a4e,#0d0d2e); text-decoration:none; font-size:0.75rem; transition:all 0.3s; animation:float-btn 3s ease-in-out infinite; }}
+        .nav-btn:hover {{ transform: scale(1.15); }}
+        .nav-btn span {{ font-size:2rem; animation:spin-icon 4s linear infinite; }}
+        .btn-gold {{ border:2px solid #FFD700; color:#FFD700; animation:glow-gold 2s infinite; }}
+        .btn-blue {{ border:2px solid #00c8ff; color:#00c8ff; animation:glow-blue 2s infinite; }}
+        .btn-green {{ border:2px solid #4affb0; color:#4affb0; box-shadow:0 0 25px rgba(74,255,176,0.4); }}
+    </style>
+    <h1>🦅 لوحة نوح المالية</h1>
+    <div class="stats">
+        <div class="stat" style="animation-delay:0s;"><h2>{accounts}</h2>حسابات</div>
+        <div class="stat" style="animation-delay:0.2s;"><h2>{customers}</h2>عملاء</div>
+        <div class="stat" style="animation-delay:0.4s;"><h2>{invoices}</h2>فواتير</div>
+        <div class="stat" style="animation-delay:0.6s;"><h2>{products}</h2>منتجات</div>
+        <div class="stat" style="animation-delay:0.8s;"><h2>{bank}</h2>بنك</div>
+        <div class="stat" style="animation-delay:1s;"><h2>{revenue}</h2>إيرادات</div>
+    </div>
+    <div class="nav-grid">
+        <a href="/accounts" class="nav-btn btn-gold"><span>📚</span>الحسابات</a>
+        <a href="/customers" class="nav-btn btn-blue"><span>👥</span>العملاء</a>
+        <a href="/suppliers" class="nav-btn btn-green"><span>📦</span>الموردون</a>
+        <a href="/invoices" class="nav-btn btn-gold"><span>🧾</span>الفواتير</a>
+        <a href="/products" class="nav-btn btn-blue"><span>📦</span>المنتجات</a>
+        <a href="/bank" class="nav-btn btn-green"><span>🏦</span>البنك</a>
+        <a href="/zakat" class="nav-btn btn-gold"><span>🕌</span>الزكاة</a>
+        <a href="/debts" class="nav-btn btn-blue"><span>💳</span>الديون</a>
+        <a href="/budgets" class="nav-btn btn-green"><span>📋</span>الميزانيات</a>
+        <a href="/assets" class="nav-btn btn-gold"><span>🏢</span>الأصول</a>
+        <a href="/currencies" class="nav-btn btn-blue"><span>💱</span>العملات</a>
+        <a href="/logout" class="nav-btn btn-green"><span>🚪</span>خروج</a>
+    </div>"""
     return render_template_string(PAGE, content=content)
 
 @app.route('/accounts', methods=['GET','POST'])

@@ -73,13 +73,25 @@ def dashboard():
         <div style="background:#1a1a3e;padding:20px;text-align:center;"><h2>{invoices}</h2>فواتير</div>
         <div style="background:#1a1a3e;padding:20px;text-align:center;"><h2>{products}</h2>منتجات</div>
     </div>
-    <div style="margin-top:20px;text-align:center;">
+    <div class="nav-links" style="margin-top:20px;text-align:center;">
+    <style>
+        @keyframes glow-gold {{ 0%,100% {{ box-shadow:0 0 10px rgba(255,215,0,0.4); }} 50% {{ box-shadow:0 0 30px rgba(255,215,0,0.9); }} }}
+        @keyframes glow-blue {{ 0%,100% {{ box-shadow:0 0 10px rgba(0,200,255,0.4); }} 50% {{ box-shadow:0 0 30px rgba(0,200,255,0.9); }} }}
+        @keyframes glow-green {{ 0%,100% {{ box-shadow:0 0 10px rgba(74,255,176,0.4); }} 50% {{ box-shadow:0 0 30px rgba(74,255,176,0.9); }} }}
+        @keyframes float-icon {{ 0%,100% {{ transform:translateY(0); }} 50% {{ transform:translateY(-5px); }} }}
+        .nav-links a {{ display:inline-block; margin:5px; padding:10px 20px; border-radius:25px; text-decoration:none; font-weight:bold; transition:all 0.3s; }}
+        .nav-links a:hover {{ transform:scale(1.1); }}
+        .nav-links a span {{ display:inline-block; animation:float-icon 2s ease-in-out infinite; }}
+    </style>
         <a href="/accounts" style="color:#FFD700;">📚 الحسابات</a> |
         <a href="/customers" style="color:#FFD700;">👥 العملاء</a> |
         <a href="/invoices" style="color:#FFD700;">🧾 الفواتير</a> |
         <a href="/products" style="color:#FFD700;">📦 المنتجات</a> |
         <a href="/bank" style="color:#FFD700;">🏦 البنك</a> |
-        <a href="/logout" style="color:#ff4a4a;">🚪 خروج</a>
+        <a href="/zakat" style="border:2px solid #4affb0;color:#4affb0;animation:glow-green 2s infinite;"><span>🕌</span> الزكاة</a>
+        <a href="/debts" style="border:2px solid #FFD700;color:#FFD700;animation:glow-gold 2s infinite;"><span>💳</span> الديون</a>
+        <a href="/budgets" style="border:2px solid #00c8ff;color:#00c8ff;animation:glow-blue 2s infinite;"><span>📋</span> الميزانيات</a>
+        <a href="/logout" style="border:2px solid #ff4a4a;color:#ff4a4a;animation:glow-red 2s infinite;"><span>🚪</span> خروج</a>
     </div>'''
     return render_template_string(PAGE, content=content)
 

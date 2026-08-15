@@ -169,3 +169,108 @@ def invoices():
     for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td></tr>"
     content += "</table>"
     return render_template_string(PAGE, content=content)
+
+@app.route('/products', methods=['GET','POST'])
+def products():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    if request.method == 'POST':
+        c.execute("INSERT INTO products (name, price, stock) VALUES (?,?,?)", (request.form['name'], request.form['price'], request.form['stock']))
+        conn.commit()
+    c.execute("SELECT * FROM products")
+    rows = c.fetchall(); conn.close()
+    content = "<h2>📦 المنتجات</h2><form method='POST'><input name='name' placeholder='اسم المنتج' required><input name='price' placeholder='السعر' required><input name='stock' placeholder='المخزون' required><button>إضافة</button></form><table><tr><th>ID</th><th>الاسم</th><th>السعر</th><th>المخزون</th></tr>"
+    for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td></tr>"
+    content += "</table>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/bank', methods=['GET','POST'])
+def bank():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    if request.method == 'POST':
+        c.execute("INSERT INTO bank_moves (date, desc, amount) VALUES (?,?,?)", (request.form['date'], request.form['desc'], request.form['amount']))
+        conn.commit()
+    c.execute("SELECT * FROM bank_moves")
+    rows = c.fetchall()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves")
+    balance = c.fetchone()[0]
+    conn.close()
+    content = f"<h2>🏦 البنك</h2><p style='font-size:1.5rem;color:#FFD700;'>الرصيد: {balance}</p><form method='POST'><input name='date' type='date' required><input name='desc' placeholder='الوصف' required><input name='amount' placeholder='المبلغ' required><button>إضافة</button></form><table><tr><th>ID</th><th>التاريخ</th><th>الوصف</th><th>المبلغ</th></tr>"
+    for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td></tr>"
+    content += "</table>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/zakat', methods=['GET','POST'])
+def zakat():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    if request.method == 'POST':
+        c.execute("INSERT INTO zakat (amount, date) VALUES (?,?)", (request.form['amount'], request.form['date']))
+        conn.commit()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount > 0")
+    total = c.fetchone()[0]
+    c.execute("SELECT * FROM zakat")
+    rows = c.fetchall(); conn.close()
+    nisab = 85 * 60
+    due = total * 0.025 if total >= nisab else 0
+    content = f"<h2>🕌 الزكاة</h2><p>💰 النقود: {total}</p><p>📏 النصاب: {nisab}</p><p style='color:#FFD700;font-size:1.5rem;'>🧮 المستحقة: {due:.2f}</p><form method='POST'><input name='amount' placeholder='مبلغ' required><input name='date' type='date' required><button>تسجيل</button></form><table><tr><th>ID</th><th>مبلغ</th><th>تاريخ</th></tr>"
+    for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>"
+    content += "</table>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/debts', methods=['GET','POST'])
+def debts():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    if request.method == 'POST':
+        c.execute("INSERT INTO debts (name, amount, type) VALUES (?,?,?)", (request.form['name'], request.form['amount'], request.form['type']))
+        conn.commit()
+    c.execute("SELECT * FROM debts")
+    rows = c.fetchall(); conn.close()
+    content = "<h2>💳 الديون</h2><form method='POST'><input name='name' placeholder='اسم' required><input name='amount' placeholder='مبلغ' required><select name='type'><option>علينا</option><option>لنا</option></select><button>إضافة</button></form><table><tr><th>ID</th><th>الاسم</th><th>مبلغ</th><th>نوع</th></tr>"
+    for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td></tr>"
+    content += "</table>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/budgets', methods=['GET','POST'])
+def budgets():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    if request.method == 'POST':
+        c.execute("INSERT INTO budgets (name, amount) VALUES (?,?)", (request.form['name'], request.form['amount']))
+        conn.commit()
+    c.execute("SELECT * FROM budgets")
+    rows = c.fetchall(); conn.close()
+    content = "<h2>📋 الميزانيات</h2><form method='POST'><input name='name' placeholder='اسم' required><input name='amount' placeholder='مبلغ' required><button>إضافة</button></form><table><tr><th>ID</th><th>الاسم</th><th>المبلغ</th></tr>"
+    for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>"
+    content += "</table>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/assets', methods=['GET','POST'])
+def assets():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    if request.method == 'POST':
+        c.execute("INSERT INTO assets (name, value) VALUES (?,?)", (request.form['name'], request.form['value']))
+        conn.commit()
+    c.execute("SELECT * FROM assets")
+    rows = c.fetchall(); conn.close()
+    content = "<h2>🏢 الأصول</h2><form method='POST'><input name='name' placeholder='اسم الأصل' required><input name='value' placeholder='القيمة' required><button>إضافة</button></form><table><tr><th>ID</th><th>الاسم</th><th>القيمة</th></tr>"
+    for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>"
+    content += "</table>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/currencies', methods=['GET','POST'])
+def currencies():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    if request.method == 'POST':
+        c.execute("INSERT INTO currencies (code, rate) VALUES (?,?)", (request.form['code'], request.form['rate']))
+        conn.commit()
+    c.execute("SELECT * FROM currencies")
+    rows = c.fetchall(); conn.close()
+    content = "<h2>💱 العملات</h2><form method='POST'><input name='code' placeholder='رمز' required><input name='rate' placeholder='سعر' required><button>إضافة</button></form><table><tr><th>ID</th><th>رمز</th><th>سعر</th></tr>"
+    for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>"
+    content += "</table>"
+    return render_template_string(PAGE, content=content)

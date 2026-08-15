@@ -145,8 +145,9 @@ def init_db():
         ('أورام','علاج الأورام'),
         ('طوارئ','طب الطوارئ'),
     ]
+    c.execute("DELETE FROM specialties")
     for name, desc in specialties:
-        c.execute("INSERT OR IGNORE INTO specialties (name, description) VALUES (?,?)", (name, desc))
+        c.execute("INSERT INTO specialties (name, description) VALUES (?,?)", (name, desc))
     conn.commit()
     conn.close()
 

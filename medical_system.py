@@ -915,7 +915,9 @@ def drug_interactions():
 def medical_history():
     if 'medical_user' not in session: return redirect('/medical_login')
     systems = ["سجل الأمراض السابقة","سجل العمليات","سجل الحساسية","سجل الأدوية الحالية","التاريخ العائلي","سجل التطعيمات","سجل الحمل","سجل الحوادث","سجل الدخول للمستشفى","ملف المريض الكامل"]
-    html = "".join([f'<div style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #00c8ff;"><strong style="color:#00c8ff;">📋 {s}</strong></div>' for s in systems])
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #00c8ff;display:block;text-decoration:none;"><strong style="color:#00c8ff;">📋 {s}</strong></a>'
     content = f'<h2>📋 التاريخ المرضي + 10 داعمة</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
     return render_template_string(MED_PAGE, content=content)
 
@@ -923,7 +925,9 @@ def medical_history():
 def emergency_alerts():
     if 'medical_user' not in session: return redirect('/medical_login')
     systems = ["تنبيه فوري للأطباء","تنبيه غرفة الطوارئ","تنبيه العناية المركزة","تنبيه الصيدلية","تنبيه المختبر","تنبيه الأشعة","تنبيه الإدارة","تنبيه الأمن","تنبيه الإسعاف","تنبيه العائلة"]
-    html = "".join([f'<div style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #ff4a4a;"><strong style="color:#ff4a4a;">🚨 {s}</strong></div>' for s in systems])
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #ff4a4a;display:block;text-decoration:none;"><strong style="color:#ff4a4a;">🚨 {s}</strong></a>'
     content = f'<h2>🚨 تنبيهات الطوارئ + 10 داعمة</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
     return render_template_string(MED_PAGE, content=content)
 
@@ -931,7 +935,9 @@ def emergency_alerts():
 def surgical_consent():
     if 'medical_user' not in session: return redirect('/medical_login')
     systems = ["موافقة العملية","موافقة التخدير","موافقة نقل الدم","موافقة العلاج الكيماوي","موافقة الإشعاع","موافقة التجارب","موافقة الأطفال","موافقة الطوارئ","موافقة التبرع","موافقة الخروج"]
-    html = "".join([f'<div style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #FFD700;"><strong style="color:#FFD700;">📜 {s}</strong></div>' for s in systems])
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #FFD700;display:block;text-decoration:none;"><strong style="color:#FFD700;">📜 {s}</strong></a>'
     content = f'<h2>📜 موافقات العمليات + 10 داعمة</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
     return render_template_string(MED_PAGE, content=content)
 
@@ -939,7 +945,9 @@ def surgical_consent():
 def data_privacy():
     if 'medical_user' not in session: return redirect('/medical_login')
     systems = ["تشفير السجلات","صلاحيات الوصول","سجل الدخول","نسخ احتياطي مشفر","إخفاء الهوية","قفل الملفات","تدقيق الخصوصية","حماية كلمة المرور","مصادقة ثنائية","تسجيل الخروج التلقائي"]
-    html = "".join([f'<div style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #4affb0;"><strong style="color:#4affb0;">🔐 {s}</strong></div>' for s in systems])
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #4affb0;display:block;text-decoration:none;"><strong style="color:#4affb0;">🔐 {s}</strong></a>'
     content = f'<h2>🔐 خصوصية البيانات + 10 داعمة</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
     return render_template_string(MED_PAGE, content=content)
 

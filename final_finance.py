@@ -518,37 +518,3 @@ def kpis():
         <div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #FFD700;"><h3>النقد</h3><p style="font-size:2rem;color:#FFD700;">{cash}</p></div>
     </div>'''
     return render_template_string(PAGE, content=content)
-
-@app.route('/advanced_reports')
-def advanced_reports():
-    if 'user' not in session: return redirect('/login')
-    conn = sqlite3.connect(DB); c = conn.cursor()
-    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
-    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount > 0"); inflow = c.fetchone()[0]
-    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount < 0"); outflow = c.fetchone()[0]
-    c.execute("SELECT COALESCE(SUM(balance),0) FROM accounts WHERE type='أصول'"); assets = c.fetchone()[0]
-    c.execute("SELECT COALESCE(SUM(balance),0) FROM accounts WHERE type='خصوم'"); liabilities = c.fetchone()[0]
-    conn.close()
-    net = inflow + outflow
-    equity = assets - liabilities
-    content = f"<h2>📊 التقارير المتقدمة</h2><table><tr><th>الإيرادات</th><th>التدفق الصافي</th><th>الأصول</th><th>الخصوم</th><th>حقوق الملكية</th></tr><tr><td>{revenue}</td><td>{net}</td><td>{assets}</td><td>{liabilities}</td><td>{equity}</td></tr></table>"
-    return render_template_string(PAGE, content=content)
-
-@app.route('/smart_analysis')
-def smart_analysis():
-    if 'user' not in session: return redirect('/login')
-    conn = sqlite3.connect(DB); c = conn.cursor()
-    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
-    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount < 0"); expenses = abs(c.fetchone()[0])
-    c.execute("SELECT COUNT(*) FROM customers"); customers = c.fetchone()[0]
-    conn.close()
-    profit = revenue - expenses
-    margin = (profit / revenue * 100) if revenue > 0 else 0
-    insights = []
-    if margin > 30: insights.append("✅ ربحية ممتازة")
-    elif margin > 10: insights.append("📊 ربحية جيدة")
-    else: insights.append("⚠️ ربحية منخفضة")
-    if customers >= 5: insights.append("👥 عملاء كافيون")
-    else: insights.append("📈 تحتاج عملاء أكثر")
-    content = f"<h2>🧠 التحليل الذكي</h2><p>هامش الربح: {margin:.1f}%</p>" + "".join(f"<p>{i}</p>" for i in insights)
-    return render_template_string(PAGE, content=content)

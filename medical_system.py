@@ -907,7 +907,9 @@ def vital_systems():
 def drug_interactions():
     if 'medical_user' not in session: return redirect('/medical_login')
     systems = ["فحص التعارض الدوائي","قاعدة بيانات الأدوية","تنبيهات الجرعات","تفاعلات الأعشاب","تفاعلات الحساسية","فحص الأدوية للحوامل","فحص أدوية الأطفال","تفاعلات الأغذية","تنبيهات الفشل الكلوي","تنبيهات الفشل الكبدي"]
-    html = "".join([f'<div style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #4affb0;"><strong style="color:#4affb0;">💊 {s}</strong></div>' for s in systems])
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #4affb0;display:block;text-decoration:none;margin:5px;"><strong style="color:#4affb0;">💊 {s}</strong></a>'
     content = f'<h2>💊 نظام تفاعلات الأدوية + 10 داعمة</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
     return render_template_string(MED_PAGE, content=content)
 

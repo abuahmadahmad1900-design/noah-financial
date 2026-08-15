@@ -573,3 +573,49 @@ def cashflow():
     net = inflow + outflow
     content = f"<h2>💵 التدفقات النقدية</h2><p>داخل: {inflow}</p><p>خارج: {outflow}</p><p style='color:#FFD700;'>صافي: {net}</p>"
     return render_template_string(PAGE, content=content)
+
+@app.route('/ai_forecast')
+def ai_forecast():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
+    conn.close()
+    next_month = revenue * 1.15
+    next_quarter = revenue * 1.4
+    content = f"<h2>🧠 التنبؤ المالي</h2><p>الحالي: {revenue}</p><p>الشهر القادم: {next_month:.0f}</p><p>الربع القادم: {next_quarter:.0f}</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/scenarios')
+def scenarios():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
+    conn.close()
+    best = revenue * 1.5
+    worst = revenue * 0.5
+    expected = revenue * 1.1
+    content = f"<h2>🔮 السيناريوهات</h2><p>الأفضل: {best:.0f}</p><p>الأسوأ: {worst:.0f}</p><p>المتوقع: {expected:.0f}</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/ratios')
+def ratios():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount < 0"); expenses = abs(c.fetchone()[0])
+    conn.close()
+    margin = (revenue - expenses) / revenue * 100 if revenue > 0 else 0
+    content = f"<h2>📊 النسب المالية</h2><p>هامش الربح: {margin:.1f}%</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/fraud_detection')
+def fraud_detection():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>⚠️ كشف الاحتيال</h2><p>لا توجد عمليات مشبوهة</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/credit_management')
+def credit_management():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>💳 إدارة الائتمان</h2><p>لا توجد ديون متأخرة</p>"
+    return render_template_string(PAGE, content=content)

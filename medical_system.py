@@ -267,6 +267,7 @@ MED_PAGE = '''
             <a href="/medical_alerts" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #ff4a4a;box-shadow:0 0 15px rgba(255,74,74,0.3);text-decoration:none;color:#ff4a4a;font-size:0.75rem;transition:all 0.3s;animation:float-circle 3s ease-in-out infinite;animation-delay:2.8s;"><span style="font-size:1.5rem;animation:spin-icon 4s linear infinite;">🔔</span>التنبيهات</a>
             <a href="/medical_ai" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #00c8ff;box-shadow:0 0 15px rgba(0,200,255,0.3);text-decoration:none;color:#00c8ff;font-size:0.75rem;transition:all 0.3s;animation:float-circle 3s ease-in-out infinite;animation-delay:3s;"><span style="font-size:1.5rem;animation:spin-icon 4s linear infinite;">🧠</span>الذكاء</a>
             <a href="/medical_encyclopedia" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #FFD700;box-shadow:0 0 25px rgba(255,215,0,0.5);text-decoration:none;color:#FFD700;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">📚</span>الموسوعة</a>
+        <a href="/medical_apps" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #00c8ff;box-shadow:0 0 25px rgba(0,200,255,0.5);text-decoration:none;color:#00c8ff;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">📱</span>التطبيقات</a>
         <a href="/logout_medical" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #ff4a4a;box-shadow:0 0 15px rgba(255,74,74,0.3);text-decoration:none;color:#ff4a4a;font-size:0.75rem;transition:all 0.3s;animation:float-circle 3s ease-in-out infinite;animation-delay:3.2s;"><span style="font-size:1.5rem;animation:spin-icon 4s linear infinite;">🚪</span>خروج</a>
         </div>
         {{ content | safe }}
@@ -1379,6 +1380,34 @@ def medical_encyclopedia():
     for icon, name, url, desc in MEDICAL_ENCYCLOPEDIA:
         html += f'<a href="{url}" target="_blank" style="background:#1a1a4e;padding:15px;border-radius:12px;text-align:center;border:1px solid #4affb0;display:block;text-decoration:none;margin:5px;"><span style="font-size:2rem;">{icon}</span><br><strong style="color:#4affb0;">{name}</strong><br><small style="color:#aaa;">{desc}</small></a>'
     content = f'<h2>📚 الموسوعة الطبية الشاملة - {len(MEDICAL_ENCYCLOPEDIA)} مصدر</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+# ========== التطبيقات والتواصل الاجتماعي ==========
+MEDICAL_APPS = [
+    ("💼", "LinkedIn Medical", "https://www.linkedin.com", "شبكة مهنية"),
+    ("🐦", "Twitter X Medical", "https://twitter.com", "أخبار طبية"),
+    ("📘", "Facebook Medical Groups", "https://www.facebook.com", "مجموعات طبية"),
+    ("📱", "Telegram Medical", "https://t.me", "قنوات طبية"),
+    ("💬", "WhatsApp Medical", "https://www.whatsapp.com", "مجموعات استشارية"),
+    ("📺", "YouTube Medical", "https://www.youtube.com", "فيديوهات طبية"),
+    ("📸", "Instagram Medical", "https://www.instagram.com", "توعية صحية"),
+    ("🎵", "TikTok Medical", "https://www.tiktok.com", "فيديوهات قصيرة"),
+    ("👽", "Reddit Medical", "https://www.reddit.com", "منتديات طبية"),
+    ("❓", "Quora Medical", "https://www.quora.com", "أسئلة وأجوبة"),
+    ("🤖", "Ada", "https://ada.com", "تشخيص الأعراض"),
+    ("🏥", "Babylon", "https://www.babylonhealth.com", "استشارات"),
+    ("📞", "Teladoc", "https://www.teladoc.com", "طب عن بعد"),
+    ("💻", "Amwell", "https://www.amwell.com", "استشارات"),
+    ("🩺", "Doctor on Demand", "https://www.doctorondemand.com", "طب فوري"),
+]
+
+@app.route('/medical_apps')
+def medical_apps():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    html = ""
+    for icon, name, url, desc in MEDICAL_APPS:
+        html += f'<a href="{url}" target="_blank" style="background:#1a1a4e;padding:15px;border-radius:12px;text-align:center;border:1px solid #00c8ff;display:block;text-decoration:none;margin:5px;"><span style="font-size:2rem;">{icon}</span><br><strong style="color:#00c8ff;">{name}</strong><br><small style="color:#aaa;">{desc}</small></a>'
+    content = f'<h2>📱 التطبيقات والتواصل الطبي - {len(MEDICAL_APPS)} تطبيق</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
     return render_template_string(MED_PAGE, content=content)
 
 if __name__ == '__main__':

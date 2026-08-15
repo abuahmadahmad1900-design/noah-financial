@@ -114,3 +114,41 @@ def dashboard():
         </div>
     </body></html>
     """
+
+@app.route('/customers', methods=['GET','POST'])
+def customers():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS customers (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        phone TEXT
+    )''')
+    if request.method == 'POST':
+        c.execute("INSERT INTO customers (name, phone) VALUES (?,?)",
+                  (request.form['name'], request.form.get('phone','')))
+        conn.commit()
+    c.execute("SELECT * FROM customers")
+    rows = c.fetchall()
+    conn.close()
+    return f"<h2>👥 العملاء</h2><table border='1'><tr><th>ID</th><th>الاسم</th><th>الهاتف</th></tr>" + "".join(f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>" for r in rows) + "</table>"
+
+@app.route('/suppliers', methods=['GET','POST'])
+def suppliers():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS suppliers (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        phone TEXT
+    )''')
+    if request.method == 'POST':
+        c.execute("INSERT INTO suppliers (name, phone) VALUES (?,?)",
+                  (request.form['name'], request.form.get('phone','')))
+        conn.commit()
+    c.execute("SELECT * FROM suppliers")
+    rows = c.fetchall()
+    conn.close()
+    return f"<h2>📦 الموردون</h2><table border='1'><tr><th>ID</th><th>الاسم</th><th>الهاتف</th></tr>" + "".join(f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>" for r in rows) + "</table>"

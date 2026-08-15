@@ -250,6 +250,17 @@ def dashboard():
         <a href="/smart_analysis" style="border:2px solid #FFD700;color:#FFD700;"><span>🧠</span> تحليل</a>
         <a href="/currency_converter" style="border:2px solid #00c8ff;color:#00c8ff;"><span>💱</span> محول</a>
         <a href="/kpis" style="border:2px solid #4affb0;color:#4affb0;"><span>🎯</span> مؤشرات</a>
+        <a href="/ledger" style="border:2px solid #FFD700;color:#FFD700;"><span>📒</span> أستاذ</a>
+        <a href="/trial_balance" style="border:2px solid #00c8ff;color:#00c8ff;"><span>⚖️</span> ميزان</a>
+        <a href="/income_statement" style="border:2px solid #4affb0;color:#4affb0;"><span>📈</span> دخل</a>
+        <a href="/cashflow" style="border:2px solid #FFD700;color:#FFD700;"><span>💵</span> تدفقات</a>
+        <a href="/ai_forecast" style="border:2px solid #00c8ff;color:#00c8ff;"><span>🧠</span> تنبؤ</a>
+        <a href="/economic_indicators" style="border:2px solid #4affb0;color:#4affb0;"><span>📈</span> مؤشرات</a>
+        <a href="/stock_market" style="border:2px solid #FFD700;color:#FFD700;"><span>💰</span> أسهم</a>
+        <a href="/blockchain" style="border:2px solid #00c8ff;color:#00c8ff;"><span>🔗</span> بلوكتشين</a>
+        <a href="/machine_learning" style="border:2px solid #4affb0;color:#4affb0;"><span>🤖</span> تعلم</a>
+        <a href="/encryption" style="border:2px solid #FFD700;color:#FFD700;"><span>🔐</span> تشفير</a>
+        <a href="/cloud" style="border:2px solid #00c8ff;color:#00c8ff;"><span>☁️</span> سحابية</a>
         <a href="/logout" style="border:2px solid #ff4a4a;color:#ff4a4a;"><span>🚪</span> خروج</a>
     </div>"""
     return render_template_string(PAGE, content=content)

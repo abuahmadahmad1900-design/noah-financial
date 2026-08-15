@@ -1023,5 +1023,25 @@ def system_details(system_name):
     return render_template_string(MED_PAGE, content=content)
 
 
+
+@app.route('/vital_systems2')
+def vital_systems2():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    content = '''
+    <h2>🏥 أنظمة حيوية إضافية</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;">
+        <a href="/ventilation" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #00c8ff;"><h3>🫁 التنفس الصناعي</h3><p style="color:#aaa;">11 نظام</p></a>
+        <a href="/blood_bank" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #ff4a4a;"><h3>🩸 بنك الدم</h3><p style="color:#aaa;">11 نظام</p></a>
+        <a href="/advanced_lab" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #4affb0;"><h3>🧪 المختبر المتقدم</h3><p style="color:#aaa;">11 نظام</p></a>
+        <a href="/infection_control" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #FFD700;"><h3>🦠 مكافحة العدوى</h3><p style="color:#aaa;">11 نظام</p></a>
+        <a href="/iv_fluids" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #00c8ff;"><h3>💉 المحاليل</h3><p style="color:#aaa;">11 نظام</p></a>
+        <a href="/cardiac_monitor" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #ff4a4a;"><h3>🫀 مراقبة القلب</h3><p style="color:#aaa;">11 نظام</p></a>
+        <a href="/neuro_monitor" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #4affb0;"><h3>🧠 مراقبة المخ</h3><p style="color:#aaa;">11 نظام</p></a>
+        <a href="/neonatal" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #FFD700;"><h3>👶 حديثي الولادة</h3><p style="color:#aaa;">11 نظام</p></a>
+        <a href="/air_ambulance" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #00c8ff;"><h3>🚑 إسعاف جوي</h3><p style="color:#aaa;">11 نظام</p></a>
+        <a href="/remote_monitor" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #4affb0;"><h3>📡 مراقبة عن بعد</h3><p style="color:#aaa;">11 نظام</p></a>
+    </div>'''
+    return render_template_string(MED_PAGE, content=content)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5007, debug=False)

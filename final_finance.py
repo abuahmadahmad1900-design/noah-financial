@@ -39,7 +39,7 @@ def login():
 def home():
     if 'user' not in session:
         return redirect('/login')
-    return f"<h1 style='text-align:center;color:#FFD700;font-family:Tahoma;'>🦅 مرحباً {session['user']} في نوح المالي</h1>"
+    return redirect('/dashboard')
 
 @app.route('/logout')
 def logout():

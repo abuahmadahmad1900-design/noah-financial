@@ -5,7 +5,23 @@ app = Flask(__name__)
 app.secret_key = 'final_2026'
 DB = 'finance.db'
 
-def init_db():
+def init_db()
+
+conn = sqlite3.connect(DB)
+c = conn.cursor()
+c.execute("SELECT COUNT(*) FROM accounts")
+if c.fetchone()[0] == 0:
+    c.execute("INSERT INTO accounts (name, type, balance) VALUES ('النقدية','أصول',50000)")
+    c.execute("INSERT INTO accounts (name, type, balance) VALUES ('البنك','أصول',150000)")
+    c.execute("INSERT INTO customers (name, phone) VALUES ('شركة الأمل','0501234567')")
+    c.execute("INSERT INTO customers (name, phone) VALUES ('مؤسسة النور','0507654321')")
+    c.execute("INSERT INTO products (name, price, stock) VALUES ('منتج أ',100,50)")
+    c.execute("INSERT INTO products (name, price, stock) VALUES ('منتج ب',200,30)")
+    c.execute("INSERT INTO invoices (customer_id, amount, date) VALUES (1,15000,'2026-08-01')")
+    c.execute("INSERT INTO invoices (customer_id, amount, date) VALUES (2,25000,'2026-08-05')")
+    c.execute("INSERT INTO bank_moves (date, desc, amount) VALUES ('2026-08-01','إيداع',50000)")
+    conn.commit()
+conn.close():
     conn = sqlite3.connect(DB)
     c = conn.cursor()
     c.executescript('''

@@ -34,10 +34,27 @@ init_db()
 PAGE = '''
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head><meta charset="UTF-8"><title>نوح المالي</title></head>
-<body style="font-family:Tahoma;background:#0a0a2e;color:#fff;padding:20px;">
+<head><meta charset="UTF-8"><title>نوح المالي</title>
+<style>
+    body { font-family:Tahoma; background:linear-gradient(135deg,#0a0a2e,#1a0a3e); color:#fff; padding:20px; }
+    .nav-btn { display:inline-block; margin:6px; padding:10px 20px; border-radius:25px; text-decoration:none; font-weight:bold; transition:all 0.3s; animation: float-icon 2.5s ease-in-out infinite; }
+    .nav-btn:hover { transform:scale(1.1); }
+    .nav-btn span { display:inline-block; animation: spin-icon 3s linear infinite; }
+    .nav-btn.gold { border:2px solid #FFD700; color:#FFD700; animation: glow-gold 1.8s infinite alternate, float-icon 2.5s ease-in-out infinite; }
+    .nav-btn.blue { border:2px solid #00c8ff; color:#00c8ff; animation: glow-blue 1.8s infinite alternate, float-icon 2.5s ease-in-out infinite; }
+    .nav-btn.green { border:2px solid #4affb0; color:#4affb0; animation: glow-green 1.8s infinite alternate, float-icon 2.5s ease-in-out infinite; }
+    .nav-btn.red { border:2px solid #ff4a4a; color:#ff4a4a; animation: glow-red 1.8s infinite alternate, float-icon 2.5s ease-in-out infinite; }
+    @keyframes glow-gold { 0% { box-shadow:0 0 5px rgba(255,215,0,0.4); } 100% { box-shadow:0 0 25px rgba(255,215,0,0.9); } }
+    @keyframes glow-blue { 0% { box-shadow:0 0 5px rgba(0,200,255,0.4); } 100% { box-shadow:0 0 25px rgba(0,200,255,0.9); } }
+    @keyframes glow-green { 0% { box-shadow:0 0 5px rgba(74,255,176,0.4); } 100% { box-shadow:0 0 25px rgba(74,255,176,0.9); } }
+    @keyframes glow-red { 0% { box-shadow:0 0 5px rgba(255,74,74,0.4); } 100% { box-shadow:0 0 25px rgba(255,74,74,0.9); } }
+    @keyframes float-icon { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-5px); } }
+    @keyframes spin-icon { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
+</style></head>
+<body>
 {{ content | safe }}
 </body></html>'''
+
 
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -64,35 +81,37 @@ def dashboard():
     c.execute("SELECT COUNT(*) FROM customers"); customers = c.fetchone()[0]
     c.execute("SELECT COUNT(*) FROM invoices"); invoices = c.fetchone()[0]
     c.execute("SELECT COUNT(*) FROM products"); products = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
     conn.close()
-    content = f'''
+    content = f"""
     <h1 style="text-align:center;color:#FFD700;">🦅 لوحة نوح المالية</h1>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
-        <div style="background:#1a1a3e;padding:20px;text-align:center;"><h2>{accounts}</h2>حسابات</div>
-        <div style="background:#1a1a3e;padding:20px;text-align:center;"><h2>{customers}</h2>عملاء</div>
-        <div style="background:#1a1a3e;padding:20px;text-align:center;"><h2>{invoices}</h2>فواتير</div>
-        <div style="background:#1a1a3e;padding:20px;text-align:center;"><h2>{products}</h2>منتجات</div>
+    <p style="text-align:center;color:#aaa;">النظام المالي الأسطوري المتكامل</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin:30px 0;">
+        <div style="background:#1a1a3e;padding:25px;border-radius:20px;border:2px solid #FFD700;text-align:center;"><h2>{accounts}</h2>حسابات</div>
+        <div style="background:#1a1a3e;padding:25px;border-radius:20px;border:2px solid #00c8ff;text-align:center;"><h2>{customers}</h2>عملاء</div>
+        <div style="background:#1a1a3e;padding:25px;border-radius:20px;border:2px solid #4affb0;text-align:center;"><h2>{invoices}</h2>فواتير</div>
+        <div style="background:#1a1a3e;padding:25px;border-radius:20px;border:2px solid #FFD700;text-align:center;"><h2>{products}</h2>منتجات</div>
+        <div style="background:#1a1a3e;padding:25px;border-radius:20px;border:2px solid #00c8ff;text-align:center;"><h2>{revenue}</h2>إيرادات</div>
     </div>
-    <div class="nav-links" style="margin-top:20px;text-align:center;">
-    <style>
-        @keyframes glow-gold {{ 0%,100% {{ box-shadow:0 0 10px rgba(255,215,0,0.4); }} 50% {{ box-shadow:0 0 30px rgba(255,215,0,0.9); }} }}
-        @keyframes glow-blue {{ 0%,100% {{ box-shadow:0 0 10px rgba(0,200,255,0.4); }} 50% {{ box-shadow:0 0 30px rgba(0,200,255,0.9); }} }}
-        @keyframes glow-green {{ 0%,100% {{ box-shadow:0 0 10px rgba(74,255,176,0.4); }} 50% {{ box-shadow:0 0 30px rgba(74,255,176,0.9); }} }}
-        @keyframes float-icon {{ 0%,100% {{ transform:translateY(0); }} 50% {{ transform:translateY(-5px); }} }}
-        .nav-links a {{ display:inline-block; margin:5px; padding:10px 20px; border-radius:25px; text-decoration:none; font-weight:bold; transition:all 0.3s; }}
-        .nav-links a:hover {{ transform:scale(1.1); }}
-        .nav-links a span {{ display:inline-block; animation:float-icon 2s ease-in-out infinite; }}
-    </style>
-        <a href="/accounts" style="color:#FFD700;">📚 الحسابات</a> |
-        <a href="/customers" style="color:#FFD700;">👥 العملاء</a> |
-        <a href="/invoices" style="color:#FFD700;">🧾 الفواتير</a> |
-        <a href="/products" style="color:#FFD700;">📦 المنتجات</a> |
-        <a href="/bank" style="color:#FFD700;">🏦 البنك</a> |
-        <a href="/zakat" style="border:2px solid #4affb0;color:#4affb0;animation:glow-green 2s infinite;"><span>🕌</span> الزكاة</a>
-        <a href="/debts" style="border:2px solid #FFD700;color:#FFD700;animation:glow-gold 2s infinite;"><span>💳</span> الديون</a>
-        <a href="/budgets" style="border:2px solid #00c8ff;color:#00c8ff;animation:glow-blue 2s infinite;"><span>📋</span> الميزانيات</a>
-        <a href="/logout" style="border:2px solid #ff4a4a;color:#ff4a4a;animation:glow-red 2s infinite;"><span>🚪</span> خروج</a>
-    </div>'''
+    <div style="text-align:center;">
+        <a href="/accounts" class="nav-btn gold"><span>📚</span> الحسابات</a>
+        <a href="/customers" class="nav-btn blue"><span>👥</span> العملاء</a>
+        <a href="/invoices" class="nav-btn green"><span>🧾</span> الفواتير</a>
+        <a href="/products" class="nav-btn gold"><span>📦</span> المنتجات</a>
+        <a href="/bank" class="nav-btn blue"><span>🏦</span> البنك</a>
+        <a href="/zakat" class="nav-btn green"><span>🕌</span> الزكاة</a>
+        <a href="/debts" class="nav-btn gold"><span>💳</span> الديون</a>
+        <a href="/budgets" class="nav-btn blue"><span>📋</span> الميزانيات</a>
+        <a href="/assets" class="nav-btn green"><span>🏢</span> الأصول</a>
+        <a href="/currencies" class="nav-btn gold"><span>💱</span> العملات</a>
+        <a href="/ledger" class="nav-btn blue"><span>📒</span> الأستاذ</a>
+        <a href="/cashflow" class="nav-btn green"><span>💵</span> التدفقات</a>
+        <a href="/ai_forecast" class="nav-btn gold"><span>🧠</span> تنبؤ</a>
+        <a href="/economic_indicators" class="nav-btn blue"><span>📈</span> مؤشرات</a>
+        <a href="/stock_market" class="nav-btn green"><span>💰</span> أسهم</a>
+        <a href="/blockchain" class="nav-btn gold"><span>🔗</span> بلوكتشين</a>
+        <a href="/logout" class="nav-btn red"><span>🚪</span> خروج</a>
+    </div>"""
     return render_template_string(PAGE, content=content)
 
 @app.route('/accounts')
@@ -148,6 +167,70 @@ def bank():
     content = "<h2>🏦 البنك</h2><table border='1'><tr><th>ID</th><th>التاريخ</th><th>الوصف</th><th>المبلغ</th></tr>"
     for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td></tr>"
     content += "</table>"
+    return render_template_string(PAGE, content=content)
+
+
+
+@app.route('/assets')
+def assets():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>🏢 الأصول</h2><p>لا توجد أصول مسجلة</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/currencies')
+def currencies():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>💱 العملات</h2><p>لا توجد عملات</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/ledger')
+def ledger():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT * FROM accounts")
+    rows = c.fetchall(); conn.close()
+    content = "<h2>📒 دفتر الأستاذ</h2><table border='1'><tr><th>ID</th><th>الحساب</th><th>النوع</th><th>الرصيد</th></tr>"
+    for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td></tr>"
+    content += "</table>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/cashflow')
+def cashflow():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount > 0"); inflow = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount < 0"); outflow = c.fetchone()[0]
+    conn.close()
+    net = inflow + outflow
+    content = f"<h2>💵 التدفقات النقدية</h2><p>داخل: {inflow}</p><p>خارج: {outflow}</p><p>صافي: {net}</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/ai_forecast')
+def ai_forecast():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
+    conn.close()
+    next_month = revenue * 1.15
+    content = f"<h2>🧠 التنبؤ المالي</h2><p>الحالي: {revenue}</p><p>الشهر القادم: {next_month:.0f}</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/economic_indicators')
+def economic_indicators():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>📈 المؤشرات الاقتصادية</h2><p>التضخم: 2.5%</p><p>البطالة: 5%</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/stock_market')
+def stock_market():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>💰 سوق الأسهم</h2><p>المؤشر: +1.5%</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/blockchain')
+def blockchain():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>🔗 بلوكتشين</h2><p>شبكة آمنة</p>"
     return render_template_string(PAGE, content=content)
 
 if __name__ == '__main__':

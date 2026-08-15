@@ -1,9 +1,66 @@
 from flask import Flask, request, session, redirect, render_template_string
+import sqlite3, hashlib
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'final_finance_2026'
+DB = 'new_finance.db'
 
-@app.route('/login', methods=['GET', 'POST'])
+def init_db():
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+    c.executescript('''
+    CREATE TABLE IF NOT EXISTS accounts (id INTEGER PRIMARY KEY, name TEXT, type TEXT, balance REAL DEFAULT 0);
+    CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, name TEXT, phone TEXT, balance REAL DEFAULT 0);
+    CREATE TABLE IF NOT EXISTS suppliers (id INTEGER PRIMARY KEY, name TEXT, phone TEXT, balance REAL DEFAULT 0);
+    CREATE TABLE IF NOT EXISTS invoices (id INTEGER PRIMARY KEY, customer_id INTEGER, amount REAL, date TEXT);
+    CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY, name TEXT, price REAL, stock INTEGER);
+    CREATE TABLE IF NOT EXISTS bank_moves (id INTEGER PRIMARY KEY, date TEXT, desc TEXT, amount REAL);
+    CREATE TABLE IF NOT EXISTS zakat (id INTEGER PRIMARY KEY, amount REAL, date TEXT);
+    CREATE TABLE IF NOT EXISTS debts (id INTEGER PRIMARY KEY, name TEXT, amount REAL, type TEXT);
+    CREATE TABLE IF NOT EXISTS budgets (id INTEGER PRIMARY KEY, name TEXT, amount REAL);
+    CREATE TABLE IF NOT EXISTS assets (id INTEGER PRIMARY KEY, name TEXT, value REAL);
+    CREATE TABLE IF NOT EXISTS currencies (id INTEGER PRIMARY KEY, code TEXT, rate REAL);
+    ''')
+    conn.commit()
+    conn.close()
+
+init_db()
+
+PAGE = '''
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head><meta charset="UTF-8"><title>🦅 نوح المالي</title>
+<style>
+    body { font-family:Tahoma; background:#0a0a2e; color:#fff; padding:20px; }
+    a { color:#FFD700; text-decoration:none; margin:5px; }
+    input, select, button { padding:10px; margin:5px; background:#222; color:#fff; border:1px solid #FFD700; border-radius:8px; }
+    button { background:#FFD700; color:#000; font-weight:bold; cursor:pointer; }
+    table { width:100%; border-collapse:collapse; margin-top:15px; }
+    th, td { border:1px solid #444; padding:10px; text-align:center; }
+    th { background:#1a1a3e; color:#FFD700; }
+</style></head>
+<body>
+    <div style="background:#1a1a3e;padding:15px;border-radius:15px;margin-bottom:20px;">
+        <a href="/">🏠 الرئيسية</a>
+        <a href="/accounts">📚 الحسابات</a>
+        <a href="/customers">👥 العملاء</a>
+        <a href="/suppliers">📦 الموردون</a>
+        <a href="/invoices">🧾 الفواتير</a>
+        <a href="/products">📦 المنتجات</a>
+        <a href="/bank">🏦 البنك</a>
+        <a href="/zakat">🕌 الزكاة</a>
+        <a href="/debts">💳 الديون</a>
+        <a href="/budgets">📋 الميزانيات</a>
+        <a href="/assets">🏢 الأصول</a>
+        <a href="/currencies">💱 العملات</a>
+        <a href="/logout">🚪 خروج</a>
+    </div>
+    {{ content | safe }}
+</body></html>
+'''
+
+@app.route('/login', methods=['GET','POST'])
 def login():
     if request.method == 'POST':
         session['user'] = request.form.get('username', 'admin')
@@ -11,144 +68,48 @@ def login():
     return render_template_string('''
     <!DOCTYPE html>
     <html lang="ar" dir="rtl">
-    <head>
-        <meta charset="UTF-8">
-        <title>🦅 دخول نوح المالي</title>
-        <style>
-            body { font-family:Tahoma; background:#0a0a2e; color:#fff; display:flex; justify-content:center; align-items:center; height:100vh; }
-            .box { background:#1a1a3e; padding:40px; border-radius:25px; border:2px solid #FFD700; text-align:center; box-shadow:0 0 40px rgba(255,215,0,0.4); }
-            h2 { color:#FFD700; }
-            input { display:block; width:100%; padding:12px; margin:10px 0; background:#222; border:1px solid #FFD700; color:#fff; border-radius:10px; }
-            button { width:100%; padding:12px; background:#FFD700; border:none; border-radius:10px; font-weight:bold; cursor:pointer; }
-        </style>
-    </head>
-    <body>
-        <div class="box">
-            <h2>🦅 نوح المالي</h2>
-            <form method="POST">
-                <input type="text" name="username" placeholder="المستخدم (أي اسم)">
-                <input type="password" name="password" placeholder="كلمة المرور (أي شيء)">
-                <button type="submit">🚀 دخول</button>
-            </form>
-        </div>
-    </body>
-    </html>
-    ''')
-
-@app.route('/')
-def home():
-    if 'user' not in session:
-        return redirect('/login')
-    return redirect('/dashboard')
+    <head><meta charset="UTF-8"><title>🦅 دخول نوح المالي</title>
+    <style>
+        body { font-family:Tahoma; background:#0a0a2e; color:#fff; display:flex; justify-content:center; align-items:center; height:100vh; }
+        .box { background:#1a1a3e; padding:40px; border-radius:25px; border:2px solid #FFD700; text-align:center; }
+        h2 { color:#FFD700; }
+        input { display:block; width:100%; padding:12px; margin:10px 0; background:#222; border:1px solid #FFD700; color:#fff; border-radius:10px; }
+        button { width:100%; padding:12px; background:#FFD700; border:none; border-radius:10px; font-weight:bold; }
+    </style></head>
+    <body><div class="box"><h2>🦅 نوح المالي</h2>
+    <form method="POST">
+        <input type="text" name="username" placeholder="المستخدم">
+        <input type="password" name="password" placeholder="كلمة المرور">
+        <button>🚀 دخول</button>
+    </form></div></body></html>''')
 
 @app.route('/logout')
 def logout():
     session.pop('user', None)
     return redirect('/login')
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-
-import sqlite3
-
-DB = 'new_finance.db'
-
-def init_db():
-    conn = sqlite3.connect(DB)
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS accounts (
-        id INTEGER PRIMARY KEY,
-        name TEXT,
-        type TEXT,
-        balance REAL DEFAULT 0
-    )''')
-    conn.commit()
-    conn.close()
-
-init_db()
-
-@app.route('/accounts', methods=['GET','POST'])
-def accounts():
+@app.route('/')
+def home():
     if 'user' not in session: return redirect('/login')
-    conn = sqlite3.connect(DB)
-    c = conn.cursor()
-    if request.method == 'POST':
-        c.execute("INSERT INTO accounts (name, type) VALUES (?,?)",
-                  (request.form['name'], request.form['type']))
-        conn.commit()
-    c.execute("SELECT * FROM accounts")
-    rows = c.fetchall()
-    conn.close()
-    return f"<h2>📚 الحسابات</h2><table border='1'><tr><th>ID</th><th>الاسم</th><th>النوع</th></tr>" + "".join(f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>" for r in rows) + "</table>"
+    return redirect('/dashboard')
 
 @app.route('/dashboard')
 def dashboard():
     if 'user' not in session: return redirect('/login')
-    conn = sqlite3.connect(DB)
-    c = conn.cursor()
-    c.execute("SELECT COUNT(*) FROM accounts")
-    accounts = c.fetchone()[0]
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM accounts"); accounts = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM customers"); customers = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM invoices"); invoices = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM products"); products = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
     conn.close()
-    return f"""
-    <!DOCTYPE html>
-    <html lang="ar" dir="rtl">
-    <head><meta charset="UTF-8"><title>🦅 نوح المالي</title>
-    <style>
-        body {{ font-family:Tahoma; background:linear-gradient(135deg,#0a0a2e,#1a0a3e); color:#fff; padding:30px; }}
-        h1 {{ text-align:center; color:#FFD700; font-size:2.5rem; }}
-        .stats {{ display:flex; gap:20px; justify-content:center; margin:40px 0; }}
-        .card {{ background:#1a1a3e; padding:30px; border-radius:20px; border:2px solid #FFD700; text-align:center; }}
-        .card h2 {{ font-size:2.5rem; color:#FFD700; }}
-        .nav {{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }}
-        .nav a {{ background:#1a1a3e; color:#fff; padding:15px 25px; border-radius:25px; text-decoration:none; border:1px solid #FFD700; }}
-        .nav a:hover {{ background:#FFD700; color:#000; }}
-    </style></head>
-    <body>
-        <h1>🦅 لوحة نوح المالية</h1>
-        <div class="stats">
-            <div class="card"><h2>{accounts}</h2>حسابات</div>
-        </div>
-        <div class="nav">
-            <a href="/accounts">📚 الحسابات</a>
-            <a href="/logout">🚪 خروج</a>
-        </div>
-    </body></html>
-    """
-
-@app.route('/customers', methods=['GET','POST'])
-def customers():
-    if 'user' not in session: return redirect('/login')
-    conn = sqlite3.connect(DB)
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS customers (
-        id INTEGER PRIMARY KEY,
-        name TEXT,
-        phone TEXT
-    )''')
-    if request.method == 'POST':
-        c.execute("INSERT INTO customers (name, phone) VALUES (?,?)",
-                  (request.form['name'], request.form.get('phone','')))
-        conn.commit()
-    c.execute("SELECT * FROM customers")
-    rows = c.fetchall()
-    conn.close()
-    return f"<h2>👥 العملاء</h2><table border='1'><tr><th>ID</th><th>الاسم</th><th>الهاتف</th></tr>" + "".join(f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>" for r in rows) + "</table>"
-
-@app.route('/suppliers', methods=['GET','POST'])
-def suppliers():
-    if 'user' not in session: return redirect('/login')
-    conn = sqlite3.connect(DB)
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS suppliers (
-        id INTEGER PRIMARY KEY,
-        name TEXT,
-        phone TEXT
-    )''')
-    if request.method == 'POST':
-        c.execute("INSERT INTO suppliers (name, phone) VALUES (?,?)",
-                  (request.form['name'], request.form.get('phone','')))
-        conn.commit()
-    c.execute("SELECT * FROM suppliers")
-    rows = c.fetchall()
-    conn.close()
-    return f"<h2>📦 الموردون</h2><table border='1'><tr><th>ID</th><th>الاسم</th><th>الهاتف</th></tr>" + "".join(f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>" for r in rows) + "</table>"
+    content = f'''
+    <h1 style="text-align:center;color:#FFD700;font-size:2.5rem;">🦅 لوحة نوح المالية</h1>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin:30px 0;">
+        <div style="background:#1a1a3e;padding:30px;border-radius:20px;border:2px solid #FFD700;text-align:center;"><h2 style="font-size:2.5rem;color:#FFD700;">{accounts}</h2>حسابات</div>
+        <div style="background:#1a1a3e;padding:30px;border-radius:20px;border:2px solid #FFD700;text-align:center;"><h2 style="font-size:2.5rem;color:#FFD700;">{customers}</h2>عملاء</div>
+        <div style="background:#1a1a3e;padding:30px;border-radius:20px;border:2px solid #FFD700;text-align:center;"><h2 style="font-size:2.5rem;color:#FFD700;">{invoices}</h2>فواتير</div>
+        <div style="background:#1a1a3e;padding:30px;border-radius:20px;border:2px solid #FFD700;text-align:center;"><h2 style="font-size:2.5rem;color:#FFD700;">{products}</h2>منتجات</div>
+        <div style="background:#1a1a3e;padding:30px;border-radius:20px;border:2px solid #FFD700;text-align:center;"><h2 style="font-size:2.5rem;color:#FFD700;">{revenue}</h2>إيرادات</div>
+    </div>'''
+    return render_template_string(PAGE, content=content)

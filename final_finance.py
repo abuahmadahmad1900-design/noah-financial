@@ -48,3 +48,35 @@ def logout():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
+import sqlite3
+
+DB = 'new_finance.db'
+
+def init_db():
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS accounts (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        type TEXT,
+        balance REAL DEFAULT 0
+    )''')
+    conn.commit()
+    conn.close()
+
+init_db()
+
+@app.route('/accounts', methods=['GET','POST'])
+def accounts():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+    if request.method == 'POST':
+        c.execute("INSERT INTO accounts (name, type) VALUES (?,?)",
+                  (request.form['name'], request.form['type']))
+        conn.commit()
+    c.execute("SELECT * FROM accounts")
+    rows = c.fetchall()
+    conn.close()
+    return f"<h2>📚 الحسابات</h2><table border='1'><tr><th>ID</th><th>الاسم</th><th>النوع</th></tr>" + "".join(f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>" for r in rows) + "</table>"

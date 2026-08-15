@@ -167,6 +167,9 @@ def dashboard():
         <a href="/ai_analysis" class="nav-btn btn-gold"><span>🧠</span>ذكاء مالي</a>
         <a href="/forecast" class="nav-btn btn-blue"><span>🔮</span>تنبؤ</a>
         <a href="/reports" class="nav-btn btn-green"><span>📊</span>تقارير</a>
+        <a href="/cashflow" class="nav-btn btn-gold"><span>💵</span>تدفقات</a>
+        <a href="/profit_analysis" class="nav-btn btn-blue"><span>📈</span>ربحية</a>
+        <a href="/balance_sheet" class="nav-btn btn-green"><span>📊</span>ميزانية</a>
         <a href="/logout" class="nav-btn btn-green"><span>🚪</span>خروج</a>
     </div>"""
     return render_template_string(PAGE, content=content)

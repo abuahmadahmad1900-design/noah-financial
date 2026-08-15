@@ -141,6 +141,7 @@ def dashboard():
         @keyframes glow-green {{ 0%,100% {{ box-shadow:0 0 15px rgba(74,255,176,0.4); }} 50% {{ box-shadow:0 0 35px rgba(74,255,176,0.9); }} }}
         @keyframes pulse-bar {{ 0%,100% {{ filter:brightness(1); }} 50% {{ filter:brightness(1.5); }} }}
         @keyframes subtitle-glow {{ 0%,100% {{ text-shadow:0 0 10px rgba(255,215,0,0.5); }} 50% {{ text-shadow:0 0 30px rgba(255,215,0,0.9), 0 0 50px rgba(0,200,255,0.5); }} }}
+        @keyframes glow-red {{ 0%,100% {{ box-shadow:0 0 15px rgba(255,74,74,0.4); }} 50% {{ box-shadow:0 0 35px rgba(255,74,74,0.9); }} }}
         @keyframes spin-icon {{ 0%,100% {{ transform:rotate(0deg); }} 50% {{ transform:rotate(12deg); }} }}
         @keyframes gradient-shift {{ 0% {{ background-position:0% 50%; }} 50% {{ background-position:100% 50%; }} 100% {{ background-position:0% 50%; }} }}
         h1 {{
@@ -261,6 +262,14 @@ def dashboard():
         <a href="/machine_learning" style="border:2px solid #4affb0;color:#4affb0;"><span>🤖</span> تعلم</a>
         <a href="/encryption" style="border:2px solid #FFD700;color:#FFD700;"><span>🔐</span> تشفير</a>
         <a href="/cloud" style="border:2px solid #00c8ff;color:#00c8ff;"><span>☁️</span> سحابية</a>
+        <a href="/scenarios" style="border:2px solid #FFD700;color:#FFD700;animation:glow-gold 2s infinite;"><span style="animation:spin-icon 4s linear infinite;">🔮</span> سيناريوهات</a>
+        <a href="/ratios" style="border:2px solid #00c8ff;color:#00c8ff;animation:glow-blue 2s infinite;"><span style="animation:spin-icon 4s linear infinite;">📊</span> نسب</a>
+        <a href="/fraud_detection" style="border:2px solid #ff4a4a;color:#ff4a4a;animation:glow-red 2s infinite;"><span style="animation:spin-icon 4s linear infinite;">⚠️</span> احتيال</a>
+        <a href="/credit_management" style="border:2px solid #4affb0;color:#4affb0;animation:glow-green 2s infinite;"><span style="animation:spin-icon 4s linear infinite;">💳</span> ائتمان</a>
+        <a href="/exchange_rates" style="border:2px solid #FFD700;color:#FFD700;animation:glow-gold 2s infinite;"><span style="animation:spin-icon 4s linear infinite;">🌍</span> صرف</a>
+        <a href="/central_banks" style="border:2px solid #00c8ff;color:#00c8ff;animation:glow-blue 2s infinite;"><span style="animation:spin-icon 4s linear infinite;">🏦</span> بنوك</a>
+        <a href="/inflation" style="border:2px solid #4affb0;color:#4affb0;animation:glow-green 2s infinite;"><span style="animation:spin-icon 4s linear infinite;">📊</span> تضخم</a>
+        <a href="/mobile_app" style="border:2px solid #FFD700;color:#FFD700;animation:glow-gold 2s infinite;"><span style="animation:spin-icon 4s linear infinite;">📱</span> موبايل</a>
         <a href="/logout" style="border:2px solid #ff4a4a;color:#ff4a4a;"><span>🚪</span> خروج</a>
     </div>"""
     return render_template_string(PAGE, content=content)

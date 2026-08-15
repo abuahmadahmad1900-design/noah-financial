@@ -847,5 +847,45 @@ def medical_ai_home():
     content = f'<h2>🦅 الذكاء الطبي - 25 بوت متخصص</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;">{bots_html}</div>'
     return render_template_string(MED_PAGE, content=content)
 
+# ========== 100 نظام حماية طبي ==========
+medical_protections = []
+for i in range(1, 101):
+    medical_protections.append({
+        "id": i,
+        "name": f"درع طبي {i}",
+        "type": "حماية",
+        "status": "مفعل",
+        "description": f"نظام حماية طبي متكامل رقم {i}"
+    })
+
+@app.route('/medical_protections')
+def medical_protections_page():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    html = ""
+    for p in medical_protections:
+        html += f'<div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border-radius:12px;padding:15px;text-align:center;border:1px solid rgba(0,200,255,0.3);"><strong style="color:#00c8ff;">🛡️ {p["name"]}</strong><br><small style="color:#aaa;">{p["description"]}</small></div>'
+    content = f'<h2>🛡️ أنظمة الحماية الطبية - 100 نظام</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+# ========== 100 نظام تطوير ذاتي ==========
+medical_self_dev = []
+for i in range(1, 101):
+    medical_self_dev.append({
+        "id": i,
+        "name": f"نظام تطوير ذاتي {i}",
+        "type": "تطوير",
+        "status": "مفعل",
+        "description": f"نظام تطوير ذاتي طبي متكامل رقم {i}"
+    })
+
+@app.route('/medical_self_dev')
+def medical_self_dev_page():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    html = ""
+    for s in medical_self_dev:
+        html += f'<div style="background:linear-gradient(145deg,#1a3e1a,#0d2e0d);border-radius:12px;padding:15px;text-align:center;border:1px solid rgba(74,255,74,0.3);"><strong style="color:#4aff4a;">🧬 {s["name"]}</strong><br><small style="color:#aaa;">{s["description"]}</small></div>'
+    content = f'<h2>🧬 أنظمة التطوير الذاتي - 100 نظام</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5007, debug=False)

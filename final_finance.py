@@ -1,5 +1,5 @@
 from flask import Flask, request, session, redirect, render_template_string
-import sqlite3, hashlib
+import sqlite3
 from datetime import datetime
 
 app = Flask(__name__)
@@ -41,21 +41,6 @@ PAGE = '''
     th { background:#1a1a3e; color:#FFD700; }
 </style></head>
 <body>
-    <div style="background:#1a1a3e;padding:15px;border-radius:15px;margin-bottom:20px;">
-        <a href="/">🏠 الرئيسية</a>
-        <a href="/accounts">📚 الحسابات</a>
-        <a href="/customers">👥 العملاء</a>
-        <a href="/suppliers">📦 الموردون</a>
-        <a href="/invoices">🧾 الفواتير</a>
-        <a href="/products">📦 المنتجات</a>
-        <a href="/bank">🏦 البنك</a>
-        <a href="/zakat">🕌 الزكاة</a>
-        <a href="/debts">💳 الديون</a>
-        <a href="/budgets">📋 الميزانيات</a>
-        <a href="/assets">🏢 الأصول</a>
-        <a href="/currencies">💱 العملات</a>
-        <a href="/logout">🚪 خروج</a>
-    </div>
     {{ content | safe }}
 </body></html>
 '''
@@ -64,7 +49,7 @@ PAGE = '''
 def login():
     if request.method == 'POST':
         session['user'] = request.form.get('username', 'admin')
-        return redirect('/')
+        return redirect('/dashboard')
     return render_template_string('''
     <!DOCTYPE html>
     <html lang="ar" dir="rtl">
@@ -104,74 +89,30 @@ def dashboard():
     c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
     c.execute("SELECT COUNT(*) FROM bank_moves"); bank = c.fetchone()[0]
     conn.close()
-    content = f"""
-    <style>
-        @keyframes float-btn {{ 0%,100% {{ transform: translateY(0); }} 50% {{ transform: translateY(-8px); }} }}
-        @keyframes glow-gold {{ 0%,100% {{ box-shadow: 0 0 15px rgba(255,215,0,0.4); }} 50% {{ box-shadow: 0 0 35px rgba(255,215,0,0.8); }} }}
-        @keyframes glow-blue {{ 0%,100% {{ box-shadow: 0 0 15px rgba(0,200,255,0.4); }} 50% {{ box-shadow: 0 0 35px rgba(0,200,255,0.8); }} }}
-        @keyframes spin-icon {{ 0%,100% {{ transform: rotate(0deg); }} 50% {{ transform: rotate(10deg); }} }}
-        h1 {{ text-align:center; font-size:2.5rem; background:linear-gradient(45deg,#FFD700,#FF8C00,#FFD700); -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:gradient-shift 3s ease infinite; }}
-        @keyframes gradient-shift {{ 0% {{ background-position:0% 50%; }} 50% {{ background-position:100% 50%; }} 100% {{ background-position:0% 50%; }} }}
-        .stats {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:15px; margin:30px 0; }}
-        .stat {{ background:linear-gradient(145deg,#1a1a4e,#0d0d2e); border-radius:20px; padding:25px; text-align:center; border:2px solid #FFD700; animation:float-btn 3s ease-in-out infinite; }}
-        .stat h2 {{ font-size:2rem; color:#FFD700; }}
-        .nav-grid {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px; margin-top:30px; }}
-        .nav-btn {{ display:flex; flex-direction:column; align-items:center; gap:8px; padding:20px; border-radius:50%; width:100px; height:100px; justify-content:center; background:linear-gradient(145deg,#1a1a4e,#0d0d2e); text-decoration:none; font-size:0.75rem; transition:all 0.3s; animation:float-btn 3s ease-in-out infinite; }}
-        .nav-btn:hover {{ transform: scale(1.15); }}
-        .nav-btn span {{ font-size:2rem; animation:spin-icon 4s linear infinite; }}
-        .btn-gold {{ border:2px solid #FFD700; color:#FFD700; animation:glow-gold 2s infinite; }}
-        .btn-blue {{ border:2px solid #00c8ff; color:#00c8ff; animation:glow-blue 2s infinite; }}
-        .btn-green {{ border:2px solid #4affb0; color:#4affb0; box-shadow:0 0 25px rgba(74,255,176,0.4); }}
-    </style>
-    <div class="particles"></div>
-    <h1>🦅 لوحة نوح المالية</h1>
-    <p style="text-align:center;color:#aaa;margin-top:10px;">النظام المالي الأسطوري المتكامل</p>
-    <style>
-        .particles {{ position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
-        .particle {{ position:absolute; border-radius:50%; background:rgba(255,215,0,0.6); animation:float-particle linear infinite; }
-        @keyframes float-particle {{ 0% {{ transform:translateY(100vh) scale(0); opacity:0; }} 10% {{ opacity:1; }} 90% {{ opacity:1; }} 100% {{ transform:translateY(-10vh) scale(1); opacity:0; }} }}
-        .stats, .nav-grid {{ position:relative; z-index:1; }
-    </style>
-    <script>
-        for (let i = 0; i < 40; i++) {{
-            const p = document.createElement('div');
-            p.classList.add('particle');
-            p.style.left = Math.random() * 100 + '%';
-            p.style.width = Math.random() * 5 + 2 + 'px';
-            p.style.height = p.style.width;
-            p.style.animationDuration = Math.random() * 8 + 4 + 's';
-            p.style.animationDelay = Math.random() * 8 + 's';
-            document.querySelector('.particles').appendChild(p);
-        }}
-    </script>
-    <div class="stats">
-        <div class="stat" style="animation-delay:0s;"><h2>{accounts}</h2>حسابات</div>
-        <div class="stat" style="animation-delay:0.2s;"><h2>{customers}</h2>عملاء</div>
-        <div class="stat" style="animation-delay:0.4s;"><h2>{invoices}</h2>فواتير</div>
-        <div class="stat" style="animation-delay:0.6s;"><h2>{products}</h2>منتجات</div>
-        <div class="stat" style="animation-delay:0.8s;"><h2>{bank}</h2>بنك</div>
-        <div class="stat" style="animation-delay:1s;"><h2>{revenue}</h2>إيرادات</div>
+    content = f'''
+    <h1 style="text-align:center;color:#FFD700;font-size:2.5rem;">🦅 لوحة نوح المالية</h1>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin:30px 0;">
+        <div style="background:#1a1a3e;padding:25px;border-radius:20px;border:2px solid #FFD700;text-align:center;"><h2 style="font-size:2rem;color:#FFD700;">{accounts}</h2>حسابات</div>
+        <div style="background:#1a1a3e;padding:25px;border-radius:20px;border:2px solid #00c8ff;text-align:center;"><h2 style="font-size:2rem;color:#00c8ff;">{customers}</h2>عملاء</div>
+        <div style="background:#1a1a3e;padding:25px;border-radius:20px;border:2px solid #4affb0;text-align:center;"><h2 style="font-size:2rem;color:#4affb0;">{invoices}</h2>فواتير</div>
+        <div style="background:#1a1a3e;padding:25px;border-radius:20px;border:2px solid #FFD700;text-align:center;"><h2 style="font-size:2rem;color:#FFD700;">{products}</h2>منتجات</div>
+        <div style="background:#1a1a3e;padding:25px;border-radius:20px;border:2px solid #00c8ff;text-align:center;"><h2 style="font-size:2rem;color:#00c8ff;">{bank}</h2>بنك</div>
+        <div style="background:#1a1a3e;padding:25px;border-radius:20px;border:2px solid #4affb0;text-align:center;"><h2 style="font-size:2rem;color:#4affb0;">{revenue}</h2>إيرادات</div>
     </div>
-    <div class="nav-grid">
-        <a href="/accounts" class="nav-btn btn-gold"><span>📚</span>الحسابات</a>
-        <a href="/customers" class="nav-btn btn-blue"><span>👥</span>العملاء</a>
-        <a href="/suppliers" class="nav-btn btn-green"><span>📦</span>الموردون</a>
-        <a href="/invoices" class="nav-btn btn-gold"><span>🧾</span>الفواتير</a>
-        <a href="/products" class="nav-btn btn-blue"><span>📦</span>المنتجات</a>
-        <a href="/bank" class="nav-btn btn-green"><span>🏦</span>البنك</a>
-        <a href="/zakat" class="nav-btn btn-gold"><span>🕌</span>الزكاة</a>
-        <a href="/debts" class="nav-btn btn-blue"><span>💳</span>الديون</a>
-        <a href="/budgets" class="nav-btn btn-green"><span>📋</span>الميزانيات</a>
-        <a href="/assets" class="nav-btn btn-gold"><span>🏢</span>الأصول</a>
-        <a href="/currencies" class="nav-btn btn-blue"><span>💱</span>العملات</a>
-        <a href="/ai_analysis" class="nav-btn btn-gold"><span>🧠</span>ذكاء مالي</a>
-        <a href="/forecast" class="nav-btn btn-blue"><span>🔮</span>تنبؤ</a>
-        <a href="/reports" class="nav-btn btn-green"><span>📊</span>تقارير</a>
-        <a href="/cashflow" class="nav-btn btn-gold"><span>💵</span>تدفقات</a>
-        <a href="/profit_analysis" class="nav-btn btn-blue"><span>📈</span>ربحية</a>
-        <a href="/balance_sheet" class="nav-btn btn-green"><span>📊</span>ميزانية</a>
-        <a href="/logout" class="nav-btn btn-green"><span>🚪</span>خروج</a>
-    </div>"""
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;">
+        <a href="/accounts" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #FFD700;">📚 الحسابات</a>
+        <a href="/customers" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #00c8ff;">👥 العملاء</a>
+        <a href="/suppliers" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #4affb0;">📦 الموردون</a>
+        <a href="/invoices" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #FFD700;">🧾 الفواتير</a>
+        <a href="/products" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #00c8ff;">📦 المنتجات</a>
+        <a href="/bank" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #4affb0;">🏦 البنك</a>
+        <a href="/zakat" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #FFD700;">🕌 الزكاة</a>
+        <a href="/debts" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #00c8ff;">💳 الديون</a>
+        <a href="/budgets" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #4affb0;">📋 الميزانيات</a>
+        <a href="/assets" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #FFD700;">🏢 الأصول</a>
+        <a href="/currencies" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #00c8ff;">💱 العملات</a>
+        <a href="/logout" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #ff4a4a;">🚪 خروج</a>
+    </div>'''
     return render_template_string(PAGE, content=content)
 
 @app.route('/accounts', methods=['GET','POST'])
@@ -333,106 +274,6 @@ def currencies():
     content = "<h2>💱 العملات</h2><form method='POST'><input name='code' placeholder='رمز' required><input name='rate' placeholder='سعر' required><button>إضافة</button></form><table><tr><th>ID</th><th>رمز</th><th>سعر</th></tr>"
     for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>"
     content += "</table>"
-    return render_template_string(PAGE, content=content)
-
-@app.route('/ai_analysis')
-def ai_analysis():
-    if 'user' not in session: return redirect('/login')
-    conn = sqlite3.connect(DB); c = conn.cursor()
-    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
-    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount > 0"); inflow = c.fetchone()[0]
-    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount < 0"); outflow = c.fetchone()[0]
-    c.execute("SELECT COUNT(*) FROM customers"); customers = c.fetchone()[0]
-    c.execute("SELECT COUNT(*) FROM products"); products = c.fetchone()[0]
-    conn.close()
-    net = revenue
-    cash = inflow + outflow
-    insights = []
-    if revenue > 50000: insights.append("📈 إيراداتك ممتازة! استمر في النمو")
-    else: insights.append("📊 إيراداتك تحتاج تعزيزاً — ركز على التسويق")
-    if cash < 0: insights.append("🚨 التدفق النقدي سلبي — خفف المصاريف")
-    else: insights.append("✅ التدفق النقدي إيجابي")
-    if customers < 5: insights.append("👥 قاعدة عملائك صغيرة — وسّع نطاقك")
-    if products < 5: insights.append("📦 منتجاتك محدودة — أضف المزيد")
-    content = f"""
-    <h2 style="text-align:center;color:#00c8ff;">🧠 الذكاء المالي</h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;margin-top:20px;">
-        <div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #FFD700;"><h3>💰 الإيرادات</h3><p style="font-size:2rem;color:#FFD700;">{revenue}</p></div>
-        <div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #00c8ff;"><h3>💵 التدفق</h3><p style="font-size:2rem;color:#00c8ff;">{cash}</p></div>
-    </div>
-    <div style="margin-top:20px;">"""
-    for i in insights:
-        content += f'<div style="background:#1a1a4e;padding:15px;border-radius:10px;margin:10px 0;border-right:4px solid #FFD700;">{i}</div>'
-    content += "</div>"
-    return render_template_string(PAGE, content=content)
-
-@app.route('/forecast')
-def forecast():
-    if 'user' not in session: return redirect('/login')
-    conn = sqlite3.connect(DB); c = conn.cursor()
-    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
-    conn.close()
-    next_month = revenue * 1.15
-    next_quarter = revenue * 1.4
-    content = f"""
-    <h2 style="text-align:center;color:#4affb0;">🔮 التنبؤ المالي</h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-top:20px;">
-        <div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #4affb0;"><h3>الحالي</h3><p style="font-size:2rem;color:#4affb0;">{revenue}</p></div>
-        <div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #4affb0;"><h3>الشهر القادم</h3><p style="font-size:2rem;color:#4affb0;">{next_month:.0f}</p></div>
-        <div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #4affb0;"><h3>الربع القادم</h3><p style="font-size:2rem;color:#4affb0;">{next_quarter:.0f}</p></div>
-    </div>"""
-    return render_template_string(PAGE, content=content)
-
-@app.route('/reports')
-def reports():
-    if 'user' not in session: return redirect('/login')
-    conn = sqlite3.connect(DB); c = conn.cursor()
-    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
-    c.execute("SELECT COALESCE(SUM(balance),0) FROM accounts WHERE type='أصول'"); assets = c.fetchone()[0]
-    c.execute("SELECT COALESCE(SUM(amount),0) FROM debts WHERE type='علينا'"); our_debts = c.fetchone()[0]
-    c.execute("SELECT COALESCE(SUM(amount),0) FROM debts WHERE type='لنا'"); their_debts = c.fetchone()[0]
-    conn.close()
-    content = f"""
-    <h2 style="text-align:center;color:#FFD700;">📊 التقارير المالية</h2>
-    <table><tr><th>البند</th><th>القيمة</th></tr>
-    <tr><td>💰 الإيرادات</td><td>{revenue}</td></tr>
-    <tr><td>🏢 الأصول</td><td>{assets}</td></tr>
-    <tr><td>💳 ديون علينا</td><td>{our_debts}</td></tr>
-    <tr><td>💳 ديون لنا</td><td>{their_debts}</td></tr></table>"""
-    return render_template_string(PAGE, content=content)
-
-@app.route('/cashflow')
-def cashflow():
-    if 'user' not in session: return redirect('/login')
-    conn = sqlite3.connect(DB); c = conn.cursor()
-    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount > 0"); inflow = c.fetchone()[0]
-    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount < 0"); outflow = c.fetchone()[0]
-    conn.close()
-    net = inflow + outflow
-    content = f"<h2 style='text-align:center;color:#00c8ff;'>💵 التدفقات النقدية</h2><table><tr><th>داخل</th><th>خارج</th><th>صافي</th></tr><tr><td>{inflow}</td><td>{outflow}</td><td>{net}</td></tr></table>"
-    return render_template_string(PAGE, content=content)
-
-@app.route('/profit_analysis')
-def profit_analysis():
-    if 'user' not in session: return redirect('/login')
-    conn = sqlite3.connect(DB); c = conn.cursor()
-    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
-    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount < 0"); expenses = abs(c.fetchone()[0])
-    conn.close()
-    profit = revenue - expenses
-    margin = (profit / revenue * 100) if revenue > 0 else 0
-    content = f"<h2 style='text-align:center;color:#4affb0;'>📈 تحليل الربحية</h2><p>الإيرادات: {revenue}</p><p>المصاريف: {expenses}</p><p style='font-size:1.5rem;color:#4affb0;'>الربح: {profit} ({margin:.1f}%)</p>"
-    return render_template_string(PAGE, content=content)
-
-@app.route('/balance_sheet')
-def balance_sheet():
-    if 'user' not in session: return redirect('/login')
-    conn = sqlite3.connect(DB); c = conn.cursor()
-    c.execute("SELECT COALESCE(SUM(balance),0) FROM accounts WHERE type='أصول'"); assets = c.fetchone()[0]
-    c.execute("SELECT COALESCE(SUM(balance),0) FROM accounts WHERE type='خصوم'"); liabilities = c.fetchone()[0]
-    conn.close()
-    equity = assets - liabilities
-    content = f"<h2 style='text-align:center;color:#FFD700;'>📊 الميزانية العمومية</h2><table><tr><th>الأصول</th><th>الخصوم</th><th>حقوق الملكية</th></tr><tr><td>{assets}</td><td>{liabilities}</td><td>{equity}</td></tr></table>"
     return render_template_string(PAGE, content=content)
 
 if __name__ == '__main__':

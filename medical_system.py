@@ -292,6 +292,10 @@ MED_PAGE = '''
         <a href="/medical_search" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #00c8ff;box-shadow:0 0 15px rgba(0,200,255,0.3);text-decoration:none;color:#00c8ff;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">🔍</span>البحث</a>
         <a href="/medical_notifications" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #FFD700;box-shadow:0 0 15px rgba(255,215,0,0.3);text-decoration:none;color:#FFD700;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">🔔</span>إشعارات</a>
         <a href="/medical_payments" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #4affb0;box-shadow:0 0 15px rgba(74,255,176,0.3);text-decoration:none;color:#4affb0;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">💳</span>الدفع</a>
+        <a href="/medical_reports" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #4affb0;box-shadow:0 0 15px rgba(74,255,176,0.3);text-decoration:none;color:#4affb0;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">📊</span>التقارير</a>
+        <a href="/medical_search" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #00c8ff;box-shadow:0 0 15px rgba(0,200,255,0.3);text-decoration:none;color:#00c8ff;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">🔍</span>البحث</a>
+        <a href="/medical_notifications" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #FFD700;box-shadow:0 0 15px rgba(255,215,0,0.3);text-decoration:none;color:#FFD700;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">🔔</span>إشعارات</a>
+        <a href="/medical_payments" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #4affb0;box-shadow:0 0 15px rgba(74,255,176,0.3);text-decoration:none;color:#4affb0;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">💳</span>الدفع</a>
         <a href="/logout_medical" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #ff4a4a;box-shadow:0 0 15px rgba(255,74,74,0.3);text-decoration:none;color:#ff4a4a;font-size:0.75rem;transition:all 0.3s;animation:float-circle 3s ease-in-out infinite;animation-delay:3.2s;"><span style="font-size:1.5rem;animation:spin-icon 4s linear infinite;">🚪</span>خروج</a>
         </div>
         {{ content | safe }}
@@ -1582,6 +1586,26 @@ def medical_payments():
     content += '<div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:1px solid #4affb0;"><h3 style="color:#4affb0;">💳 بطاقة</h3><p style="color:#aaa;">Visa / Mastercard</p></div>'
     content += '<div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:1px solid #4affb0;"><h3 style="color:#4affb0;">📱 محفظة</h3><p style="color:#aaa;">Apple Pay / Google Pay</p></div>'
     content += '<div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:1px solid #4affb0;"><h3 style="color:#4affb0;">🏦 تحويل</h3><p style="color:#aaa;">تحويل بنكي</p></div>'
+    content += '</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+
+# ========== نظام الدفع الإلكتروني المتكامل ==========
+@app.route('/medical_payments')
+def medical_payments():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    content = '<h2>💳 نظام الدفع الإلكتروني المتكامل</h2>'
+    content += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;">'
+    content += '<div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:25px;border-radius:15px;text-align:center;border:1px solid #4affb0;"><h3 style="color:#4affb0;">💳 البطاقات</h3><p style="color:#aaa;">Visa / Mastercard / Mada</p></div>'
+    content += '<div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:25px;border-radius:15px;text-align:center;border:1px solid #00c8ff;"><h3 style="color:#00c8ff;">📱 المحافظ</h3><p style="color:#aaa;">Apple Pay / Google Pay / STC Pay</p></div>'
+    content += '<div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:25px;border-radius:15px;text-align:center;border:1px solid #FFD700;"><h3 style="color:#FFD700;">🏦 التحويل</h3><p style="color:#aaa;">تحويل بنكي / سداد</p></div>'
+    content += '<div style="background:linear-gradient(145deg,#1a1a4e,#0d0d2e);padding:25px;border-radius:15px;text-align:center;border:1px solid #4affb0;"><h3 style="color:#4affb0;">🔗 الدفع عند الاستلام</h3><p style="color:#aaa;">تابي / تمارا</p></div>'
+    content += '</div>'
+    content += '<h3 style="margin-top:30px;color:#FFD700;">💳 طرق الدفع المتاحة:</h3>'
+    content += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:15px;">'
+    methods = ["Visa","Mastercard","Mada","Apple Pay","Google Pay","STC Pay","تحويل بنكي","سداد","تابي","تمارا","PayPal","مدى"]
+    for m in methods:
+        content += f'<div style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #4affb0;">{m}</div>'
     content += '</div>'
     return render_template_string(MED_PAGE, content=content)
 

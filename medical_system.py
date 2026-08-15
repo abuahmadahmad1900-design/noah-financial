@@ -314,24 +314,117 @@ def medical_login():
             return redirect('/medical_dashboard')
         return redirect('/medical_login?error=1')
     error = request.args.get('error')
-    return '''
-    <!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8">
-    <title>دخول نوح الطبي</title>
-    <style>
-        body { font-family:Tahoma; background:linear-gradient(135deg,#0a2e2e,#0e1a2e); color:#fff; display:flex; justify-content:center; align-items:center; height:100vh; }
-        .login-box { background:rgba(10,20,30,0.9); padding:40px; border-radius:25px; border:2px solid #4affb0; text-align:center; }
-        input { display:block; width:100%; padding:15px; margin:15px 0; background:rgba(255,255,255,0.05); border:2px solid #4affb0; color:#fff; border-radius:15px; font-size:1rem; transition:all 0.3s; outline:none; }
-        input:focus { border-color:#FFD700; box-shadow:0 0 20px rgba(255,215,0,0.3); }
-        button { width:100%; padding:12px; background:linear-gradient(45deg,#4affb0,#00c8ff); border:none; border-radius:10px; font-weight:bold; cursor:pointer; }
-    </style></head><body>
-    <div class="login-box" style="background:linear-gradient(145deg,rgba(26,26,62,0.95),rgba(13,13,32,0.95));padding:50px;border-radius:30px;border:2px solid #4affb0;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,0.8),0 0 50px rgba(74,255,176,0.3);animation:glow-login 3s ease-in-out infinite alternate;">
-        <h2 style="font-size:2rem;background:linear-gradient(45deg,#4affb0,#00c8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:20px;">🦅 دخول نوح الطبي</h2>
-        <p style="color:#aaa;margin-bottom:30px;">النظام الطبي الأسطوري المتكامل</p>''' + ("<p style='color:#ff4a4a;'>بيانات خاطئة</p>" if error else "") + '''
-    <form method="POST">
-        <input type="text" name="username" placeholder="المستخدم" required>
-        <input type="password" name="password" placeholder="كلمة المرور" required>
-        <button>دخول</button>
-    </form></div></body></html>'''
+    error_msg = "<p style='color:#ff4a4a;font-weight:bold;'>❌ بيانات خاطئة</p>" if error else ""
+    return """
+    <!DOCTYPE html>
+    <html lang="ar" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>🦅 دخول نوح الطبي</title>
+        <style>
+            * { margin:0; padding:0; box-sizing:border-box; }
+            body {
+                font-family: Tahoma, sans-serif;
+                background: linear-gradient(135deg, #0a2e2e, #1a0a3e, #0e1a2e);
+                background-size: 400% 400%;
+                animation: bg-shift 8s ease infinite;
+                color: #fff;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            @keyframes bg-shift {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+            .login-box {
+                width: 100%;
+                max-width: 450px;
+                background: rgba(10,20,30,0.9);
+                padding: 50px 40px;
+                border-radius: 30px;
+                border: 2px solid #4affb0;
+                text-align: center;
+                box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 50px rgba(74,255,176,0.4);
+                animation: glow-box 3s ease-in-out infinite alternate;
+            }
+            @keyframes glow-box {
+                from { box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 30px rgba(74,255,176,0.3); }
+                to { box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 70px rgba(74,255,176,0.7); }
+            }
+            .logo {
+                font-size: 4rem;
+                animation: bounce 2s ease-in-out infinite;
+            }
+            @keyframes bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-15px); }
+            }
+            h2 {
+                font-size: 2rem;
+                background: linear-gradient(45deg, #4affb0, #00c8ff, #FFD700);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: gradient-shift 3s ease infinite;
+            }
+            @keyframes gradient-shift {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+            .subtitle { color: #aaa; margin: 20px 0 30px; }
+            input {
+                display: block;
+                width: 100%;
+                padding: 15px;
+                margin: 15px 0;
+                background: rgba(255,255,255,0.05);
+                border: 2px solid #4affb0;
+                color: #fff;
+                border-radius: 15px;
+                font-size: 1rem;
+                outline: none;
+            }
+            input:focus {
+                border-color: #FFD700;
+                box-shadow: 0 0 25px rgba(255,215,0,0.4);
+            }
+            button {
+                width: 100%;
+                padding: 15px;
+                background: linear-gradient(45deg, #4affb0, #00c8ff);
+                border: none;
+                border-radius: 15px;
+                font-weight: bold;
+                font-size: 1.1rem;
+                cursor: pointer;
+                color: #000;
+                margin-top: 10px;
+            }
+            button:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 15px 35px rgba(74,255,176,0.5);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="login-box">
+            <div class="logo">🏥</div>
+            <h2>🦅 نوح الطبي</h2>
+            <p class="subtitle">النظام الطبي الأسطوري المتكامل</p>
+            """ + error_msg + """
+            <form method="POST">
+                <input type="text" name="username" placeholder="👤 اسم المستخدم" required>
+                <input type="password" name="password" placeholder="🔒 كلمة المرور" required>
+                <button type="submit">🚀 دخول</button>
+            </form>
+        </div>
+    </body>
+    </html>
+    """
 
 @app.route('/logout_medical')
 def logout_medical():

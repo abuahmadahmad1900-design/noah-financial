@@ -1043,5 +1043,106 @@ def vital_systems2():
     </div>'''
     return render_template_string(MED_PAGE, content=content)
 
+
+@app.route('/ventilation')
+def ventilation():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["مراقبة التنفس","ضبط الأكسجين","تنبيه انسداد","مراقبة الضغط","إعدادات المريض","سجل التنفس","تنبيه انقطاع","مراقبة التشبع","إدارة الأنبوب","تنظيف تلقائي"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #00c8ff;display:block;text-decoration:none;margin:5px;"><strong style="color:#00c8ff;">🫁 {s}</strong></a>'
+    content = f'<h2>🫁 نظام التنفس الصناعي</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/blood_bank')
+def blood_bank():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["إدارة المتبرعين","فصائل الدم","مخزون الدم","فحص الدم","توافق الدم","توزيع الدم","تنبيه نقص","سجل التبرع","فحص الأمراض","تخزين آمن"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #ff4a4a;display:block;text-decoration:none;margin:5px;"><strong style="color:#ff4a4a;">🩸 {s}</strong></a>'
+    content = f'<h2>🩸 بنك الدم</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/advanced_lab')
+def advanced_lab():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["تحليل الدم الشامل","تحليل البول","تحليل الهرمونات","تحليل الأورام","تحليل الجينات","تحليل المناعة","تحليل البكتيريا","تحليل الفيروسات","تحليل المعادن","نتائج فورية"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #4affb0;display:block;text-decoration:none;margin:5px;"><strong style="color:#4affb0;">🧪 {s}</strong></a>'
+    content = f'<h2>🧪 المختبر المتقدم</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/infection_control')
+def infection_control():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["تعقيم الأدوات","عزل المرضى","مكافحة البكتيريا","مكافحة الفيروسات","تعقيم الغرف","مراقبة العدوى","تقارير العدوى","تدريب الوقاية","مواد التعقيم","سجل التعقيم"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #FFD700;display:block;text-decoration:none;margin:5px;"><strong style="color:#FFD700;">🦠 {s}</strong></a>'
+    content = f'<h2>🦠 مكافحة العدوى</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/iv_fluids')
+def iv_fluids():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["معدل التنقيط","نوع المحلول","مراقبة الوريد","تنبيه التسرب","متابعة السوائل","حساب الجرعة","سجل المحاليل","تنبيه الانتهاء","إدارة المضخة","مراقبة التوازن"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #00c8ff;display:block;text-decoration:none;margin:5px;"><strong style="color:#00c8ff;">💉 {s}</strong></a>'
+    content = f'<h2>💉 المحاليل الوريدية</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/cardiac_monitor')
+def cardiac_monitor():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["مراقبة النبض","مراقبة الضغط","رسم القلب","تنبيه عدم انتظام","سجل القلب","مراقبة الأكسجين","تنبيه السكتة","متابعة دائمة","تحليل الإيقاع","تنبيه فوري"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #ff4a4a;display:block;text-decoration:none;margin:5px;"><strong style="color:#ff4a4a;">🫀 {s}</strong></a>'
+    content = f'<h2>🫀 مراقبة القلب</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/neuro_monitor')
+def neuro_monitor():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["مراقبة الوعي","مراقبة الضغط الدماغي","رسم المخ","تنبيه التشنج","متابعة الأعصاب","سجل المخ","تنبيه السكتة","مراقبة الحدقة","تحليل الاستجابة","تنبيه فوري"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #4affb0;display:block;text-decoration:none;margin:5px;"><strong style="color:#4affb0;">🧠 {s}</strong></a>'
+    content = f'<h2>🧠 مراقبة المخ</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/neonatal')
+def neonatal():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["مراقبة المواليد","الحضانات","مراقبة الوزن","مراقبة التغذية","مراقبة التنفس","مراقبة الصفار","سجل المواليد","تنبيه فوري","رعاية خاصة","متابعة النمو"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #FFD700;display:block;text-decoration:none;margin:5px;"><strong style="color:#FFD700;">👶 {s}</strong></a>'
+    content = f'<h2>👶 حديثي الولادة</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/air_ambulance')
+def air_ambulance():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["تنسيق الطيران","تجهيز الطائرة","فريق طبي جوي","مراقبة المريض","تواصل أرضي","تنسيق المستشفى","سجل الرحلات","تنبيه فوري","معدات الطيران","إدارة الوقود"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #00c8ff;display:block;text-decoration:none;margin:5px;"><strong style="color:#00c8ff;">🚑 {s}</strong></a>'
+    content = f'<h2>🚑 الإسعاف الجوي</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/remote_monitor')
+def remote_monitor():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["مراقبة من المنزل","أجهزة استشعار","تطبيق متابعة","تنبيه الأطباء","سجل القياسات","مراقبة السكر","مراقبة الضغط","مراقبة القلب","تواصل مرئي","تقارير دورية"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #4affb0;display:block;text-decoration:none;margin:5px;"><strong style="color:#4affb0;">📡 {s}</strong></a>'
+    content = f'<h2>📡 المراقبة عن بعد</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5007, debug=False)

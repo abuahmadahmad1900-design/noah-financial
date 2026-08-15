@@ -129,7 +129,7 @@ def dashboard():
     <style>
         .particles { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
         .particle { position:absolute; border-radius:50%; background:rgba(255,215,0,0.6); animation:float-particle linear infinite; }
-        @keyframes float-particle { 0% { transform:translateY(100vh) scale(0); opacity:0; } 10% { opacity:1; } 90% { opacity:1; } 100% { transform:translateY(-10vh) scale(1); opacity:0; } }
+        @keyframes float-particle {{ 0% {{ transform:translateY(100vh) scale(0); opacity:0; }} 10% {{ opacity:1; }} 90% {{ opacity:1; }} 100% {{ transform:translateY(-10vh) scale(1); opacity:0; }} }}
         .stats, .nav-grid { position:relative; z-index:1; }
     </style>
     <script>

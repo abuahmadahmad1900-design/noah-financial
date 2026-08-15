@@ -308,3 +308,69 @@ def currencies():
     for r in rows: content += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>"
     content += "</table>"
     return render_template_string(PAGE, content=content)
+
+@app.route('/ai_analysis')
+def ai_analysis():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount > 0"); inflow = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount < 0"); outflow = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM customers"); customers = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM products"); products = c.fetchone()[0]
+    conn.close()
+    net = revenue
+    cash = inflow + outflow
+    insights = []
+    if revenue > 50000: insights.append("📈 إيراداتك ممتازة! استمر في النمو")
+    else: insights.append("📊 إيراداتك تحتاج تعزيزاً — ركز على التسويق")
+    if cash < 0: insights.append("🚨 التدفق النقدي سلبي — خفف المصاريف")
+    else: insights.append("✅ التدفق النقدي إيجابي")
+    if customers < 5: insights.append("👥 قاعدة عملائك صغيرة — وسّع نطاقك")
+    if products < 5: insights.append("📦 منتجاتك محدودة — أضف المزيد")
+    content = f"""
+    <h2 style="text-align:center;color:#00c8ff;">🧠 الذكاء المالي</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;margin-top:20px;">
+        <div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #FFD700;"><h3>💰 الإيرادات</h3><p style="font-size:2rem;color:#FFD700;">{revenue}</p></div>
+        <div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #00c8ff;"><h3>💵 التدفق</h3><p style="font-size:2rem;color:#00c8ff;">{cash}</p></div>
+    </div>
+    <div style="margin-top:20px;">"""
+    for i in insights:
+        content += f'<div style="background:#1a1a4e;padding:15px;border-radius:10px;margin:10px 0;border-right:4px solid #FFD700;">{i}</div>'
+    content += "</div>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/forecast')
+def forecast():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
+    conn.close()
+    next_month = revenue * 1.15
+    next_quarter = revenue * 1.4
+    content = f"""
+    <h2 style="text-align:center;color:#4affb0;">🔮 التنبؤ المالي</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-top:20px;">
+        <div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #4affb0;"><h3>الحالي</h3><p style="font-size:2rem;color:#4affb0;">{revenue}</p></div>
+        <div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #4affb0;"><h3>الشهر القادم</h3><p style="font-size:2rem;color:#4affb0;">{next_month:.0f}</p></div>
+        <div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #4affb0;"><h3>الربع القادم</h3><p style="font-size:2rem;color:#4affb0;">{next_quarter:.0f}</p></div>
+    </div>"""
+    return render_template_string(PAGE, content=content)
+
+@app.route('/reports')
+def reports():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(balance),0) FROM accounts WHERE type='أصول'"); assets = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM debts WHERE type='علينا'"); our_debts = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM debts WHERE type='لنا'"); their_debts = c.fetchone()[0]
+    conn.close()
+    content = f"""
+    <h2 style="text-align:center;color:#FFD700;">📊 التقارير المالية</h2>
+    <table><tr><th>البند</th><th>القيمة</th></tr>
+    <tr><td>💰 الإيرادات</td><td>{revenue}</td></tr>
+    <tr><td>🏢 الأصول</td><td>{assets}</td></tr>
+    <tr><td>💳 ديون علينا</td><td>{our_debts}</td></tr>
+    <tr><td>💳 ديون لنا</td><td>{their_debts}</td></tr></table>"""
+    return render_template_string(PAGE, content=content)

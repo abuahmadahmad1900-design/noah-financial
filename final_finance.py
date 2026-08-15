@@ -619,3 +619,33 @@ def credit_management():
     if 'user' not in session: return redirect('/login')
     content = "<h2>💳 إدارة الائتمان</h2><p>لا توجد ديون متأخرة</p>"
     return render_template_string(PAGE, content=content)
+
+@app.route('/economic_indicators')
+def economic_indicators():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>📈 المؤشرات الاقتصادية</h2><p>الناتج المحلي: 1.2T</p><p>التضخم: 2.5%</p><p>البطالة: 5%</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/exchange_rates')
+def exchange_rates():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>🌍 أسعار الصرف</h2><p>USD: 1.0</p><p>EUR: 0.92</p><p>SAR: 3.75</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/stock_market')
+def stock_market():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>💰 سوق الأسهم</h2><p>مؤشر: +1.5%</p><p>التداول: نشط</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/central_banks')
+def central_banks():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>🏦 البنوك المركزية</h2><p>الفائدة: 5%</p><p>الاحتياطي: مستقر</p>"
+    return render_template_string(PAGE, content=content)
+
+@app.route('/inflation')
+def inflation():
+    if 'user' not in session: return redirect('/login')
+    content = "<h2>📊 التضخم والفائدة</h2><p>التضخم: 2.5%</p><p>الفائدة: 5%</p>"
+    return render_template_string(PAGE, content=content)

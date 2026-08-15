@@ -953,5 +953,17 @@ def data_privacy():
     content = f'<h2>🔐 خصوصية البيانات + 10 داعمة</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
     return render_template_string(MED_PAGE, content=content)
 
+@app.route('/system_details/<system_name>')
+def system_details(system_name):
+    if 'medical_user' not in session: return redirect('/medical_login')
+    content = f'''
+    <h2>📄 {system_name}</h2>
+    <div style="background:#1a1a4e;padding:30px;border-radius:15px;border:1px solid #4affb0;text-align:center;">
+        <h3 style="color:#4affb0;">✅ النظام مفعل</h3>
+        <p style="color:#ccc;">جاهز للعمل بكامل طاقته</p>
+        <a href="/vital_systems" style="color:#00c8ff;">🏠 العودة</a>
+    </div>'''
+    return render_template_string(MED_PAGE, content=content)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5007, debug=False)

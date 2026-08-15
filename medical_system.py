@@ -283,6 +283,10 @@ MED_PAGE = '''
             <a href="/medical_alerts" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #ff4a4a;box-shadow:0 0 15px rgba(255,74,74,0.3);text-decoration:none;color:#ff4a4a;font-size:0.75rem;transition:all 0.3s;animation:float-circle 3s ease-in-out infinite;animation-delay:2.8s;"><span style="font-size:1.5rem;animation:spin-icon 4s linear infinite;">🔔</span>التنبيهات</a>
             <a href="/medical_ai" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #00c8ff;box-shadow:0 0 15px rgba(0,200,255,0.3);text-decoration:none;color:#00c8ff;font-size:0.75rem;transition:all 0.3s;animation:float-circle 3s ease-in-out infinite;animation-delay:3s;"><span style="font-size:1.5rem;animation:spin-icon 4s linear infinite;">🧠</span>الذكاء</a>
             <a href="/medical_encyclopedia" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #FFD700;box-shadow:0 0 25px rgba(255,215,0,0.5);text-decoration:none;color:#FFD700;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">📚</span>الموسوعة</a>
+        <a href="/emergency" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #ff4a4a;box-shadow:0 0 15px rgba(255,74,74,0.3);text-decoration:none;color:#ff4a4a;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">🚑</span>الطوارئ</a>
+        <a href="/insurance" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #FFD700;box-shadow:0 0 15px rgba(255,215,0,0.3);text-decoration:none;color:#FFD700;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">🏥</span>التأمين</a>
+        <a href="/vaccinations" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #4affb0;box-shadow:0 0 15px rgba(74,255,176,0.3);text-decoration:none;color:#4affb0;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">💉</span>التطعيمات</a>
+        <a href="/incubators" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #FFD700;box-shadow:0 0 15px rgba(255,215,0,0.3);text-decoration:none;color:#FFD700;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">👶</span>الحضانات</a>
         <a href="/medical_apps" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #00c8ff;box-shadow:0 0 25px rgba(0,200,255,0.5);text-decoration:none;color:#00c8ff;font-size:0.75rem;animation:float-circle 3s ease-in-out infinite;"><span style="font-size:1.5rem;">📱</span>التطبيقات</a>
         <a href="/logout_medical" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:15px;border-radius:50%;width:90px;height:90px;justify-content:center;background:linear-gradient(145deg,#1a1a4e,#0d0d2e);border:2px solid #ff4a4a;box-shadow:0 0 15px rgba(255,74,74,0.3);text-decoration:none;color:#ff4a4a;font-size:0.75rem;transition:all 0.3s;animation:float-circle 3s ease-in-out infinite;animation-delay:3.2s;"><span style="font-size:1.5rem;animation:spin-icon 4s linear infinite;">🚪</span>خروج</a>
         </div>
@@ -1424,6 +1428,50 @@ def medical_apps():
     for icon, name, url, desc in MEDICAL_APPS:
         html += f'<a href="{url}" target="_blank" style="background:#1a1a4e;padding:15px;border-radius:12px;text-align:center;border:1px solid #00c8ff;display:block;text-decoration:none;margin:5px;"><span style="font-size:2rem;">{icon}</span><br><strong style="color:#00c8ff;">{name}</strong><br><small style="color:#aaa;">{desc}</small></a>'
     content = f'<h2>📱 التطبيقات والتواصل الطبي - {len(MEDICAL_APPS)} تطبيق</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+# ========== الطوارئ ==========
+@app.route('/emergency')
+def emergency():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["استقبال الطوارئ","فرز الحالات","سيارات الإسعاف","غرفة الإنعاش","طوارئ القلب","طوارئ الحوادث","طوارئ الأطفال","طوارئ الحروق","طوارئ التسمم","طوارئ نفسية"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #ff4a4a;display:block;text-decoration:none;margin:5px;"><strong style="color:#ff4a4a;">🚑 {s}</strong></a>'
+    content = f'<h2>🚑 نظام الطوارئ</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+# ========== التأمين الصحي ==========
+@app.route('/insurance')
+def insurance():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["شركات التأمين","الموافقات","المطالبات","تغطية العلاج","نسبة التحمل","سقف التأمين","التأمين الشامل","تأمين الأسنان","تأمين الأدوية","تأمين العمليات"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #FFD700;display:block;text-decoration:none;margin:5px;"><strong style="color:#FFD700;">🏥 {s}</strong></a>'
+    content = f'<h2>🏥 التأمين الصحي</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+# ========== التطعيمات ==========
+@app.route('/vaccinations')
+def vaccinations():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["جدول التطعيمات","تطعيمات الأطفال","تطعيمات الكبار","تطعيمات الحوامل","تطعيمات السفر","تطعيم الإنفلونزا","تطعيم كورونا","متابعة الجرعات","تنبيه المواعيد","سجل التطعيمات"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #4affb0;display:block;text-decoration:none;margin:5px;"><strong style="color:#4affb0;">💉 {s}</strong></a>'
+    content = f'<h2>💉 التطعيمات</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+# ========== الحضانات ==========
+@app.route('/incubators')
+def incubators():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    systems = ["حضانات المواليد","مراقبة الوزن","مراقبة التنفس","مراقبة الحرارة","مراقبة التغذية","مراقبة الصفار","رعاية الخدج","متابعة النمو","تنبيه فوري","سجل المواليد"]
+    html = ""
+    for s in systems:
+        html += f'<a href="/system_details/{s}" style="background:#1a1a4e;padding:15px;border-radius:10px;text-align:center;border:1px solid #FFD700;display:block;text-decoration:none;margin:5px;"><strong style="color:#FFD700;">👶 {s}</strong></a>'
+    content = f'<h2>👶 الحضانات</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">{html}</div>'
     return render_template_string(MED_PAGE, content=content)
 
 if __name__ == '__main__':

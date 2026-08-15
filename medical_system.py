@@ -320,10 +320,13 @@ def medical_dashboard():
     c.execute("SELECT COUNT(*) FROM operations"); ops = c.fetchone()[0]
     conn.close()
     content = f'''
-    <div style="text-align:center;margin-bottom:20px;">
-        <a href="/vital_systems" style="background:linear-gradient(45deg,#FFD700,#FF8C00);color:#000;padding:15px 30px;border-radius:25px;text-decoration:none;font-weight:bold;">🏥 الأنظمة الحيوية</a>
-        <a href="/vital_systems2" style="background:linear-gradient(45deg,#4affb0,#00c8ff);color:#000;padding:15px 30px;border-radius:25px;text-decoration:none;font-weight:bold;">🚀 الأنظمة المتقدمة</a>
-        <a href="/medical_ai" style="background:linear-gradient(45deg,#00c8ff,#4affb0);color:#000;padding:15px 30px;border-radius:25px;text-decoration:none;font-weight:bold;">🧠 الذكاء الطبي</a>
+    <div style="background:linear-gradient(145deg,rgba(26,26,62,0.9),rgba(13,13,32,0.9));border-radius:25px;padding:30px;margin-bottom:30px;border:2px solid rgba(74,255,176,0.4);box-shadow:0 15px 40px rgba(0,0,0,0.5),0 0 40px rgba(74,255,176,0.2),inset 0 0 30px rgba(74,255,176,0.05);text-align:center;animation:glow-border 3s ease-in-out infinite alternate;">
+        <h3 style="color:#FFD700;margin-bottom:20px;font-size:1.3rem;text-shadow:0 0 15px rgba(255,215,0,0.5);">⚡ الأنظمة المتقدمة</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:15px;justify-content:center;">
+            <a href="/vital_systems" style="background:linear-gradient(45deg,#FFD700,#FF8C00);color:#000;padding:15px 30px;border-radius:25px;text-decoration:none;font-weight:bold;box-shadow:0 0 25px rgba(255,215,0,0.4);transition:all 0.3s;animation:pulse-gold 2s infinite;">🏥 الأنظمة الحيوية</a>
+            <a href="/vital_systems2" style="background:linear-gradient(45deg,#4affb0,#00c8ff);color:#000;padding:15px 30px;border-radius:25px;text-decoration:none;font-weight:bold;box-shadow:0 0 25px rgba(74,255,176,0.4);transition:all 0.3s;animation:pulse-green 2s infinite;">🚀 الأنظمة المتقدمة</a>
+            <a href="/medical_ai" style="background:linear-gradient(45deg,#00c8ff,#4affb0);color:#000;padding:15px 30px;border-radius:25px;text-decoration:none;font-weight:bold;box-shadow:0 0 25px rgba(0,200,255,0.4);transition:all 0.3s;animation:pulse-blue 2s infinite;">🧠 الذكاء الطبي</a>
+        </div>
     </div>
     <div class="stats-grid">
         <div class="stat-card"><div class="icon">👥</div><div class="num">{patients}</div><div class="label">المرضى</div></div>
@@ -1152,3 +1155,9 @@ def vital_systems2():
         <a href="/remote_monitor" style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #4affb0;"><h3>📡 مراقبة عن بعد</h3><p style="color:#aaa;">11 نظام</p></a>
     </div>'''
     return render_template_string(MED_PAGE, content=content)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5007, debug=False)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5007, debug=False)

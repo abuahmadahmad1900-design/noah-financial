@@ -6,7 +6,33 @@ app = Flask(__name__)
 app.secret_key = 'final_finance_2026'
 DB = 'new_finance.db'
 
-def init_db():
+def init_db()
+
+def add_sample_data():
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM accounts")
+    if c.fetchone()[0] == 0:
+        c.execute("INSERT INTO accounts (name, type, balance) VALUES ('النقدية','أصول',50000)")
+        c.execute("INSERT INTO accounts (name, type, balance) VALUES ('البنك','أصول',150000)")
+        c.execute("INSERT INTO accounts (name, type, balance) VALUES ('المبيعات','إيرادات',200000)")
+        c.execute("INSERT INTO accounts (name, type, balance) VALUES ('المشتريات','مصاريف',80000)")
+        c.execute("INSERT INTO customers (name, phone) VALUES ('شركة الأمل','0501234567')")
+        c.execute("INSERT INTO customers (name, phone) VALUES ('مؤسسة النور','0507654321')")
+        c.execute("INSERT INTO customers (name, phone) VALUES ('شركة المستقبل','0509876543')")
+        c.execute("INSERT INTO products (name, price, stock) VALUES ('منتج أ',100,50)")
+        c.execute("INSERT INTO products (name, price, stock) VALUES ('منتج ب',200,30)")
+        c.execute("INSERT INTO products (name, price, stock) VALUES ('منتج ج',300,20)")
+        c.execute("INSERT INTO invoices (customer_id, amount, date) VALUES (1,15000,'2026-08-01')")
+        c.execute("INSERT INTO invoices (customer_id, amount, date) VALUES (2,25000,'2026-08-05')")
+        c.execute("INSERT INTO invoices (customer_id, amount, date) VALUES (3,10000,'2026-08-10')")
+        c.execute("INSERT INTO bank_moves (date, desc, amount) VALUES ('2026-08-01','إيداع',50000)")
+        c.execute("INSERT INTO bank_moves (date, desc, amount) VALUES ('2026-08-05','إيداع مبيعات',35000)")
+        c.execute("INSERT INTO bank_moves (date, desc, amount) VALUES ('2026-08-10','سحب',-15000)")
+        conn.commit()
+    conn.close()
+
+add_sample_data():
     conn = sqlite3.connect(DB)
     c = conn.cursor()
     c.executescript('''
@@ -97,6 +123,7 @@ def dashboard():
         @keyframes glow-blue {{ 0%,100% {{ box-shadow:0 0 15px rgba(0,200,255,0.4); }} 50% {{ box-shadow:0 0 35px rgba(0,200,255,0.9); }} }}
         @keyframes glow-green {{ 0%,100% {{ box-shadow:0 0 15px rgba(74,255,176,0.4); }} 50% {{ box-shadow:0 0 35px rgba(74,255,176,0.9); }} }}
         @keyframes pulse-bar {{ 0%,100% {{ filter:brightness(1); }} 50% {{ filter:brightness(1.5); }} }}
+        @keyframes subtitle-glow {{ 0%,100% {{ text-shadow:0 0 10px rgba(255,215,0,0.5); }} 50% {{ text-shadow:0 0 30px rgba(255,215,0,0.9), 0 0 50px rgba(0,200,255,0.5); }} }}
         @keyframes spin-icon {{ 0%,100% {{ transform:rotate(0deg); }} 50% {{ transform:rotate(12deg); }} }}
         @keyframes gradient-shift {{ 0% {{ background-position:0% 50%; }} 50% {{ background-position:100% 50%; }} 100% {{ background-position:0% 50%; }} }}
         h1 {{

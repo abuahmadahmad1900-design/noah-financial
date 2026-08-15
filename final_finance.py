@@ -336,3 +336,46 @@ def smart_analysis():
         content += f'<div style="background:#1a1a4e;padding:15px;border-radius:10px;margin:10px 0;border-right:4px solid #FFD700;">{i}</div>'
     content += "</div>"
     return render_template_string(PAGE, content=content)
+
+@app.route('/currency_converter', methods=['GET','POST'])
+def currency_converter():
+    if 'user' not in session: return redirect('/login')
+    result = None
+    if request.method == 'POST':
+        amount = float(request.form['amount'])
+        from_rate = float(request.form.get('from_rate', 1))
+        to_rate = float(request.form.get('to_rate', 1))
+        result = amount * (to_rate / from_rate)
+    content = '''
+    <h2 style="text-align:center;color:#00c8ff;">💱 محول العملات</h2>
+    <form method="POST" style="text-align:center;margin-top:20px;">
+        <input name="amount" placeholder="المبلغ" required>
+        <input name="from_rate" placeholder="سعر العملة من" value="1">
+        <input name="to_rate" placeholder="سعر العملة إلى" value="1">
+        <button>تحويل</button>
+    </form>'''
+    if result is not None:
+        content += f'<p style="text-align:center;font-size:2rem;color:#FFD700;margin-top:20px;">✅ {result:.2f}</p>'
+    return render_template_string(PAGE, content=content)
+
+@app.route('/kpis')
+def kpis():
+    if 'user' not in session: return redirect('/login')
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM invoices"); revenue = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves WHERE amount < 0"); expenses = abs(c.fetchone()[0])
+    c.execute("SELECT COUNT(*) FROM customers"); customers = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM products"); products = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM bank_moves"); cash = c.fetchone()[0]
+    conn.close()
+    profit = revenue - expenses
+    margin = (profit / revenue * 100) if revenue > 0 else 0
+    content = f'''
+    <h2 style="text-align:center;color:#4affb0;">🎯 مؤشرات الأداء</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-top:20px;">
+        <div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #FFD700;"><h3>هامش الربح</h3><p style="font-size:2rem;color:#FFD700;">{margin:.1f}%</p></div>
+        <div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #00c8ff;"><h3>العملاء</h3><p style="font-size:2rem;color:#00c8ff;">{customers}</p></div>
+        <div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #4affb0;"><h3>المنتجات</h3><p style="font-size:2rem;color:#4affb0;">{products}</p></div>
+        <div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:2px solid #FFD700;"><h3>النقد</h3><p style="font-size:2rem;color:#FFD700;">{cash}</p></div>
+    </div>'''
+    return render_template_string(PAGE, content=content)

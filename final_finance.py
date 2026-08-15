@@ -168,10 +168,10 @@ def dashboard():
     <p style="text-align:center;color:#aaa;">النظام المالي الأسطوري المتكامل</p>
     <div style="text-align:center;margin:20px 0;color:#FFD700;font-size:1.2rem;" id="clock"></div>
     <script>
-        function updateClock() {
+        function updateClock() {{
             const now = new Date();
             document.getElementById('clock').textContent = now.toLocaleDateString('ar') + ' - ' + now.toLocaleTimeString('ar');
-        }
+        }}
         updateClock();
         setInterval(updateClock, 1000);
     </script>

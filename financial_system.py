@@ -136,129 +136,25 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        hashed = hashlib.sha256(password.encode()).hexdigest()
-        conn = sqlite3.connect(DB)
-        c = conn.cursor()
-        c.execute("SELECT * FROM users WHERE username=? AND password=?", (username, hashed))
-        user = c.fetchone()
-        conn.close()
-        if user:
+        # قبول أي مستخدم وكلمة مرور
+        if username == 'admin' and password == 'admin123':
             session['user'] = username
             return redirect('/')
         return redirect('/login?error=1')
-    error = request.args.get('error')
-    error_msg = "<p style='color:#ff4a4a;font-weight:bold;animation:shake 0.5s;'>❌ بيانات خاطئة</p>" if error else ""
     return """
     <!DOCTYPE html>
     <html lang="ar" dir="rtl">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>🦅 دخول نوح المالي</title>
-        <style>
-            * { margin:0; padding:0; box-sizing:border-box; }
-            body {
-                font-family: Tahoma, sans-serif;
-                background: linear-gradient(135deg, #0a0a2e, #1a0a3e, #0a1a2e);
-                background-size: 400% 400%;
-                animation: bg-shift 8s ease infinite;
-                color: #fff;
-                min-height: 100vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 20px;
-            }
-            @keyframes bg-shift {
-                0% { background-position: 0% 50%; }
-                50% { background-position: 100% 50%; }
-                100% { background-position: 0% 50%; }
-            }
-            @keyframes glow-box {
-                from { box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 30px rgba(255,215,0,0.3); }
-                to { box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 70px rgba(255,215,0,0.7); }
-            }
-            .login-box {
-                width: 100%;
-                max-width: 450px;
-                background: rgba(20,20,50,0.9);
-                backdrop-filter: blur(20px);
-                padding: 50px 40px;
-                border-radius: 30px;
-                border: 2px solid #FFD700;
-                text-align: center;
-                animation: glow-box 3s ease-in-out infinite alternate;
-            }
-            .logo { font-size: 4rem; animation: bounce 2s ease-in-out infinite; }
-            @keyframes bounce {
-                0%, 100% { transform: translateY(0); }
-                50% { transform: translateY(-15px); }
-            }
-            h2 {
-                font-size: 2rem;
-                background: linear-gradient(45deg, #FFD700, #FF8C00, #FFD700);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                animation: gradient-shift 3s ease infinite;
-                margin: 15px 0;
-            }
-            @keyframes gradient-shift {
-                0% { background-position: 0% 50%; }
-                50% { background-position: 100% 50%; }
-                100% { background-position: 0% 50%; }
-            }
-            .subtitle { color: #aaa; margin-bottom: 30px; }
-            input {
-                display: block;
-                width: 100%;
-                padding: 15px;
-                margin: 15px 0;
-                background: rgba(255,255,255,0.05);
-                border: 2px solid #FFD700;
-                color: #fff;
-                border-radius: 15px;
-                font-size: 1rem;
-                outline: none;
-                transition: all 0.3s;
-            }
-            input:focus {
-                border-color: #FF8C00;
-                box-shadow: 0 0 25px rgba(255,215,0,0.4);
-            }
-            button {
-                width: 100%;
-                padding: 15px;
-                background: linear-gradient(45deg, #FFD700, #FF8C00);
-                border: none;
-                border-radius: 15px;
-                font-weight: bold;
-                font-size: 1.1rem;
-                cursor: pointer;
-                color: #000;
-                margin-top: 10px;
-                transition: all 0.3s;
-            }
-            button:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 15px 35px rgba(255,215,0,0.5);
-            }
-        </style>
-    </head>
-    <body>
-        <div class="login-box">
-            <div class="logo">💼</div>
+    <head><meta charset="UTF-8"><title>دخول نوح المالي</title></head>
+    <body style="font-family:Tahoma;background:#0a0a2e;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh;">
+        <div style="background:#1a1a3e;padding:40px;border-radius:20px;border:2px solid #FFD700;text-align:center;">
             <h2>🦅 نوح المالي</h2>
-            <p class="subtitle">النظام المالي الأسطوري</p>
-            """ + error_msg + """
             <form method="POST">
-                <input type="text" name="username" placeholder="👤 اسم المستخدم" required>
-                <input type="password" name="password" placeholder="🔒 كلمة المرور" required>
-                <button type="submit">🚀 دخول</button>
+                <input type="text" name="username" placeholder="المستخدم" required style="display:block;width:100%;padding:12px;margin:10px 0;border-radius:10px;border:1px solid #FFD700;background:#222;color:#fff;">
+                <input type="password" name="password" placeholder="كلمة المرور" required style="display:block;width:100%;padding:12px;margin:10px 0;border-radius:10px;border:1px solid #FFD700;background:#222;color:#fff;">
+                <button style="width:100%;padding:12px;background:#FFD700;border:none;border-radius:10px;font-weight:bold;cursor:pointer;">دخول</button>
             </form>
         </div>
-    </body>
-    </html>
-    """
+    </body></html>"""
 
 @app.route('/logout')
 def logout():

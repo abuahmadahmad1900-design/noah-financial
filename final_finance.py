@@ -144,6 +144,9 @@ def dashboard():
         <a href="/budgets" class="nav-btn btn-green"><span>📋</span>الميزانيات</a>
         <a href="/assets" class="nav-btn btn-gold"><span>🏢</span>الأصول</a>
         <a href="/currencies" class="nav-btn btn-blue"><span>💱</span>العملات</a>
+        <a href="/ai_analysis" class="nav-btn btn-gold"><span>🧠</span>ذكاء مالي</a>
+        <a href="/forecast" class="nav-btn btn-blue"><span>🔮</span>تنبؤ</a>
+        <a href="/reports" class="nav-btn btn-green"><span>📊</span>تقارير</a>
         <a href="/logout" class="nav-btn btn-green"><span>🚪</span>خروج</a>
     </div>"""
     return render_template_string(PAGE, content=content)

@@ -320,6 +320,11 @@ def medical_dashboard():
     c.execute("SELECT COUNT(*) FROM operations"); ops = c.fetchone()[0]
     conn.close()
     content = f'''
+    <div style="text-align:center;margin-bottom:20px;">
+        <a href="/vital_systems" style="background:linear-gradient(45deg,#FFD700,#FF8C00);color:#000;padding:15px 30px;border-radius:25px;text-decoration:none;font-weight:bold;">🏥 الأنظمة الحيوية</a>
+        <a href="/vital_systems2" style="background:linear-gradient(45deg,#4affb0,#00c8ff);color:#000;padding:15px 30px;border-radius:25px;text-decoration:none;font-weight:bold;">🚀 الأنظمة المتقدمة</a>
+        <a href="/medical_ai" style="background:linear-gradient(45deg,#00c8ff,#4affb0);color:#000;padding:15px 30px;border-radius:25px;text-decoration:none;font-weight:bold;">🧠 الذكاء الطبي</a>
+    </div>
     <div class="stats-grid">
         <div class="stat-card"><div class="icon">👥</div><div class="num">{patients}</div><div class="label">المرضى</div></div>
         <div class="stat-card"><div class="icon">🩺</div><div class="num">{doctors}</div><div class="label">الأطباء</div></div>

@@ -1645,5 +1645,42 @@ def medical_notifications():
     content = f'<h2>🔔 الإشعارات</h2>{html}'
     return render_template_string(MED_PAGE, content=content)
 
+
+@app.route('/medical_reports')
+def medical_reports():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    conn = sqlite3.connect(DB_MED); c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM patients"); patients = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM doctors"); doctors = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM medical_invoices"); total_rev = c.fetchone()[0]
+    conn.close()
+    content = f'<h2>📊 التقارير</h2><p>المرضى: {patients} | الأطباء: {doctors} | الإيرادات: {total_rev}</p>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/medical_search')
+def medical_search():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    query = request.args.get('q', '')
+    content = f'<h2>🔍 البحث</h2><form method="GET"><input name="q" placeholder="ابحث..." value="{query}"><button>بحث</button></form>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/medical_notifications')
+def medical_notifications():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    content = '<h2>🔔 الإشعارات</h2><p>لا توجد إشعارات جديدة</p>'
+    return render_template_string(MED_PAGE, content=content)
+
+
+@app.route('/medical_payments')
+def medical_payments():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    content = '<h2>💳 الدفع الإلكتروني</h2>'
+    content += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;">'
+    content += '<div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:1px solid #4affb0;"><h3>💳 بطاقات</h3><p>Visa / Mastercard / Mada</p></div>'
+    content += '<div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:1px solid #00c8ff;"><h3>📱 محافظ</h3><p>Apple Pay / STC Pay</p></div>'
+    content += '<div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;border:1px solid #FFD700;"><h3>🏦 تحويل</h3><p>بنكي / سداد</p></div>'
+    content += '</div>'
+    return render_template_string(MED_PAGE, content=content)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5007, debug=False)

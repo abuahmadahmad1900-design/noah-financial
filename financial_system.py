@@ -127,6 +127,10 @@ th {
 </style>
 '''
 
+@app.route('/')
+def finance_home():
+    return redirect('/login')
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':

@@ -25,7 +25,27 @@ def init_db():
     conn.commit()
     conn.close()
 
-def add_sample_data():
+def add_sample_data()
+
+def seed_finance_data():
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM accounts")
+    if c.fetchone()[0] == 0:
+        for name, type_acc, bal in [('النقدية','أصول',50000),('البنك','أصول',150000),('المبيعات','إيرادات',200000),('المشتريات','مصاريف',80000)]:
+            c.execute("INSERT INTO accounts (name, type, balance) VALUES (?,?,?)", (name, type_acc, bal))
+        for name, phone in [('شركة الأمل','0501234567'),('مؤسسة النور','0507654321'),('شركة المستقبل','0509876543')]:
+            c.execute("INSERT INTO customers (name, phone) VALUES (?,?)", (name, phone))
+        for name, price, stock in [('منتج أ',100,50),('منتج ب',200,30),('منتج ج',300,20)]:
+            c.execute("INSERT INTO products (name, price, stock) VALUES (?,?,?)", (name, price, stock))
+        for cust_id, amount, date in [(1,15000,'2026-08-01'),(2,25000,'2026-08-05'),(3,10000,'2026-08-10')]:
+            c.execute("INSERT INTO invoices (customer_id, amount, date) VALUES (?,?,?)", (cust_id, amount, date))
+        for date, desc, amount in [('2026-08-01','إيداع',50000),('2026-08-05','مبيعات',35000),('2026-08-10','سحب',-15000)]:
+            c.execute("INSERT INTO bank_moves (date, desc, amount) VALUES (?,?,?)", (date, desc, amount))
+        conn.commit()
+    conn.close()
+
+seed_finance_data():
     conn = sqlite3.connect(DB)
     c = conn.cursor()
     c.execute("SELECT COUNT(*) FROM accounts")

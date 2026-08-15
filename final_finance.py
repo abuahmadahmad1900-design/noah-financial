@@ -6,7 +6,24 @@ app = Flask(__name__)
 app.secret_key = 'final_finance_2026'
 DB = 'new_finance.db'
 
-def init_db()
+def init_db():
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+    c.executescript("""
+    CREATE TABLE IF NOT EXISTS accounts (id INTEGER PRIMARY KEY, name TEXT, type TEXT, balance REAL DEFAULT 0);
+    CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, name TEXT, phone TEXT, balance REAL DEFAULT 0);
+    CREATE TABLE IF NOT EXISTS suppliers (id INTEGER PRIMARY KEY, name TEXT, phone TEXT, balance REAL DEFAULT 0);
+    CREATE TABLE IF NOT EXISTS invoices (id INTEGER PRIMARY KEY, customer_id INTEGER, amount REAL, date TEXT);
+    CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY, name TEXT, price REAL, stock INTEGER);
+    CREATE TABLE IF NOT EXISTS bank_moves (id INTEGER PRIMARY KEY, date TEXT, desc TEXT, amount REAL);
+    CREATE TABLE IF NOT EXISTS zakat (id INTEGER PRIMARY KEY, amount REAL, date TEXT);
+    CREATE TABLE IF NOT EXISTS debts (id INTEGER PRIMARY KEY, name TEXT, amount REAL, type TEXT);
+    CREATE TABLE IF NOT EXISTS budgets (id INTEGER PRIMARY KEY, name TEXT, amount REAL);
+    CREATE TABLE IF NOT EXISTS assets (id INTEGER PRIMARY KEY, name TEXT, value REAL);
+    CREATE TABLE IF NOT EXISTS currencies (id INTEGER PRIMARY KEY, code TEXT, rate REAL);
+    """)
+    conn.commit()
+    conn.close()
 
 def add_sample_data():
     conn = sqlite3.connect(DB)
@@ -32,7 +49,7 @@ def add_sample_data():
         conn.commit()
     conn.close()
 
-add_sample_data():
+def add_sample_data():
     conn = sqlite3.connect(DB)
     c = conn.cursor()
     c.executescript('''

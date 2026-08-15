@@ -1575,3 +1575,55 @@ if __name__ == '__main__':
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5007, debug=False)
+
+@app.route('/medical_reports')
+def medical_reports():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    conn = sqlite3.connect(DB_MED); c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM patients"); patients = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM doctors"); doctors = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM appointments"); appts = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM prescriptions"); presc = c.fetchone()[0]
+    c.execute("SELECT COALESCE(SUM(amount),0) FROM medical_invoices"); total_rev = c.fetchone()[0]
+    conn.close()
+    content = '<h2>📊 التقارير</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;">'
+    content += f'<div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;"><h3 style="color:#4affb0;">{patients}</h3>مرضى</div>'
+    content += f'<div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;"><h3 style="color:#4affb0;">{doctors}</h3>أطباء</div>'
+    content += f'<div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;"><h3 style="color:#4affb0;">{appts}</h3>مواعيد</div>'
+    content += f'<div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;"><h3 style="color:#4affb0;">{presc}</h3>وصفات</div>'
+    content += f'<div style="background:#1a1a4e;padding:25px;border-radius:15px;text-align:center;"><h3 style="color:#FFD700;">{total_rev}</h3>إيرادات</div>'
+    content += '</div>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/medical_search')
+def medical_search():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    query = request.args.get('q', '')
+    results = []
+    if query:
+        conn = sqlite3.connect(DB_MED); c = conn.cursor()
+        c.execute("SELECT 'مريض', name FROM patients WHERE name LIKE ?", (f'%{query}%',))
+        results.extend(c.fetchall())
+        c.execute("SELECT 'طبيب', name FROM doctors WHERE name LIKE ?", (f'%{query}%',))
+        results.extend(c.fetchall())
+        c.execute("SELECT 'تخصص', name FROM specialties WHERE name LIKE ?", (f'%{query}%',))
+        results.extend(c.fetchall())
+        c.execute("SELECT 'دواء', medicine_name FROM pharmacy WHERE medicine_name LIKE ?", (f'%{query}%',))
+        results.extend(c.fetchall())
+        conn.close()
+    content = f'<h2>🔍 البحث</h2><form method="GET"><input name="q" placeholder="ابحث..." value="{query}"><button>بحث</button></form><table><tr><th>النوع</th><th>الاسم</th></tr>'
+    for r in results:
+        content += f'<tr><td>{r[0]}</td><td>{r[1]}</td></tr>'
+    content += '</table>'
+    return render_template_string(MED_PAGE, content=content)
+
+@app.route('/medical_notifications')
+def medical_notifications():
+    if 'medical_user' not in session: return redirect('/medical_login')
+    notifications = ["📅 تذكير بموعد المريض غداً","💊 تنبيه: دواء قارب على الانتهاء","🔬 نتيجة فحص جاهزة","🏥 غرفة 101 أصبحت متاحة"]
+    html = "".join([f'<div style="background:#1a1a4e;padding:15px;border-radius:10px;margin:5px;border:1px solid #4affb0;">🔔 {n}</div>' for n in notifications])
+    content = f'<h2>🔔 الإشعارات</h2>{html}'
+    return render_template_string(MED_PAGE, content=content)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5007, debug=False)

@@ -111,6 +111,10 @@ def dashboard():
         <a href="/budgets" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #4affb0;">📋 الميزانيات</a>
         <a href="/assets" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #FFD700;">🏢 الأصول</a>
         <a href="/currencies" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #00c8ff;">💱 العملات</a>
+        <a href="/advanced_reports" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #FFD700;">📊 تقارير</a>
+        <a href="/smart_analysis" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #00c8ff;">🧠 تحليل</a>
+        <a href="/currency_converter" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #4affb0;">💱 محول</a>
+        <a href="/kpis" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #FFD700;">🎯 مؤشرات</a>
         <a href="/logout" style="background:#1a1a3e;padding:15px 25px;border-radius:25px;border:2px solid #ff4a4a;">🚪 خروج</a>
     </div>'''
     return render_template_string(PAGE, content=content)

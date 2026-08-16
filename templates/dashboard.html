@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>🦅 نوح - لوحة القيادة الأسطورية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #00c8ff;
+            --gold: #FFD700;
+            --dark: #0a0a1a;
+            --glass: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.1);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #0a0a1a;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        /* خلفية متحركة بالجزيئات */
+        #particles-canvas {
+            position: fixed;
+            top:0; left:0;
+            width:100%; height:100%;
+            z-index:0;
+        }
+        .overlay {
+            position: fixed;
+            top:0; left:0;
+            width:100%; height:100%;
+            background: radial-gradient(circle at 50% 50%, rgba(0,200,255,0.1), transparent 70%);
+            z-index:1;
+            pointer-events:none;
+        }
+        .main-container {
+            position: relative;
+            z-index:2;
+            display:flex;
+            min-height:100vh;
+        }
+        /* الشريط الجانبي */
+        .sidebar {
+            width: 250px;
+            background: rgba(10,10,30,0.8);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            padding: 20px;
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+        }
+        .sidebar h2 {
+            color: var(--gold);
+            text-align:center;
+            margin-bottom:20px;
+            font-size:1.8rem;
+            text-shadow:0 0 10px rgba(255,215,0,0.5);
+        }
+        .sidebar a {
+            color:#ccc;
+            text-decoration:none;
+            padding:10px 15px;
+            border-radius:8px;
+            transition:all 0.3s;
+            font-size:0.9rem;
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+        .sidebar a:hover {
+            background:rgba(0,200,255,0.1);
+            color:var(--primary);
+            transform:translateX(-5px);
+            box-shadow:0 0 15px rgba(0,200,255,0.2);
+        }
+        .content {
+            flex:1;
+            padding:30px;
+        }
+        /* بطاقات إحصائية */
+        .stats-grid {
+            display:grid;
+            grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+            gap:20px;
+            margin-bottom:30px;
+        }
+        .stat-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border:1px solid var(--glass-border);
+            border-radius:20px;
+            padding:25px;
+            text-align:center;
+            transition:all 0.3s;
+            position:relative;
+            overflow:hidden;
+        }
+        .stat-card::before {
+            content:'';
+            position:absolute;
+            top:-50%;
+            left:-50%;
+            width:200%;
+            height:200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0,200,255,0.2), transparent, rgba(255,215,0,0.2), transparent);
+            animation: spin 6s linear infinite;
+        }
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        .stat-card:hover {
+            transform:translateY(-10px);
+            border-color:var(--primary);
+            box-shadow:0 15px 30px rgba(0,200,255,0.3);
+        }
+        .stat-card .icon { font-size:2.5rem; margin-bottom:10px; position:relative; z-index:1; }
+        .stat-card .value { font-size:2.5rem; font-weight:900; color:#fff; position:relative; z-index:1; text-shadow:0 0 10px rgba(0,200,255,0.5); }
+        .stat-card .label { color:#aaa; font-size:0.85rem; position:relative; z-index:1; }
+        /* الرسوم البيانية */
+        .charts-row {
+            display:grid;
+            grid-template-columns:repeat(auto-fit, minmax(350px, 1fr));
+            gap:20px;
+            margin-bottom:30px;
+        }
+        .chart-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border:1px solid var(--glass-border);
+            border-radius:20px;
+            padding:20px;
+            transition:all 0.3s;
+        }
+        .chart-card:hover {
+            border-color:var(--primary);
+            box-shadow:0 0 20px rgba(0,200,255,0.2);
+        }
+        .quick-actions {
+            display:flex;
+            flex-wrap:wrap;
+            gap:10px;
+            margin-top:30px;
+        }
+        .quick-actions a {
+            background:linear-gradient(145deg, #1a1a3e, #0d0d24);
+            color:#fff;
+            padding:12px 25px;
+            border-radius:30px;
+            text-decoration:none;
+            font-size:0.9rem;
+            border:1px solid rgba(255,255,255,0.2);
+            transition:all 0.3s;
+        }
+        .quick-actions a:hover {
+            background:var(--primary);
+            color:#000;
+            transform:scale(1.1);
+            box-shadow:0 0 25px rgba(0,200,255,0.5);
+        }
+        .alert-banner {
+            background:rgba(255,0,0,0.2);
+            border:1px solid #ff4a4a;
+            color:#ff4a4a;
+            padding:15px;
+            border-radius:10px;
+            margin-bottom:20px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%,100% { opacity:1; }
+            50% { opacity:0.7; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <div class="overlay"></div>
+    <div class="main-container">
+        <div class="sidebar">
+            <h2>🦅 نوح</h2>
+            <a href="/">🏠 الرئيسية</a>
+            <a href="/accounts">📚 الحسابات</a>
+            <a href="/customers">👥 العملاء</a>
+            <a href="/suppliers">📦 الموردون</a>
+            <a href="/invoices">🧾 الفواتير</a>
+            <a href="/products">📦 المنتجات</a>
+            <a href="/bank">🏦 البنك</a>
+            <a href="/zakat">🕌 الزكاة</a>
+            <a href="/investments">📈 الاستثمارات</a>
+            <a href="/projects">📁 المشاريع</a>
+            <a href="/contracts">📜 العقود</a>
+            <a href="/messages">✉️ الرسائل</a>
+            <a href="/alerts">🔔 التنبيهات</a>
+            <a href="/reports/charts">📊 التحليلات</a>
+            <a href="/settings">⚙️ الإعدادات</a>
+            <a href="/logout">🚪 خروج</a>
+        </div>
+        <div class="content">
+            {% if alerts_count > 0 %}
+            <div class="alert-banner">
+                ⚠️ لديك {{ alerts_count }} تنبيهات غير مقروءة! <a href="/alerts" style="color:#fff;">عرضها</a>
+            </div>
+            {% endif %}
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="icon">👥</div>
+                    <div class="value" id="customers">0</div>
+                    <div class="label">العملاء</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">🧾</div>
+                    <div class="value" id="invoices">0</div>
+                    <div class="label">الفواتير</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">📦</div>
+                    <div class="value" id="products">0</div>
+                    <div class="label">المنتجات</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">🏭</div>
+                    <div class="value" id="warehouses">0</div>
+                    <div class="label">المستودعات</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">🤝</div>
+                    <div class="value" id="suppliers">0</div>
+                    <div class="label">الموردون</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">💰</div>
+                    <div class="value" id="revenue">0</div>
+                    <div class="label">الإيرادات</div>
+                </div>
+            </div>
+            <div class="charts-row">
+                <div class="chart-card">
+                    <canvas id="incomeExpenseChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <canvas id="accountsChart"></canvas>
+                </div>
+            </div>
+            <div class="quick-actions">
+                <a href="/invoices">🧾 فاتورة جديدة</a>
+                <a href="/bank">🏦 حركة بنكية</a>
+                <a href="/products">📦 إضافة منتج</a>
+                <a href="/projects">📁 مشروع جديد</a>
+                <a href="/messages">✉️ رسالة جديدة</a>
+                <a href="/export">📥 تصدير البيانات</a>
+                <a href="/backup">💾 نسخ احتياطي</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        // خلفية الجزيئات
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const particles = [];
+        for (let i = 0; i < 100; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 3 + 1,
+                dx: (Math.random() - 0.5) * 0.5,
+                dy: (Math.random() - 0.5) * 0.5,
+                color: Math.random() > 0.5 ? '#00c8ff' : '#FFD700'
+            });
+        }
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.dx;
+                p.y += p.dy;
+                if (p.x < 0 || p.x > canvas.width) p.dx = -p.dx;
+                if (p.y < 0 || p.y > canvas.height) p.dy = -p.dy;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = 0.6;
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // عدادات متحركة
+        function animateCounter(id, target) {
+            const el = document.getElementById(id);
+            let current = 0;
+            const step = Math.max(1, Math.floor(target / 40));
+            const interval = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    el.textContent = target.toLocaleString();
+                    clearInterval(interval);
+                } else {
+                    el.textContent = current.toLocaleString();
+                }
+            }, 25);
+        }
+        animateCounter('customers', {{ customers }});
+        animateCounter('invoices', {{ invoices }});
+        animateCounter('products', {{ products }});
+        animateCounter('warehouses', {{ warehouses }});
+        animateCounter('suppliers', {{ suppliers }});
+        animateCounter('revenue', {{ revenue }});
+
+        // رسوم بيانية
+        const incomeExpense = new Chart(document.getElementById('incomeExpenseChart'), {
+            type: 'bar',
+            data: {
+                labels: ['الإيرادات', 'المصاريف', 'صافي الربح'],
+                datasets: [{
+                    label: 'المبلغ',
+                    data: [{{ revenue }}, {{ expenses }}, {{ net }}],
+                    backgroundColor: ['#4aff4a', '#ff4a4a', '#FFD700'],
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { title: { display: true, text: 'الملخص المالي', color: '#fff' } },
+                scales: { y: { ticks: { color: '#fff' } }, x: { ticks: { color: '#fff' } } }
+            }
+        });
+
+        const accountsChart = new Chart(document.getElementById('accountsChart'), {
+            type: 'doughnut',
+            data: {
+                labels: [{% for acc in accounts %}'{{ acc[0] }}',{% endfor %}],
+                datasets: [{
+                    data: [{% for acc in accounts %}{{ acc[1] }},{% endfor %}],
+                    backgroundColor: ['#FFD700', '#FF8C00', '#4aff4a', '#ff4a4a', '#00c8ff', '#ff00ff']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { title: { display: true, text: 'توزيع الحسابات', color: '#fff' } }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <title>نوح - الإمبراطورية الخالدة</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #0a0a1a;
+            color: #e0e0e0;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a1a3e, #0a0a1a);
+            padding: 40px;
+            text-align: center;
+            border-radius: 20px;
+            border: 1px solid #4a4aff;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 3em;
+            color: #ffd700;
+            text-shadow: 0 0 20px #ffd700;
+        }
+        .header p {
+            font-size: 1.2em;
+            color: #aaa;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: #151530;
+            border: 1px solid #2a2a5e;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #4a4aff;
+        }
+        .card .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #4a4aff;
+        }
+        .card .label {
+            color: #aaa;
+            font-size: 0.9em;
+        }
+        .emperors {
+            background: #151530;
+            border: 1px solid #2a2a5e;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .emperors h2 {
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+        .emperors ul {
+            list-style: none;
+            columns: 2;
+            gap: 10px;
+        }
+        .emperors li {
+            padding: 5px 0;
+            border-bottom: 1px solid #2a2a5e;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🦅 نوح - الإمبراطورية الخالدة</h1>
+        <p>إجمالي المكونات: {{ "{:,}".format(stats['total']) }}</p>
+    </div>
+
+    <div class="grid">
+        {% for key, value in stats.items() if key != 'total' %}
+        <div class="card">
+            <div class="number">{{ "{:,}".format(value) }}</div>
+            <div class="label">{{ key.replace('_', ' ') }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="emperors">
+        <h2>👑 الأباطرة ({{ emperors|length }})</h2>
+        <ul>
+            {% for emp in emperors %}
+            <li>{{ emp }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="footer">
+        <p><a href="/all" style="color:#ffd700; font-size:1.2em;">⚡ عرض كل قدرات نوح (22,854)</a></p>
+        <p><a href="/browse" style="color:#4a4aff;">🧭 استعراض كل مكونات نوح</a></p>
+        <p><a href="/minds" style="color:#4a4aff;">🧠 عرض العقول الـ 500</a></p>
+        <p>🦅 نوح كيان لا نهائي. الإمبراطورية خالدة.</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة تحكم نوح المالية</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Tahoma', sans-serif;
+    background: radial-gradient(ellipse at top, #0f0f2d, #050510);
+    color: #eee;
+    min-height: 100vh;
+    padding: 30px;
+}
+.header {
+    text-align: center;
+    padding: 25px;
+    background: linear-gradient(135deg, #1a1a4e, #0a0a2a);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 10px 40px rgba(74,74,255,0.3);
+    margin-bottom: 30px;
+}
+.header h1 {
+    font-size: 3rem;
+    background: linear-gradient(90deg, #ffd700, #ff6b6b, #4aff9e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.header p { color: #aaa; margin-top: 10px; }
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    margin: 30px 0;
+}
+.card {
+    background: rgba(255,255,255,0.03);
+    border-radius: 20px;
+    padding: 30px;
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    transition: all 0.3s;
+    text-align: center;
+}
+.card:hover {
+    transform: translateY(-10px);
+    border-color: #4a4aff;
+    box-shadow: 0 15px 50px rgba(74,74,255,0.5);
+}
+.card .icon { font-size: 3rem; margin-bottom: 15px; }
+.card h3 { font-size: 1.2rem; color: #ffd700; margin-bottom: 10px; }
+.card .number { font-size: 2.5rem; font-weight: bold; }
+.card .trend { font-size: 0.9rem; margin-top: 8px; }
+.positive { color: #4aff9e; }
+.negative { color: #ff6b6b; }
+.neutral { color: #ffd700; }
+.charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+.chart-box {
+    background: rgba(255,255,255,0.03);
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+}
+.chart-box h3 { color: #4a4aff; margin-bottom: 20px; }
+.bar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0;
+}
+.bar .label { width: 120px; }
+.bar .progress {
+    flex: 1;
+    height: 20px;
+    background: #1a1a3e;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.bar .fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4a4aff, #ff6b6b);
+    border-radius: 10px;
+    transition: width 1s;
+}
+.footer {
+    text-align: center;
+    margin-top: 50px;
+    padding: 20px;
+    color: #666;
+    font-size: 0.9rem;
+}
+</style>
+</head>
+<body>
+<div class="header">
+    <h1>🦅 لوحة تحكم نوح المالية</h1>
+    <p>الإمبراطورية المالية المتكاملة</p>
+</div>
+
+<div class="cards">
+    <div class="card">
+        <div class="icon">💰</div>
+        <h3>الإيرادات</h3>
+        <div class="number positive">{{ revenues }}</div>
+        <div class="trend positive">↑ 25%</div>
+    </div>
+    <div class="card">
+        <div class="icon">📉</div>
+        <h3>المصاريف</h3>
+        <div class="number negative">{{ expenses }}</div>
+        <div class="trend negative">↓ 10%</div>
+    </div>
+    <div class="card">
+        <div class="icon">📈</div>
+        <h3>صافي الربح</h3>
+        <div class="number neutral">{{ net }}</div>
+        <div class="trend neutral">مستقر</div>
+    </div>
+    <div class="card">
+        <div class="icon">👥</div>
+        <h3>العملاء</h3>
+        <div class="number">{{ customers }}</div>
+        <div class="trend positive">+ 15</div>
+    </div>
+</div>
+
+<div class="charts">
+    <div class="chart-box">
+        <h3>📊 توزيع الإيرادات</h3>
+        <div class="bar"><span class="label">المبيعات</span><div class="progress"><div class="fill" style="width:70%"></div></div></div>
+        <div class="bar"><span class="label">الخدمات</span><div class="progress"><div class="fill" style="width:20%"></div></div></div>
+        <div class="bar"><span class="label">أخرى</span><div class="progress"><div class="fill" style="width:10%"></div></div></div>
+    </div>
+    <div class="chart-box">
+        <h3>📉 توزيع المصاريف</h3>
+        <div class="bar"><span class="label">التشغيل</span><div class="progress"><div class="fill" style="width:50%"></div></div></div>
+        <div class="bar"><span class="label">التسويق</span><div class="progress"><div class="fill" style="width:30%"></div></div></div>
+        <div class="bar"><span class="label">أخرى</span><div class="progress"><div class="fill" style="width:20%"></div></div></div>
+    </div>
+</div>
+
+<div class="footer">
+    🦅 نوح - الإمبراطورية المالية الخالدة
+</div>
+</body>
+</html>

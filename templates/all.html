@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كل قدرات نوح</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #0a0a1a; color: #e0e0e0; padding: 20px; }
+        .header { background: linear-gradient(135deg, #1a1a3e, #0a0a1a); padding: 20px; text-align: center; border-radius: 15px; border: 1px solid #4a4aff; margin-bottom: 20px; }
+        .header h1 { font-size: 1.8em; color: #ffd700; }
+        .header p { color: #aaa; }
+        .search-box { width: 100%; padding: 15px; margin-bottom: 15px; background: #151530; border: 1px solid #2a2a5e; border-radius: 10px; color: #e0e0e0; font-size: 1.1em; outline: none; }
+        .search-box:focus { border-color: #4a4aff; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+        .item { background: #151530; border: 1px solid #2a2a5e; border-radius: 8px; padding: 12px; text-align: center; font-size: 0.85em; word-break: break-word; }
+        .item .cat { color: #4a4aff; font-size: 0.75em; display: block; margin-top: 4px; }
+        a { color: #4a4aff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧠 كل قدرات ومكونات نوح ({{ count }})</h1>
+        <p><a href="/">↩ العودة للرئيسية</a> | <a href="/browse">🧭 الاستعراض بالفئات</a></p>
+        <input type="text" class="search-box" id="search" placeholder="🔍 ابحث عن أي قدرة أو نظام أو مكوّن...">
+    </div>
+    <div class="grid" id="grid">
+        {% for item, cat in all_data %}
+        <div class="item" data-search="{{ item }} {{ cat }}">
+            {{ item }}
+            <span class="cat">{{ cat }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    <script>
+        const searchInput = document.getElementById('search');
+        const grid = document.getElementById('grid');
+        const items = grid.querySelectorAll('.item');
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            items.forEach(item => {
+                const text = item.getAttribute('data-search').toLowerCase();
+                item.style.display = text.includes(query) ? '' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نوح - لوحة التحكم الأسطورية</title>
+<style>
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px #4a4aff; }
+  50% { box-shadow: 0 0 50px #ff6b6b; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Tahoma', sans-serif;
+  background: linear-gradient(135deg, #050510, #1a1a4e, #050510);
+  color: #fff;
+  min-height: 100vh;
+  padding: 30px;
+  overflow-x: hidden;
+}
+.header {
+  text-align: center;
+  padding: 30px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 30px;
+  border: 1px solid rgba(74,74,255,0.3);
+  animation: glow 3s infinite;
+  margin-bottom: 40px;
+}
+.header h1 {
+  font-size: 3.5rem;
+  background: linear-gradient(90deg, #ffd700, #ff6b6b, #4aff9e, #4a4aff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+.header p { color: #bbb; margin-top: 10px; font-size: 1.1rem; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin: 30px 0;
+}
+.card {
+  background: rgba(255,255,255,0.03);
+  border-radius: 25px;
+  padding: 35px;
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(25px);
+  transition: all 0.5s;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease;
+}
+.card:hover {
+  transform: scale(1.03);
+  border-color: #4a4aff;
+  box-shadow: 0 20px 60px rgba(74,74,255,0.4);
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(74,74,255,0.1) 0%, transparent 60%);
+  transition: all 0.5s;
+}
+.card:hover::before {
+  top: 0;
+  left: 0;
+}
+.card .icon { font-size: 3.5rem; margin-bottom: 20px; position: relative; }
+.card h3 { font-size: 1.2rem; color: #ffd700; margin-bottom: 15px; position: relative; }
+.card .number { font-size: 3rem; font-weight: bold; position: relative; }
+.card .change { font-size: 1rem; margin-top: 10px; position: relative; }
+.positive { color: #4aff9e; }
+.negative { color: #ff6b6b; }
+.neutral { color: #ffd700; }
+.charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+.chart-box {
+  background: rgba(255,255,255,0.03);
+  border-radius: 25px;
+  padding: 30px;
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(25px);
+  animation: fadeInUp 1s ease;
+}
+.chart-box h3 { color: #4a4aff; margin-bottom: 25px; font-size: 1.3rem; }
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+.bar .label { width: 100px; color: #ccc; }
+.bar .progress {
+  flex: 1;
+  height: 25px;
+  background: #1a1a3e;
+  border-radius: 15px;
+  overflow: hidden;
+}
+.bar .fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4a4aff, #ff6b6b);
+  border-radius: 15px;
+  transition: width 1.5s ease;
+  position: relative;
+}
+.bar .fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shine 2s infinite;
+}
+@keyframes shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.footer {
+  text-align: center;
+  margin-top: 60px;
+  padding: 25px;
+  color: #888;
+  font-size: 0.9rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🦅 نوح</h1>
+  <p>الإمبراطورية المالية الأسطورية</p>
+</div>
+
+<div style="text-align:center;margin:20px 0">
+    <a href="/accounts" style="color:#4a4aff;margin:5px;text-decoration:none">📚 الحسابات</a>
+    <a href="/customers" style="color:#4a4aff;margin:5px;text-decoration:none">👥 العملاء</a>
+    <a href="/suppliers" style="color:#4a4aff;margin:5px;text-decoration:none">📦 الموردون</a>
+    <a href="/invoices" style="color:#4a4aff;margin:5px;text-decoration:none">🧾 الفواتير</a>
+    <a href="/purchase_orders" style="color:#4a4aff;margin:5px;text-decoration:none">📋 أوامر الشراء</a>
+    <a href="/products" style="color:#4a4aff;margin:5px;text-decoration:none">📦 المنتجات</a>
+    <a href="/employees" style="color:#4a4aff;margin:5px;text-decoration:none">👷 الموظفون</a>
+    <a href="/taxes" style="color:#4a4aff;margin:5px;text-decoration:none">💰 الضرائب</a>
+    <a href="/bank" style="color:#4a4aff;margin:5px;text-decoration:none">🏦 البنك</a>
+    <a href="/zakat" style="color:#4a4aff;margin:5px;text-decoration:none">🕌 الزكاة</a>
+    <a href="/trial_balance" style="color:#4a4aff;margin:5px;text-decoration:none">⚖️ ميزان المراجعة</a>
+    <a href="/ledger" style="color:#4a4aff;margin:5px;text-decoration:none">📒 دفتر الأستاذ</a>
+    <a href="/income_statement" style="color:#4a4aff;margin:5px;text-decoration:none">📈 قائمة الدخل</a>
+    <a href="/balance_sheet" style="color:#4a4aff;margin:5px;text-decoration:none">📊 الميزانية</a>
+    <a href="/currencies" style="color:#4a4aff;margin:5px;text-decoration:none">💱 العملات</a>
+    <a href="/budgets" style="color:#4a4aff;margin:5px;text-decoration:none">📋 الميزانيات</a>
+    <a href="/debts" style="color:#4a4aff;margin:5px;text-decoration:none">💳 الديون</a>
+    <a href="/assets" style="color:#4a4aff;margin:5px;text-decoration:none">🏢 الأصول</a>
+    <a href="/export" style="color:#4a4aff;margin:5px;text-decoration:none">📥 تصدير</a>
+    <a href="/backup" style="color:#4a4aff;margin:5px;text-decoration:none">💾 النسخ</a>
+    <a href="/logout" style="color:#ff6b6b;margin:5px;text-decoration:none">🚪 خروج</a>
+</div>
+
+<div class="grid">
+  <div class="card" style="animation-delay:0.1s">
+    <div class="icon">💰</div>
+    <h3>الإيرادات</h3>
+    <div class="number positive">{{ revenues }}</div>
+    <div class="change positive">↑ 35% عن الشهر الماضي</div>
+  </div>
+  <div class="card" style="animation-delay:0.2s">
+    <div class="icon">📉</div>
+    <h3>المصاريف</h3>
+    <div class="number negative">{{ expenses }}</div>
+    <div class="change negative">↓ 12% عن الشهر الماضي</div>
+  </div>
+  <div class="card" style="animation-delay:0.3s">
+    <div class="icon">📈</div>
+    <h3>صافي الربح</h3>
+    <div class="number neutral">{{ net }}</div>
+    <div class="change neutral">ثابت</div>
+  </div>
+  <div class="card" style="animation-delay:0.4s">
+    <div class="icon">👥</div>
+    <h3>العملاء</h3>
+    <div class="number">{{ customers }}</div>
+    <div class="change positive">+ 20 عميل جديد</div>
+  </div>
+</div>
+
+<div class="charts">
+  <div class="chart-box">
+    <h3>📊 الإيرادات حسب المصدر</h3>
+    <div class="bar"><span class="label">المبيعات</span><div class="progress"><div class="fill" style="width:65%"></div></div></div>
+    <div class="bar"><span class="label">الخدمات</span><div class="progress"><div class="fill" style="width:25%"></div></div></div>
+    <div class="bar"><span class="label">أخرى</span><div class="progress"><div class="fill" style="width:10%"></div></div></div>
+  </div>
+  <div class="chart-box">
+    <h3>📉 المصاريف حسب البند</h3>
+    <div class="bar"><span class="label">التشغيل</span><div class="progress"><div class="fill" style="width:55%"></div></div></div>
+    <div class="bar"><span class="label">التسويق</span><div class="progress"><div class="fill" style="width:30%"></div></div></div>
+    <div class="bar"><span class="label">أخرى</span><div class="progress"><div class="fill" style="width:15%"></div></div></div>
+  </div>
+</div>
+
+
+<div style="margin-top:50px">
+    <h2 style="text-align:center;color:#ffd700;margin-bottom:30px;font-size:2rem">🏦 الأنظمة المالية الشاملة</h2>
+    <div class="grid">
+        <div class="card">
+            <div class="icon">📚</div>
+            <h3>الحسابات</h3>
+            <div class="number">15</div>
+            <div class="change neutral">أصول، خصوم، إيرادات</div>
+        </div>
+        <div class="card">
+            <div class="icon">🧾</div>
+            <h3>الفواتير</h3>
+            <div class="number">42</div>
+            <div class="change positive">+ 8 هذا الأسبوع</div>
+        </div>
+        <div class="card">
+            <div class="icon">📋</div>
+            <h3>أوامر الشراء</h3>
+            <div class="number">18</div>
+            <div class="change neutral">قيد المعالجة</div>
+        </div>
+        <div class="card">
+            <div class="icon">🏦</div>
+            <h3>البنك</h3>
+            <div class="number">3</div>
+            <div class="change positive">حسابات نشطة</div>
+        </div>
+        <div class="card">
+            <div class="icon">🕌</div>
+            <h3>الزكاة</h3>
+            <div class="number">2.5%</div>
+            <div class="change neutral">محسوبة تلقائيًا</div>
+        </div>
+        <div class="card">
+            <div class="icon">💰</div>
+            <h3>الضرائب</h3>
+            <div class="number">15%</div>
+            <div class="change neutral">ضريبة قيمة مضافة</div>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top:50px">
+    <h2 style="text-align:center;color:#4a4aff;margin-bottom:30px;font-size:2rem">📊 الاقتصاد الشامل</h2>
+    <div class="charts">
+        <div class="chart-box">
+            <h3>🌍 مؤشرات اقتصادية</h3>
+            <div class="bar"><span class="label">الناتج المحلي</span><div class="progress"><div class="fill" style="width:75%"></div></div></div>
+            <div class="bar"><span class="label">التضخم</span><div class="progress"><div class="fill" style="width:30%"></div></div></div>
+            <div class="bar"><span class="label">البطالة</span><div class="progress"><div class="fill" style="width:15%"></div></div></div>
+        </div>
+        <div class="chart-box">
+            <h3>💱 أسعار العملات</h3>
+            <div class="bar"><span class="label">الدولار</span><div class="progress"><div class="fill" style="width:60%"></div></div></div>
+            <div class="bar"><span class="label">اليورو</span><div class="progress"><div class="fill" style="width:50%"></div></div></div>
+            <div class="bar"><span class="label">الريال</span><div class="progress"><div class="fill" style="width:40%"></div></div></div>
+        </div>
+    </div>
+</div>
+<div class="footer">
+  🦅 نوح - الإمبراطورية المالية الخالدة
+</div>
+</body>
+</html>

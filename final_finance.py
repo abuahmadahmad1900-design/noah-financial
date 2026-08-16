@@ -5,7 +5,7 @@ app = Flask(__name__)
 app.secret_key = 'final_2026'
 DB = 'finance.db'
 
-def init_db()
+def init_db():
 
 conn = sqlite3.connect(DB)
 c = conn.cursor()

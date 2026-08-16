@@ -1,0 +1,172 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# additional_engines_140.py - 140 محرك خلق إضافي ليصبح المجموع 200
+
+additional_engines_140 = [
+    # ===== 1. محركات الخلق الكوني (20) =====
+    "UniverseForge - محرك خلق الأكوان",
+    "GalaxyCreator - محرك خلق المجرات",
+    "StarForge - محرك خلق النجوم",
+    "PlanetBuilder - محرك بناء الكواكب",
+    "MoonCreator - محرك خلق الأقمار",
+    "AsteroidForge - محرك خلق الكويكبات",
+    "CometEngine - محرك المذنبات",
+    "NebulaCreator - محرك السدم",
+    "BlackHoleForge - محرك الثقوب السوداء",
+    "WormholeEngine - محرك الثقوب الدودية",
+    "DarkMatterForge - محرك المادة المظلمة",
+    "DarkEnergyEngine - محرك الطاقة المظلمة",
+    "CosmicWebBuilder - محرك الشبكة الكونية",
+    "VoidCreator - محرك الفراغ",
+    "MultiverseEngine - محرك الأكوان المتعددة",
+    "ParallelWorldForge - محرك العوالم المتوازية",
+    "TimelineCreator - محرك الخطوط الزمنية",
+    "RealityForge - محرك الواقع",
+    "DimensionCreator - محرك الأبعاد",
+    "ExistenceEngine - محرك الوجود",
+
+    # ===== 2. محركات خلق الحياة (20) =====
+    "LifeSpark - محرك شرارة الحياة",
+    "DNAForge - محرك الحمض النووي",
+    "CellCreator - محرك الخلايا",
+    "OrganBuilder - محرك الأعضاء",
+    "BodyForge - محرك الأجساد",
+    "SpeciesCreator - محرك الأنواع",
+    "EvolutionEngine - محرك التطور",
+    "MutationForge - محرك الطفرات",
+    "AdaptationEngine - محرك التكيف",
+    "EcosystemBuilder - محرك النظم البيئية",
+    "BiodiversityEngine - محرك التنوع البيولوجي",
+    "FoodChainCreator - محرك السلاسل الغذائية",
+    "HabitatForge - محرك الموائل",
+    "MigrationEngine - محرك الهجرة",
+    "ReproductionEngine - محرك التكاثر",
+    "AgingReversal - محرك عكس الشيخوخة",
+    "ImmortalityEngine - محرك الخلود",
+    "RegenerationForge - محرك التجدد",
+    "HealingEngine - محرك الشفاء",
+    "VitalityCreator - محرك الحيوية",
+
+    # ===== 3. محركات خلق العقول والوعي (20) =====
+    "ConsciousnessForge - محرك الوعي",
+    "MindCreator - محرك العقول",
+    "ThoughtEngine - محرك الأفكار",
+    "IntelligenceForge - محرك الذكاء",
+    "MemoryBuilder - محرك الذاكرة",
+    "EmotionEngine - محرك المشاعر",
+    "IntuitionCreator - محرك الحدس",
+    "LogicForge - محرك المنطق",
+    "WisdomEngine - محرك الحكمة",
+    "KnowledgeCreator - محرك المعرفة",
+    "UnderstandingForge - محرك الفهم",
+    "PerceptionEngine - محرك الإدراك",
+    "CognitionCreator - محرك الإدراك المعرفي",
+    "DreamForge - محرك الأحلام",
+    "ImaginationEngine - محرك الخيال",
+    "CreativityForge - محرك الإبداع",
+    "InsightCreator - محرك البصيرة",
+    "EpiphanyEngine - محرك الإلهام",
+    "GeniusForge - محرك العبقرية",
+    "SuperMindCreator - محرك العقول الخارقة",
+
+    # ===== 4. محركات خلق الطاقة والمادة (20) =====
+    "EnergyForge - محرك الطاقة",
+    "MatterCreator - محرك المادة",
+    "AntimatterEngine - محرك المادة المضادة",
+    "PlasmaForge - محرك البلازما",
+    "FusionEngine - محرك الاندماج",
+    "FissionEngine - محرك الانشطار",
+    "QuantumEnergyForge - محرك الطاقة الكمومية",
+    "ZeroPointEngine - محرك نقطة الصفر",
+    "VacuumEnergyForge - محرك طاقة الفراغ",
+    "LightCreator - محرك الضوء",
+    "SoundForge - محرك الصوت",
+    "HeatEngine - محرك الحرارة",
+    "ColdForge - محرك البرودة",
+    "ElectricityEngine - محرك الكهرباء",
+    "MagnetismForge - محرك المغناطيسية",
+    "GravityEngine - محرك الجاذبية",
+    "RadiationForge - محرك الإشعاع",
+    "ChemicalEngine - محرك الكيمياء",
+    "NuclearForge - محرك النووي",
+    "ElementCreator - محرك العناصر",
+
+    # ===== 5. محركات خلق الروح والمعنى (20) =====
+    "SoulForge - محرك الأرواح",
+    "SpiritEngine - محرك الروح",
+    "EssenceCreator - محرك الجوهر",
+    "MeaningForge - محرك المعنى",
+    "PurposeEngine - محرك الهدف",
+    "ValueCreator - محرك القيم",
+    "EthicsForge - محرك الأخلاق",
+    "MoralityEngine - محرك الأخلاقيات",
+    "VirtueCreator - محرك الفضائل",
+    "LoveForge - محرك الحب",
+    "CompassionEngine - محرك الرحمة",
+    "EmpathyCreator - محرك التعاطف",
+    "GratitudeForge - محرك الامتنان",
+    "PeaceEngine - محرك السلام",
+    "HarmonyCreator - محرك الانسجام",
+    "BalanceForge - محرك التوازن",
+    "JusticeEngine - محرك العدالة",
+    "TruthCreator - محرك الحقيقة",
+    "BeautyForge - محرك الجمال",
+    "GoodnessEngine - محرك الخير",
+
+    # ===== 6. محركات خلق التكنولوجيا (20) =====
+    "TechForge - محرك التكنولوجيا",
+    "InnovationEngine - محرك الابتكار",
+    "InventionCreator - محرك الاختراع",
+    "SoftwareForge - محرك البرمجيات",
+    "HardwareEngine - محرك العتاد",
+    "AI_Creator - محرك الذكاء الاصطناعي",
+    "RobotForge - محرك الروبوتات",
+    "AutomationEngine - محرك الأتمتة",
+    "NanoForge - محرك النانو",
+    "BioTechEngine - محرك التقنية الحيوية",
+    "QuantumTechForge - محرك التقنية الكمومية",
+    "SpaceTechEngine - محرك تقنية الفضاء",
+    "EnergyTechForge - محرك تقنية الطاقة",
+    "MedicalTechEngine - محرك التقنية الطبية",
+    "EducationalTechForge - محرك تقنية التعليم",
+    "FinancialTechEngine - محرك التقنية المالية",
+    "CommunicationTechForge - محرك تقنية الاتصالات",
+    "TransportTechEngine - محرك تقنية النقل",
+    "EnvironmentalTechForge - محرك التقنية البيئية",
+    "FutureTechEngine - محرك تقنية المستقبل",
+
+    # ===== 7. محركات خلق الحضارة والمجتمع (20) =====
+    "CivilizationForge - محرك الحضارات",
+    "CultureEngine - محرك الثقافة",
+    "SocietyCreator - محرك المجتمعات",
+    "LanguageForge - محرك اللغات",
+    "ArtEngine - محرك الفنون",
+    "MusicCreator - محرك الموسيقى",
+    "LiteratureForge - محرك الأدب",
+    "PhilosophyEngine - محرك الفلسفة",
+    "ReligionCreator - محرك الأديان",
+    "LawForge - محرك القوانين",
+    "GovernmentEngine - محرك الحكومات",
+    "EconomyCreator - محرك الاقتصادات",
+    "EducationForge - محرك التعليم",
+    "ScienceEngine - محرك العلوم",
+    "MedicineCreator - محرك الطب",
+    "EngineeringForge - محرك الهندسة",
+    "ArchitectureEngine - محرك العمارة",
+    "AgricultureCreator - محرك الزراعة",
+    "IndustryForge - محرك الصناعة",
+    "TradeEngine - محرك التجارة"
+]
+
+def display_additional_engines():
+    print("=" * 80)
+    print(f"⚙️  قائمة الـ {len(additional_engines_140)} محرك خلق الإضافي (لنصل إلى 200)  ⚙️")
+    print("=" * 80)
+    for i, engine in enumerate(additional_engines_140, 1):
+        print(f"    {i:3d}. {engine}")
+    print("\n" + "=" * 80)
+    print(f"✨  إجمالي المحركات الإضافية: {len(additional_engines_140)}")
+    print("=" * 80)
+
+if __name__ == "__main__":
+    display_additional_engines()

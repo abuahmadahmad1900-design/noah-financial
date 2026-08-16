@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استعراض كل مكونات نوح</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #0a0a1a; color: #e0e0e0; padding: 20px; }
+        .header { background: linear-gradient(135deg, #1a1a3e, #0a0a1a); padding: 20px; text-align: center; border-radius: 15px; border: 1px solid #4a4aff; margin-bottom: 20px; }
+        .header h1 { font-size: 2em; color: #ffd700; }
+        .header p { color: #aaa; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
+        .card { background: #151530; border: 1px solid #2a2a5e; border-radius: 10px; padding: 20px; text-align: center; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-5px); border-color: #4a4aff; }
+        .card .number { font-size: 2em; font-weight: bold; color: #4a4aff; }
+        .card .label { color: #aaa; font-size: 0.9em; margin-top: 5px; }
+        a { color: #4a4aff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧭 استعراض كل مكونات نوح</h1>
+        <p><a href="/">↩ العودة للرئيسية</a></p>
+    </div>
+    <div class="grid">
+        {% for cat in categories %}
+        <a href="/category/{{ cat.attr }}" style="text-decoration:none;">
+            <div class="card">
+                <div class="number">{{ "{:,}".format(cat.count) }}</div>
+                <div class="label">{{ cat.label }}</div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</body>
+</html>

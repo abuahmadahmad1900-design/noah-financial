@@ -1,4 +1,5 @@
 from flask import Flask, render_template_string
+from unified_tables import UNIFIED_TABLE_CSS
 
 app = Flask(__name__)
 

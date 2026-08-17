@@ -51,7 +51,7 @@ PAGE = '''
     @keyframes glow-red { 0% { box-shadow:0 0 5px rgba(255,74,74,0.4); } 100% { box-shadow:0 0 30px rgba(255,74,74,0.9); } }
     @keyframes float-btn { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
     @keyframes spin-icon { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
-    table { width:100%; border-collapse:separate; border-spacing:0; margin-top:25px; border-radius:25px; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.7), 0 0 40px rgba(255,215,0,0.15); background:linear-gradient(180deg,rgba(20,20,60,0.9),rgba(10,10,30,0.9)); }
+    table { width:100%; border-collapse:separate; border-spacing:0; margin-top:30px; border-radius:30px; overflow:hidden; background:linear-gradient(145deg, rgba(15,15,45,0.95), rgba(5,5,20,0.98)); box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 60px rgba(255,215,0,0.15); border:1px solid rgba(255,215,0,0.3); border-collapse:separate; border-spacing:0; margin-top:25px; border-radius:25px; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.7), 0 0 40px rgba(255,215,0,0.15); background:linear-gradient(180deg,rgba(20,20,60,0.9),rgba(10,10,30,0.9)); }
     table thead th { background:linear-gradient(145deg,#FFD700,#FF8C00); color:#000; padding:20px; font-size:1.2rem; font-weight:bold; letter-spacing:1px; text-shadow:0 1px 2px rgba(255,255,255,0.3); }
     table tbody td { padding:18px 15px; text-align:center; color:#f0f0f0; font-size:1.05rem; border-bottom:1px solid rgba(255,215,0,0.1); transition:all 0.3s; }
     table tbody tr:nth-child(odd) td { background:rgba(255,255,255,0.02); }

@@ -148,7 +148,7 @@ def empire():
             <h1 class="empire-title">🦅 إمبراطورية نوح</h1>
             <p class="empire-subtitle">المنصة الرقمية الموحدة — 500+ نظام في عقل واحد</p>
             <div class="empire-grid">
-                <a href="https://noah-financial-1.onrender.com" class="empire-card">
+                <a href="https://noah-financial.onrender.com" class="empire-card">
                     <div class="icon">💼</div>
                     <h2>نوح المالي</h2>
                     <p>135+ نظام مالي ومحاسبي</p>

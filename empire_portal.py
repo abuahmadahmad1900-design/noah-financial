@@ -160,7 +160,7 @@ def empire():
                     <p>150+ نظام طبي متكامل</p>
                     <span class="badge">دخول</span>
                 </a>
-                <a href="/erp" class="empire-card">
+                <a href="https://noah-erp.onrender.com" class="empire-card">
                     <div class="icon">🏢</div>
                     <h2>نوح ERP</h2>
                     <p>238+ نظام إدارة موارد</p>
@@ -180,7 +180,7 @@ def empire():
 
 @app.route('/erp')
 def erp():
-    return "نظام ERP سينشر قريباً على Render"
+    return ""
 
 @app.route('/ai')
 def ai():

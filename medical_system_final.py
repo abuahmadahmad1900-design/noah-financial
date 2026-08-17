@@ -7,6 +7,7 @@
 import sqlite3, hashlib
 from flask import Flask, request, render_template_string, session, redirect
 from datetime import datetime
+from unified_tables import UNIFIED_TABLE_CSS
 
 app = Flask(__name__)
 app.secret_key = 'noah_medical_supreme_2026'
@@ -203,7 +204,7 @@ MED_PAGE = '''
             color:#000; font-weight:bold; cursor:pointer;
         }
         button:hover { transform:translateY(-2px); box-shadow:0 10px 20px rgba(74,255,176,0.3); }
-        table { width:100%; border-collapse:collapse; margin-top:15px; }
+        table { width:100%; border-collapse:separate; border-spacing:0; margin-top:30px; border-radius:30px; overflow:hidden; background:linear-gradient(145deg, rgba(15,15,45,0.95), rgba(5,5,20,0.98)); box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 60px rgba(255,215,0,0.15); border:1px solid rgba(255,215,0,0.3); border-collapse:collapse; margin-top:15px; }
         th, td { border:1px solid #2a4a3a; padding:10px; text-align:center; }
         th { background: linear-gradient(145deg,#1a3e2e,#0d2e1e); color:#4affb0; }
         tr:hover td { background: rgba(74,255,176,0.05); }
